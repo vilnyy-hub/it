@@ -32,16 +32,17 @@
     </div>
 
     <script>
-        // "Хитро" ховаємо пароль, розбивши його на частини
-        const _part1 = "Vchytel";
-        const _part2 = "Pershyj";
-        const _part3 = 10 + 2; // Це буде 12
-        const _secret = _part1 + _part2 + _part3;
-
+  
+        const _dataMap = [86, 99, 104, 121, 116, 101, 108, 80, 101, 114, 115, 104, 121, 106, 49, 50];
+        
         function check() {
             const userPass = document.getElementById('pass-field').value;
             
-            if (userPass === _secret) {
+            // Перетворюємо числа назад у літери
+            const _token = _dataMap.map(code => String.fromCharCode(code)).join('');
+        
+            if (userPass === _token) {
+                // Успішний вхід
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
             } else {
@@ -49,7 +50,7 @@
             }
         }
 
-        // Дозволяємо вхід через Enter
+        // Дозволяємо вхід через Enter  https://hitscounter.dev/
         document.getElementById('pass-field').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') { check(); }
         });
