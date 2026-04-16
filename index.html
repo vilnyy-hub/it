@@ -2,20 +2,57 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Наші проєкти - IT Табір</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Табір - Проєкти</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f4f4f9; }
+        .container { background: white; padding: 30px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 200px; }
+        button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #content { display: none; } /* Ховаємо контент спочатку */
+    </style>
 </head>
 <body>
-    <h1>Проєкти наших учнів</h1>
-    
-    <h3>Група №1</h3>
-    <ul>
-        <li><a href="1/vika.html">Проєкт Віки</a></li>
-        <li><a href="1/artem.html">Проєкт Артема</a></li>
-    </ul>
 
-    <h3>Група №2</h3>
-    <ul>
-        <li><a href="2/ivan.html">Проєкт Івана</a></li>
-    </ul>
+    <div id="login-screen" class="container">
+        <h2>Вхід до кабінету ІТ-проєктів</h2>
+        <p>Введіть секретний код доступу:</p>
+        <input type="password" id="pass-field" placeholder="Пароль...">
+        <button onclick="check()">Увійти</button>
+        <p id="error" style="color: red; display: none;">Неправильний код!</p>
+    </div>
+
+    <div id="content">
+        <h1>Вітаємо в системі!</h1>
+        <h3>Список учнів:</h3>
+        <ul>
+            <li><a href="1/vika.html">Проєкт Віки</a></li>
+            <li><a href="1/artem.html">Проєкт Артема</a></li>
+        </ul>
+    </div>
+
+    <script>
+        // "Хитро" ховаємо пароль, розбивши його на частини
+        const _part1 = "Vchytel";
+        const _part2 = "Pershyj";
+        const _part3 = 10 + 2; // Це буде 12
+        const _secret = _part1 + _part2 + _part3;
+
+        function check() {
+            const userPass = document.getElementById('pass-field').value;
+            
+            if (userPass === _secret) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // Дозволяємо вхід через Enter
+        document.getElementById('pass-field').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') { check(); }
+        });
+    </script>
 </body>
 </html>
