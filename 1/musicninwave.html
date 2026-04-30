@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Music Wave - Classic Edition</title>
+    <style>
+        /* Стиль "Старий Windows / Classic Web" */
+        body {
+            background-color: #008080; /* Той самий легендарний бірюзовий колір фону */
+            font-family: "MS Sans Serif", "Tahoma", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Вікно програми */
+        .window {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            width: 450px;
+            padding: 2px;
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        /* Заголовок вікна */
+        .title-bar {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 3px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .title-bar-buttons {
+            display: flex;
+            gap: 2px;
+        }
+
+        .btn-win {
+            width: 16px;
+            height: 14px;
+            background-color: #c0c0c0;
+            border: 1px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            font-size: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+            cursor: pointer;
+        }
+
+        /* Контент всередині */
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        h3 {
+            font-family: "Times New Roman", serif;
+            font-size: 24px;
+            margin: 0 0 10px 0;
+            color: #000;
+        }
+
+        p {
+            font-size: 13px;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        /* Рамка для картинки */
+        .img-border {
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            display: inline-block;
+            padding: 5px;
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+
+        img.main-art {
+            display: block;
+            width: 300px;
+            image-rendering: pixelated; /* Робимо картинку трохи "піксельною" */
+        }
+
+        /* Старі кнопки */
+        .btn-retro {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            padding: 5px 15px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .btn-retro:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+            padding: 6px 14px 4px 16px;
+        }
+
+        .counter-box {
+            margin-top: 20px;
+            border-top: 1px solid #808080;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="window">
+        <div class="title-bar">
+            <span>MusicPlayer.exe</span>
+            <div class="title-bar-buttons">
+                <div class="btn-win">_</div>
+                <div class="btn-win">□</div>
+                <div class="btn-win" onclick="location.reload()">X</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <h3>Kinds of Music</h3>
+            <p>Welcome to the music world (v1.0)</p>
+
+            <div class="img-border">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyJVZfg7y2eHfMdBHsQ_xvBitqul2YeTGVYw&s" 
+                     class="main-art" alt="Retro Art">
+            </div>
+
+            <div>
+                <button class="btn-retro" onclick="alert('Playing...')">Play</button>
+                <button class="btn-retro" onclick="alert('Stop')">Stop</button>
+            </div>
+
+            <div class="counter-box">
+                <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fmusicninwave.html&label=Visitors&icon=skip-end-fill&color=%23c0c0c0&message=&style=flat&tz=UTC">
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
