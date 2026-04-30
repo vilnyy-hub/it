@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>🎇Будь собою🥰 — Твій простір спокою</title>
+    <style>
+        :root {
+            --sand-yellow: #f4e1a1;
+            --sand-pink: #f4cfdf;
+            --text-dark: #5d4037;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Verdana', sans-serif;
+            background-color: var(--sand-yellow);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            /* Анімація похитування на старті */
+            animation: sway 5s ease-in-out forwards;
+        }
+
+        @keyframes sway {
+            0% { transform: rotate(0deg); }
+            20% { transform: rotate(1deg); }
+            40% { transform: rotate(-1deg); }
+            60% { transform: rotate(0.5deg); }
+            80% { transform: rotate(-0.5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        header {
+            background-color: var(--sand-pink);
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        h1 { color: #d81b60; margin: 0; }
+
+        .container {
+            max-width: 800px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .intro-text {
+            font-size: 20px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Анімація дихання для зображення */
+        .character-container {
+            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 8px solid var(--sand-pink);
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .character-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            background-color: var(--sand-pink);
+            border: 2px solid #f06292;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            color: var(--text-dark);
+        }
+
+        button:hover {
+            background-color: #f06292;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        #ai-response {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            min-height: 50px;
+            display: none;
+            border: 2px dashed var(--sand-pink);
+        }
+
+        .footer-counter {
+            margin-top: 50px;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🍒 Привіт! Я твій AI-помічник 😎</h1>
+    </header>
+
+    <div class="container">
+        <p class="intro-text">
+            Якщо тобі треба заспокоїтися і поговорити з добрим спеціалістом, тобі до нас! 
+            Ми — <strong>"🎇Будь собою🥰"</strong> — завжди допоможемо. 
+            Просто вибери, що тебе турбує:
+        </p>
+
+        <div class="character-container">
+            <!-- Зображення людини, що медитує -->
+            <img src="https://st2.depositphotos.com/18722762/50790/v/450/depositphotos_507904706-stock-illustration-relax-yoga-crossed-legs-closed.jpg" alt="Дихаюча людина">
+        </div>
+
+        <div class="buttons-grid">
+            <button onclick="respond('stress')">Мені тривожно 😰</button>
+            <button onclick="respond('tired')">Я дуже втомився/лася 😴</button>
+            <button onclick="respond('sad')">Мені сумно 😔</button>
+            <button onclick="respond('happy')">Хочу поділитися радістю! ✨</button>
+        </div>
+
+        <div id="ai-response"></div>
+
+        <!-- Аудіо (автозапуск часто блокується браузерами, тому додано контроль) -->
+        <div style="margin-top: 20px;">
+            <p style="font-size: 12px;">🎵 Заспокійлива музика:</p>
+            <audio id="bg-music" controls loop>
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                Ваш браузер не підтримує аудіо.
+            </audio>
+        </div>
+    </div>
+
+    <div class="footer-counter">
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fsoliabeyourself.html&label=%D0%A2%D1%96%2C%D1%89%D0%BE+%D1%81%D1%82%D0%B0%D0%BB%D0%B8+%D1%82%D1%80%D0%BE%D1%88%D0%BA%D0%B8+%D1%81%D0%BF%D0%BE%D0%BA%D1%96%D0%B9%D0%BD%D1%96%D1%88%D0%B8%D0%BC%D0%B8&icon=bookmark-heart-fill&color=%23ff6bab&message=&style=plastic&tz=UTC">
+    </div>
+
+    <script>
+        function respond(situation) {
+            const box = document.getElementById('ai-response');
+            box.style.display = 'block';
+            
+            let message = "";
+            
+            switch(situation) {
+                case 'stress':
+                    message = "Я поруч. Давай зробимо глибокий вдих разом із людиною на малюнку. Все буде добре, це просто тимчасовий момент.";
+                    break;
+                case 'tired':
+                    message = "Ти сьогодні зробив/ла достатньо. Твоє тіло просить відпочинку, і це нормально. Дозволь собі просто полежати 5 хвилин.";
+                    break;
+                case 'sad':
+                    message = "Сумувати — це нормально. Я вислухаю тебе. Пам'ятай, що після дощу завжди з'являється сонце.";
+                    break;
+                case 'happy':
+                    message = "Я так радію за тебе! Твоя енергія чудова. Давай збережемо цей момент у пам'яті!";
+                    break;
+            }
+            
+            box.innerHTML = "<strong>AI Психолог:</strong> " + message;
+        }
+
+        // Спроба автоматично увімкнути музику при першому кліку на сайті
+        document.body.addEventListener('click', function() {
+            const music = document.getElementById('bg-music');
+            if (music.paused) {
+                music.play().catch(e => console.log("Музика зачекає на взаємодію"));
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
