@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бакалія Україна</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #fff176, #ffd54f);
+    text-align: center;
+    color: #333;
+}
+
+header {
+    padding: 20px;
+    background: #ffca28;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+img {
+    max-width: 100%;
+    border-radius: 15px;
+    margin: 15px 0;
+    transition: 0.3s;
+}
+
+img:hover {
+    transform: scale(1.05);
+}
+
+.highlight {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background: #f57c00;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button:hover {
+    background: #e65100;
+}
+
+.hidden {
+    display: none;
+}
+
+.faq-item {
+    cursor: pointer;
+    margin: 10px 0;
+    padding: 10px;
+    background: #fff3cd;
+    border-radius: 8px;
+}
+
+.counter {
+    margin-top: 20px;
+}
+
+footer {
+    margin-top: 20px;
+    padding: 10px;
+    background: #333;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🇺🇦 Українська бакалія</h1>
+</header>
+
+<div class="container">
+
+    <img src="https://images.prom.ua/440867182_w220_h220_440867182.jpg">
+
+    <div class="highlight">
+        <p><b>Про нас:</b><br>
+        Українська бакалія — це символ якості, традицій і надійності. Наші продукти вирощуються на родючих українських землях і проходять ретельний контроль.</p>
+    </div>
+
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9wary6643-dt4WDjhpdua41lZqZ05ZSYFWg&s">
+
+    <div class="highlight">
+        <p><b>Чому обирають нас?</b></p>
+        <ul>
+            <li>🌾 Натуральні продукти</li>
+            <li>⭐ Висока якість</li>
+            <li>🚚 Надійна доставка</li>
+        </ul>
+    </div>
+
+    <!-- ІНТЕРАКТИВ -->
+    <button onclick="showMessage()">Замовити</button>
+    <button onclick="toggleMore()">Детальніше</button>
+
+    <div id="more" class="hidden highlight">
+        <p>Ми працюємо навіть у складні часи, щоб забезпечити вас найкращими продуктами 💙💛</p>
+    </div>
+
+    <!-- РЕЙТИНГ -->
+    <div class="highlight">
+        <p><b>Оцініть нас:</b></p>
+        <button onclick="rate(1)">⭐</button>
+        <button onclick="rate(2)">⭐⭐</button>
+        <button onclick="rate(3)">⭐⭐⭐</button>
+        <button onclick="rate(4)">⭐⭐⭐⭐</button>
+        <button onclick="rate(5)">⭐⭐⭐⭐⭐</button>
+        <p id="ratingResult"></p>
+    </div>
+
+    <!-- FAQ -->
+    <div class="highlight">
+        <p><b>Часті питання:</b></p>
+
+        <div class="faq-item" onclick="toggleFAQ(this)">
+            Де ви вирощуєте продукцію?
+            <div class="hidden">В Україні, на екологічно чистих полях 🌱</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFAQ(this)">
+            Чи є доставка?
+            <div class="hidden">Так, по всій Україні 🚚</div>
+        </div>
+
+    </div>
+
+    <!-- COUNTER -->
+    <div class="counter">
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fbakalia_ukrain.html&label=Відвідувачі&icon=heart&color=%23f57c00&style=flat-square">
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 Бакалія Україна</p>
+</footer>
+
+<script>
+function toggleMore() {
+    document.getElementById("more").classList.toggle("hidden");
+}
+
+function showMessage() {
+    alert("Дякуємо за інтерес! Ми скоро з вами зв'яжемось 😊");
+}
+
+function rate(stars) {
+    document.getElementById("ratingResult").innerText = "Ваша оцінка: " + stars + " ⭐";
+}
+
+function toggleFAQ(element) {
+    const answer = element.querySelector("div");
+    answer.classList.toggle("hidden");
+}
+</script>
+
+</body>
+</html>
