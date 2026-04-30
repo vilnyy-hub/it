@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKATE & DIRT | LVIV RIDERS HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --main-color: #ffcc00;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #eeeeee;
+            --accent-red: #ff4444;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        header {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
+                        url('https://images.unsplash.com/photo-1520156584141-247ff18e044c?q=80&w=1200&auto=format&fit=crop');
+            background-size: cover;
+            background-attachment: fixed;
+            border-bottom: 8px solid var(--main-color);
+            text-align: center;
+        }
+
+        h1 { font-family: 'Oswald', sans-serif; font-size: 5rem; margin: 0; text-transform: uppercase; line-height: 1; }
+        header p { font-size: 1.5rem; color: var(--main-color); letter-spacing: 2px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 40px 20px;
+            border-radius: 20px;
+            border-bottom: 4px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .card:hover {
+            border-color: var(--main-color);
+            transform: translateY(-10px);
+            background: #252525;
+        }
+
+        .card i { font-size: 3.5rem; color: var(--main-color); margin-bottom: 20px; }
+        .card h3 { font-family: 'Oswald', sans-serif; font-size: 1.8rem; margin-bottom: 10px; }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 2% auto;
+            padding: 40px;
+            border-left: 10px solid var(--main-color);
+            width: 90%;
+            max-width: 800px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 25px; top: 20px;
+            color: var(--main-color);
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        /* Typography inside Modal */
+        .modal-content h2 { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--main-color); border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .spot-item { margin-bottom: 25px; background: #252525; padding: 15px; border-radius: 8px; }
+        .spot-item b { color: var(--main-color); font-size: 1.2rem; display: block; margin-bottom: 5px; }
+        .tag-red { background: var(--accent-red); color: white; padding: 2px 8px; font-size: 0.8rem; border-radius: 4px; text-transform: uppercase; }
+
+        /* Stats Section */
+        .stats-section {
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 20px;
+            margin-top: 50px;
+            text-align: left;
+        }
+
+        footer { padding: 60px; text-align: center; border-top: 1px solid #333; margin-top: 100px; }
+        .social-icons i { font-size: 2rem; margin: 0 15px; color: var(--main-color); cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SKATE & DIRT</h1>
+    <p>LVIV STREET CULTURE 2026</p>
+    <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FSKATE%26DIRT.html&label=RIDERS_ONLINE&icon=bicycle&color=%23ffcc00&style=for-the-badge" style="margin-top: 20px;">
+</header>
+
+<div class="container">
+    
+    <div style="text-align: center; margin-bottom: 60px;">
+        <h2 style="font-family: 'Oswald'; font-size: 3rem;">ОБЕРИ СВІЙ ШЛЯХ</h2>
+        <p style="color: #888;">Натисни на категорію, щоб отримати повну базу знань</p>
+    </div>
+
+    <div class="grid">
+        <!-- Картка 1: Споти -->
+        <div class="card" onclick="openModal('spots')">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>ЛОКАЦІЇ & МАПА</h3>
+            <p>Де сьогодні буде двіж? Весь список від центру до околиць.</p>
+        </div>
+
+        <!-- Картка 2: Гайди -->
+        <div class="card" onclick="openModal('guides')">
+            <i class="fas fa-book-open"></i>
+            <h3>ГАЙДИ ТА ТРЮКИ</h3>
+            <p>Як зробити перший Ollie чи Bunny Hop без травм.</p>
+        </div>
+
+        <!-- Картка 3: Події -->
+        <div class="card" onclick="openModal('events')">
+            <i class="fas fa-calendar-check"></i>
+            <h3>КОНТЕСТИ ТА ЗУСТРІЧІ</h3>
+            <p>Розклад змагань та нічних каток по місту.</p>
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <h2 style="font-family: Oswald; color: var(--main-color);">ЧОМУ ЛЬВІВ?</h2>
+        <p>Наше місто — це ідеальне поєднання старого брукованого центру (для екстремалів) та нових бетонних майданчиків. Кожен район має свою унікальну атмосферу: від технічного катання біля Порохової до швидкісних спусків у парках.</p>
+    </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    const data = {
+        spots: `
+            <h2><i class="fas fa-map"></i> Повна база спотів Львова</h2>
+            <div class="spot-item">
+                <b>📍 Порохова Вежа (Центр)</b>
+                <p>Легендарне місце. Ідеальні грані та флет. <span class="tag-red">HOT</span></p>
+            </div>
+            <div class="spot-item">
+                <b>📍 Скейт-парк "Винниченка"</b>
+                <p>Професійна бетонна чаша та фігури. Підходить для скейтів, самокатів та BMX.</p>
+            </div>
+            <div class="spot-item">
+                <b>📍 Dirt-траса "Погулянка"</b>
+                <p>Трампліни для тих, хто любить землю та високі польоти на байках.</p>
+            </div>
+            <div class="spot-item">
+                <b>📍 Новий Скейт-парк (Сихів)</b>
+                <p>Найсучасніша локація з м'яким покриттям та перилами різної висоти.</p>
+            </div>
+            <p style="color: #888;">*Порада: Будь обережним на бруківці в центрі — вона підступна!</p>
+        `,
+        guides: `
+            <h2><i class="fas fa-graduation-cap"></i> Школа Райдера</h2>
+            <h3>Для скейтерів:</h3>
+            <ul style="line-height: 2;">
+                <li><b>Ollie:</b> Основа всього. Тримай задню ногу на хвості, а передньою витягуй дошку вгору.</li>
+                <li><b>Kickflip:</b> Коли впевнено стрибаєш, додавай закрут носком.</li>
+            </ul>
+            <h3>Для Dirt/BMX:</h3>
+            <ul style="line-height: 2;">
+                <li><b>Bunny Hop:</b> Вчимося висмикувати кермо та підтискати заднє колесо.</li>
+                <li><b>Manual:</b> Баланс на задньому колесі — ключ до стилю.</li>
+            </ul>
+            <div style="background: #332200; padding: 15px; border-radius: 10px;">
+                <b>⚠️ БЕЗПЕКА:</b> Ніколи не катай без шолома на нових спотах. Твій мозок — твій головний інструмент!
+            </div>
+        `,
+        events: `
+            <h2><i class="fas fa-trophy"></i> Календар 2026</h2>
+            <div class="spot-item">
+                <b>📅 15 Травня - "Lviv Summer Jam"</b>
+                <p>Відкриття сезону біля Порохової. Призи від локальних шопіп.</p>
+            </div>
+            <div class="spot-item">
+                <b>📅 Кожна субота - "Night Ride"</b>
+                <p>Збір о 21:00 біля Оперного. Катаємо великою колоною по нічному місту.</p>
+            </div>
+            <div class="spot-item">
+                <b>📅 21 Червня - World Skateboarding Day</b>
+                <p>Наймасштабніший заїзд року. Не пропусти!</p>
+            </div>
+        `
+    };
+
+    function openModal(type) {
+        document.getElementById('modalBody').innerHTML = data[type];
+        document.getElementById('infoModal').style.display = "block";
+        document.body.style.overflow = "hidden"; // Заборонити прокрутку фону
+    }
+
+    function closeModal() {
+        document.getElementById('infoModal').style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('infoModal')) closeModal();
+    }
+</script>
+
+<footer>
+    <div class="social-icons">
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-telegram"></i>
+        <i class="fab fa-youtube"></i>
+    </div>
+    <p style="margin-top: 20px;">© 2026 SKATE & DIRT LVIV. Created for the community.</p>
+</footer>
+
+</body>
+</html>
