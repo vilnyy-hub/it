@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мяу 🐱</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+        :root {
+            --ocean: #0a3d62;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(to bottom, #0a3d62, #1e90ff);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Фон з рибками */
+        .fish-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .fish {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.85;
+            animation: swim linear infinite;
+            text-shadow: 0 0 8px rgba(255,255,255,0.6);
+            user-select: none;
+        }
+
+        @keyframes swim {
+            from {
+                transform: translateX(-150px) rotate(0deg);
+            }
+            to {
+                transform: translateX(calc(100vw + 150px)) rotate(15deg);
+            }
+        }
+
+        .fish.reverse {
+            animation-direction: reverse;
+        }
+
+        /* Контент */
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #ffeb3b;
+            text-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+            margin: 20px 0;
+        }
+
+        .greeting {
+            color: #00ff9d;
+            font-size: 2.2rem;
+            margin: 15px 0;
+            text-shadow: 0 0 15px #00ff9d;
+        }
+
+        .subtitle {
+            color: #e91e63;
+            font-size: 1.4rem;
+            margin: 20px 0;
+        }
+
+        img {
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            margin: 15px;
+            transition: transform 0.4s ease;
+        }
+
+        img:hover {
+            transform: scale(1.08) rotate(3deg);
+        }
+
+        .big-text {
+            font-size: 6rem;
+            color: #ff9800;
+            text-shadow: 0 0 20px #ff5722;
+            margin: 30px 0;
+            line-height: 1;
+        }
+
+        .smile {
+            font-size: 4rem;
+            color: #2196f3;
+        }
+
+        .tongue {
+            color: #ff69b4;
+            font-size: 2.8rem;
+            margin: 20px 0;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: bubble-rise 8s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes bubble-rise {
+            to {
+                transform: translateY(-120vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Контейнер для рибок -->
+    <div class="fish-container" id="fishContainer"></div>
+
+    <div class="content">
+        <h1>ОГОГО ти прям потужна 🐱</h1>
+        
+        <p class="greeting">ПРивІт дЯкуЮ що приЙшОВ/лА нА МІй СаЙТ 💕🐱</p>
+        
+        <img src="https://images.squarespace-cdn.com/content/v1/607f89e638219e13eee71b1e/1684821560422-SD5V37BAG28BURTLIXUQ/michael-sum-LEpfefQf4rU-unsplash.jpg" 
+             style="width: 320px;" alt="Котик">
+        
+        <p class="subtitle">Ти потрапив у світ кітиків :)</p>
+        
+        <img src="https://applaws.com/uk/wp-content/uploads/sites/3/2025/06/orange_cat_in_cardboard_box.png" 
+             style="width: 380px;" alt="Котик в коробці">
+        
+        <img src="https://cdn.britannica.com/70/234870-050-D4D024BB/Orange-colored-cat-yawns-displaying-teeth.jpg" 
+             style="width: 380px;" alt="Зіваючий котик">
+        
+        <p class="big-text">ААААААААААААААА!!!</p>
+        
+        <p class="smile">:)</p>
+        
+        <img src="https://images.squarespace-cdn.com/content/v1/53d40acae4b00000003f5e7c/d9aebc57-a9d3-4c44-ba26-ea546698f73d/Applesauce+1.jpg?format=jpg" 
+             style="width: 420px; border-radius: 50%;" alt="Котик">
+        
+        <img src="https://metro.co.uk/wp-content/uploads/2020/05/PRI_150473631-e1588316954238.jpg?quality=90&strip=all" 
+             style="width: 280px;" alt="Котик">
+        
+        <p class="tongue">язисьок 👅</p>
+    </div>
+
+    <script>
+        // Створення рибок
+        function createFish() {
+            const container = document.getElementById('fishContainer');
+            const fishTypes = ['🐟', '🐠', '🐡', '🐬', '🦈'];
+            const colors = ['#ffeb3b', '#ff4081', '#00e5ff', '#76ff03', '#e040fb', '#ff9800'];
+
+            for (let i = 0; i < 35; i++) {
+                const fish = document.createElement('div');
+                fish.className = 'fish';
+                
+                // Випадковий тип рибки
+                fish.textContent = fishTypes[Math.floor(Math.random() * fishTypes.length)];
+                
+                // Випадковий стиль
+                const size = Math.random() * 2.2 + 1.8;
+                fish.style.fontSize = `${size}rem`;
+                fish.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Позиція
+                fish.style.top = `${Math.random() * 100}vh`;
+                fish.style.left = `-${Math.random() * 100}px`;
+                
+                // Час анімації (швидкість)
+                const duration = Math.random() * 25 + 18;
+                fish.style.animationDuration = `${duration}s`;
+                
+                // Затримка
+                fish.style.animationDelay = `-${Math.random() * 30}s`;
+                
+                // Деякі рибки пливуть в інший бік
+                if (Math.random() > 0.7) {
+                    fish.classList.add('reverse');
+                    fish.style.top = `${Math.random() * 100}vh`;
+                }
+                
+                // Легке обертання
+                fish.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+                
+                container.appendChild(fish);
+            }
+        }
+
+        // Бульбашки
+        function createBubbles() {
+            const container = document.getElementById('fishContainer');
+            
+            setInterval(() => {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                const size = Math.random() * 18 + 8;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}vw`;
+                bubble.style.bottom = `-30px`;
+                bubble.style.opacity = Math.random() * 0.6 + 0.3;
+                
+                container.appendChild(bubble);
+                
+                // Видаляємо після анімації
+                setTimeout(() => {
+                    bubble.remove();
+                }, 9000);
+            }, 280);
+        }
+
+        // Ініціалізація
+        window.onload = () => {
+            createFish();
+            createBubbles();
+            
+            // Додаткові рибки кожні 12 секунд
+            setInterval(() => {
+                const container = document.getElementById('fishContainer');
+                if (Math.random() > 0.4) {
+                    const extraFish = document.createElement('div');
+                    extraFish.className = 'fish';
+                    extraFish.textContent = '🐠';
+                    extraFish.style.fontSize = '2.8rem';
+                    extraFish.style.top = `${Math.random() * 85}vh`;
+                    extraFish.style.left = '-80px';
+                    extraFish.style.animationDuration = '14s';
+                    container.appendChild(extraFish);
+                    
+                    setTimeout(() => extraFish.remove(), 16000);
+                }
+            }, 12000);
+        };
+
+        // Клік по екрану — додає зграйку рибок
+        document.addEventListener('click', (e) => {
+            if (Math.random() > 0.6) {
+                const container = document.getElementById('fishContainer');
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(() => {
+                        const fish = document.createElement('div');
+                        fish.className = 'fish';
+                        fish.textContent = '🐟';
+                        fish.style.fontSize = '2.2rem';
+                        fish.style.top = `${e.clientY / window.innerHeight * 100 + (Math.random() * 30 - 15)}vh`;
+                        fish.style.left = `${e.clientX - 100}px`;
+                        fish.style.animationDuration = '9s';
+                        container.appendChild(fish);
+                        
+                        setTimeout(() => fish.remove(), 11000);
+                    }, i * 80);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+# Щоб зберегти - cntrl s емоджі - windows + ж
