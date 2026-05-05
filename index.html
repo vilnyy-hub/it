@@ -1,68 +1,25 @@
-<!DOCTYPE html> <html lang="uk"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1.0"> <title>IT Табір - Проєкти</title> <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> <style>body{font-family:sans-serif;text-align:center;padding-top:50px;background-color:#f4f4f9;margin:0}.container{background:#fff;padding:30px;border-radius:10px;display:inline-block;box-shadow:0 4px 6px rgba(0,0,0,.1)}input{padding:10px;border:1px solid #ccc;border-radius:5px;width:200px}button{padding:10px 20px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer}#content{display:none}ul{list-style:none;padding:0;text-align:left;display:inline-block}li{margin:10px 0;background:#fff;padding:10px;border-radius:5px;border:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;gap:20px}.qr-btn{background:#007bff;font-size:12px;padding:5px 10px}#secret-door{position:fixed;bottom:0;right:0;width:40px;height:40px;z-index:9999;background:transparent}#print-zone{display:none;background:white;width:148mm;min-height:210mm;padding:10mm;margin:0 auto;box-sizing:border-box}.print-title{font-size:24pt;font-weight:bold;margin-bottom:20px;word-break:break-all}.qr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15mm;justify-items:center}.qr-item{width:35mm;height:35mm}@media print{body *{display:none!important}#print-zone,#print-zone *{display:block!important}.qr-grid{display:grid!important}@page{size:A5;margin:0}}.no-print-back{margin-bottom:20px;background:#6c757d}</style> </head> <body> <div id="secret-door" ondblclick="unlock()"></div> <div id="login-screen" class="container"> <h2>Вхід до кабінету</h2> <input type="password" id="pass-field" placeholder="Пароль..."> <button onclick="check()">Увійти</button> <p id="error" style="color:red;display:none">Неправильний код!</p> </div> <div id="content"> <h1>Проєкти учнів</h1> <ul id="project-list"></ul> </div> <div id="print-zone"> <button class="no-print-back" onclick="location.reload()">← Назад до списку</button> <div class="print-title" id="print-url-text"></div> <div class="qr-grid" id="qr-container"></div> <p style="margin-top: 20px;" class="no-print-back">Порада: Натисніть Ctrl + P для друку</p> </div> <script>
-        const projects = [
-            { name: "Віки", file: "viktoria.html" },
-            { name: "Юри", file: "CocaCola.html" },
-            { name: "Поліни", file: "jabluchko.html" },
-            { name: "Юстини", file: "musicninwave.html" },
-            { name: "Яреми", file: "SKATE&DIRT.html" },
-            { name: "Макара", file: "bakalia_ukrain.html" },
-            { name: "Солі", file: "soliabeyourself.html" },
-            { name: "Софії", file: "sofi.html" },
-            { name: "Марка", file: "marko.html" },
-            { name: "Leva", file: "chatbot.html" },
-            { name: "Аліси", file: "ALLABOUTKPOP.html" }
-        ];
+<!DOCTYPE html> <html lang="uk"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1.0"> <title>IT Табір - Проєкти</title> <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> <style>body{font-family:sans-serif;text-align:center;padding-top:50px;background-color:#f4f4f9;margin:0}.container{background:#fff;padding:30px;border-radius:10px;display:inline-block;box-shadow:0 4px 6px rgba(0,0,0,.1)}input{padding:10px;border:1px solid #ccc;border-radius:5px;width:200px}button{padding:10px 20px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer}#content{display:none}ul{list-style:none;padding:0;text-align:left;display:inline-block}li{margin:10px 0;background:#fff;padding:10px;border-radius:5px;border:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;gap:20px}li a{text-decoration:none;color:#333;font-weight:bold}li a:hover{color:#28a745}.qr-btn{background:#007bff;font-size:12px;padding:5px 10px}#secret-door{position:fixed;bottom:0;right:0;width:40px;height:40px;z-index:9999;background:transparent}#print-zone{display:none;background:white;width:148mm;height:210mm;padding:5mm;margin:0 auto;box-sizing:border-box;overflow:hidden}.print-title{font-size:14pt;font-weight:bold;margin-bottom:10mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qr-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:8mm;justify-items:center;align-items:center}.qr-item{width:32mm;height:32mm}@media print{body *{display:none!important}#print-zone,#print-zone *{display:block!important}.qr-grid{display:grid!important}.no-print-back{display:none!important}@page{size:A5;margin:0}}.no-print-back{margin-bottom:10px;background:#6c757d}</style> </head> <body> <div id="secret-door" ondblclick="unlock()"></div> <div id="login-screen" class="container"> <h2>Вхід до кабінету</h2> <input type="password" id="pass-field" placeholder="Пароль..."> <button onclick="check()">Увійти</button> <p id="error" style="color:red;display:none">Неправильний код!</p> </div> <div id="content"> <h1>Проєкти учнів</h1> <ul id="project-list"></ul> </div> <div id="print-zone"> <button class="no-print-back" onclick="location.reload()">← Назад</button> <div class="print-title" id="print-url-text"></div> <div class="qr-grid" id="qr-container"></div> <p class="no-print-back" style="font-size:10px;margin-top:5mm">Ctrl+P для друку</p> </div> <script>
+        const projects=[
+        {name:"Віки",file:"viktoria.html"},
+        {name:"Юри",file:"CocaCola.html"},
+        {name:"Поліни",file:"jabluchko.html"},
+        {name:"Юстини",file:"musicninwave.html"},
+        {name:"Яреми",file:"SKATE&DIRT.html"},
+        {name:"Макара",file:"bakalia_ukrain.html"},
+        {name:"Солі",file:"soliabeyourself.html"},
+        {name:"Софії",file:"sofi.html"},
+        {name:"Марка",file:"marko.html"},
+        {name:"Leva",file:"chatbot.html"},
+        {name:"Аліси",file:"ALLABOUTKPOP.html"}
+        {name:"",file:""}
+        {name:"",file:""}
+        {name:"",file:""}
+        {name:"",file:""}
+        {name:"",file:""}
+        {name:"",file:""}
+        {name:"",file:""}
+        {name:"",file:""}
+        {name:"",file:""}
+        {name:"",file:""}]
 
-        // Рендеримо список
-        const listEl = document.getElementById('project-list');
-        projects.forEach(p => {
-            const url = window.location.origin + "/1/" + p.file;
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>Проєкт ${p.name}</span>
-                <button class="qr-btn" onclick="generatePrintPage('${url}')">QR для друку</button>
-            `;
-            listEl.appendChild(li);
-        });
-
-        function generatePrintPage(url) {
-            document.getElementById('content').style.display = 'none';
-            document.getElementById('print-zone').style.display = 'block';
-            document.getElementById('print-url-text').innerText = url;
-            
-            const container = document.getElementById('qr-container');
-            container.innerHTML = ''; // Очистити старі коди
-
-            for (let i = 0; i < 9; i++) {
-                const div = document.createElement('div');
-                div.className = 'qr-item';
-                container.appendChild(div);
-                new QRCode(div, {
-                    text: url,
-                    width: 130,
-                    height: 130
-                });
-            }
-        }
-
-        const _dataMap = [86, 99, 104, 121, 116, 101, 108, 80, 101, 114, 115, 104, 121, 106, 49, 50];
-        
-        function unlock() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-            document.getElementById('secret-door').style.display = 'none';
-        }
-
-        function check() {
-            const userPass = document.getElementById('pass-field').value;
-            const _token = _dataMap.map(code => String.fromCharCode(code)).join('');
-            if (userPass === _token) unlock();
-            else document.getElementById('error').style.display = 'block';
-        }
-
-        document.getElementById('pass-field').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') check();
-        });
-    </script>
-</body>
-</html>
+const listEl=document.getElementById('project-list');projects.forEach(p=>{const url="https://vilnyy-hub.github.io/it/1/"+p.file;const li=document.createElement('li');li.innerHTML=`<a href="${url}" target="_blank">Проєкт ${p.name}</a><button class="qr-btn" onclick="generatePrintPage('${url}')">QR для друку</button>`;listEl.appendChild(li)});function generatePrintPage(url){event.preventDefault();document.getElementById('content').style.display='none';document.getElementById('print-zone').style.display='block';document.getElementById('print-url-text').innerText=url;const container=document.getElementById('qr-container');container.innerHTML='';for(let i=0;i<9;i++){const div=document.createElement('div');div.className='qr-item';container.appendChild(div);new QRCode(div,{text:url,width:120,height:120})}}const _dataMap=[86,99,104,121,116,101,108,80,101,114,115,104,121,106,49,50];function unlock(){document.getElementById('login-screen').style.display='none';document.getElementById('content').style.display='block';document.getElementById('secret-door').style.display='none'}function check(){const userPass=document.getElementById('pass-field').value;const _token=_dataMap.map(code=>String.fromCharCode(code)).join('');if(userPass===_token)unlock();else document.getElementById('error').style.display='block'}document.getElementById('pass-field').addEventListener('keypress',(e)=>{if(e.key==='Enter')check()});</script> </body> </html>
