@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Fun Chatbot</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* floating circles decor */
+body::before, body::after {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  animation: float 6s infinite ease-in-out;
+}
+body::after {
+  top: 10%;
+  left: 80%;
+  animation-delay: 3s;
+}
+body::before {
+  bottom: 10%;
+  left: 10%;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+}
+
+.container {
+  width: 700px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #ff4d4d;
+  margin-bottom: 10px;
+}
+
+img {
+  width: 260px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+img:hover {
+  transform: scale(1.05) rotate(1deg);
+}
+
+#chatbox {
+  height: 300px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 15px 0;
+  text-align: left;
+}
+
+.message {
+  margin-bottom: 10px;
+}
+
+.user { color: blue; font-weight: bold; }
+.bot { color: green; font-weight: bold; }
+
+.input-area {
+  display: flex;
+}
+
+#userInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#sendBtn {
+  background: #667eea;
+  color: white;
+}
+#clearBtn {
+  background: #ff4d4d;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Free Fun Chatbot 🤖</h1>
+<p class="subtitle">Have a nice time using this chatbot :)</p>
+
+<img src="https://www.cio.com/wp-content/uploads/2025/12/189347-0-83263200-1765762375-chatbot_ai_machine-learning_emerging-tech-100778305-orig.jpg?quality=50&strip=all">
+
+<div id="chatbox"></div>
+
+<div class="input-area">
+  <input type="text" id="userInput" placeholder="Type your message...">
+  <button id="sendBtn">Send</button>
+  <button id="clearBtn">Clear</button>
+</div>
+
+</div>
+
+<script>
+let knowledge = {
+  apple: "a sweet fruit",
+  cat: "a small animal",
+  dog: "a loyal animal",
+  sun: "a star"
+};
+
+function displayMessage(sender, message) {
+  const chatbox = document.getElementById("chatbox");
+  const div = document.createElement("div");
+  div.classList.add("message");
+  div.innerHTML = `<span class="${sender === 'You' ? 'user' : 'bot'}">${sender}:</span> ${message}`;
+  chatbox.appendChild(div);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function sendMessage() {
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
+  if (!text) return;
+
+  displayMessage("You", text);
+  input.value = "";
+
+  if (text.toLowerCase().startsWith("what is")) {
+    let key = text.replace(/what is/i, "").trim().toLowerCase();
+    if (knowledge[key]) {
+      displayMessage("Bot", key + " is " + knowledge[key]);
+    } else {
+      displayMessage("Bot", "I don't know that yet. Teach me!");
+    }
+    return;
+  }
+
+  let match = text.match(/(.+?) is (.+)/i);
+  if (match) {
+    let key = match[1].toLowerCase().trim();
+    let value = match[2].trim();
+    knowledge[key] = value;
+    displayMessage("Bot", "Learned something new ⚡");
+    return;
+  }
+
+  displayMessage("Bot", "Try 'What is X?' or teach me 'X is Y'");
+}
+
+function clearMemory() {
+  knowledge = {};
+  document.getElementById("chatbox").innerHTML = "";
+  displayMessage("Bot", "Memory cleared!");
+}
+
+document.getElementById("sendBtn").onclick = sendMessage;
+document.getElementById("clearBtn").onclick = clearMemory;
+
+document.getElementById("userInput").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") sendMessage();
+});
+
+displayMessage("Bot", "Hello! Ask me something or teach me 😊");
+</script>
+<img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fchatbot.html&label=&icon=binoculars-fill&color=%23198754&message=&style=flat&tz=UTC">
+</body>
+</html>
+
