@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lucky Coin 🍀</title>
+    <style>
+        body {
+            font-family: Garamond, sans-serif;
+            text-align: center;
+            background-color: blue;
+            color: cyan;
+        }
+        .coin-image {
+            border-radius: 50%; 
+            width: 280px;
+            transition: transform 0.3s;
+        }
+        #result-text {
+            font-size: 60px;
+            color: aquamarine;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #bb00ff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        button:hover { background-color: #9900cc; }
+    </style>
+</head>
+<body>
+
+    <br><br>
+
+
+    <!-- ОСЬ ВАШЕ ПОСИЛАННЯ (IMAGE SOURCE) НИЖЧЕ: -->
+
+    <img id="coin" 
+         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFSvX9mMUGwvAi8asXxMWiin4Ra192_UKgJg&s" 
+         class="coin-image">
+
+    <!-- КІНЕЦЬ БЛОКУ З КАРТИНКОЮ -->
+
+
+    <p id="result-text">Flip a coin 🍀</p>
+    
+    <p style="font-size: 30px;">If you get heads you win, but if you get tails you lose! 😝</p>
+
+    <button onclick="flipCoin()">FLIP NOW!</button>
+
+    <script>
+        function flipCoin() {
+            const resultText = document.getElementById('result-text');
+            const coinImg = document.getElementById('coin');
+            const side = Math.floor(Math.random() * 2);
+
+            if (side === 0) {
+                // HEADS = перевернута (scaleX -1)
+                resultText.innerHTML = "HEADS! YOU WIN! 🏆";
+                coinImg.style.transform = "scaleX(-1)"; 
+            } else {
+                // TAILS = звичайна (scaleX 1)
+                resultText.innerHTML = "TAILS! YOU LOSE! 😝";
+                coinImg.style.transform = "scaleX(1)"; 
+            }
+        }
+    </script>
+
+</body>
+</html>
