@@ -8,6 +8,7 @@
             --sand-yellow: #f4e1a1;
             --sand-pink: #f4cfdf;
             --text-dark: #5d4037;
+            --rain-blue: #add8e6;
         }
 
         body {
@@ -20,7 +21,6 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-            /* Анімація похитування на старті */
             animation: sway 5s ease-in-out forwards;
         }
 
@@ -31,6 +31,23 @@
             60% { transform: rotate(0.5deg); }
             80% { transform: rotate(-0.5deg); }
             100% { transform: rotate(0deg); }
+        }
+
+        /* Стилі для дощу */
+        .rain-drop {
+            position: fixed;
+            top: -10px;
+            width: 2px;
+            height: 10px;
+            background-color: var(--rain-blue);
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1000;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh); }
         }
 
         header {
@@ -49,13 +66,6 @@
             text-align: center;
         }
 
-        .intro-text {
-            font-size: 20px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        /* Анімація дихання для зображення */
         .character-container {
             margin: 20px auto;
             width: 300px;
@@ -110,6 +120,19 @@
             min-height: 50px;
             display: none;
             border: 2px dashed var(--sand-pink);
+            line-height: 1.5;
+        }
+
+        .unity-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .unity-section img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .footer-counter {
@@ -127,12 +150,10 @@
     <div class="container">
         <p class="intro-text">
             Якщо тобі треба заспокоїтися і поговорити з добрим спеціалістом, тобі до нас! 
-            Ми — <strong>"🎇Будь собою🥰"</strong> — завжди допоможемо. 
-            Просто вибери, що тебе турбує:
+            Ми — <strong>"🎇Будь собою🥰"</strong> — завжди допоможемо.
         </p>
 
         <div class="character-container">
-            <!-- Зображення людини, що медитує -->
             <img src="https://st2.depositphotos.com/18722762/50790/v/450/depositphotos_507904706-stock-illustration-relax-yoga-crossed-legs-closed.jpg" alt="Дихаюча людина">
         </div>
 
@@ -145,11 +166,15 @@
 
         <div id="ai-response"></div>
 
-        <!-- Аудіо (автозапуск часто блокується браузерами, тому додано контроль) -->
-        <div style="margin-top: 20px;">
-            <p style="font-size: 12px;">🎵 Заспокійлива музика:</p>
+        <div class="unity-section">
+            <h3>Ми всі єдині у цьому світі 🤝</h3>
+            <img src="https://img.freepik.com/free-vector/people-holding-hands-together-unity-world-peace-concept_53876-64663.jpg" alt="Єдність">
+        </div>
+
+        <div style="margin-top: 30px;">
+            <p style="font-size: 14px; font-weight: bold;">🎵 Спокійна музика для душі:</p>
             <audio id="bg-music" controls loop>
-                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
                 Ваш браузер не підтримує аудіо.
             </audio>
         </div>
@@ -160,35 +185,65 @@
     </div>
 
     <script>
+        // Функція для створення дощу на перші 5 секунд
+        function createRain() {
+            const rainDuration = 5000;
+            const endTimestamp = Date.now() + rainDuration;
+
+            const interval = setInterval(() => {
+                if (Date.now() > endTimestamp) {
+                    clearInterval(interval);
+                    return;
+                }
+                const drop = document.createElement('div');
+                drop.className = 'rain-drop';
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+                document.body.appendChild(drop);
+
+                setTimeout(() => drop.remove(), 2000);
+            }, 50);
+        }
+
+        window.onload = createRain;
+
         function respond(situation) {
             const box = document.getElementById('ai-response');
             box.style.display = 'block';
             
-            let message = "";
+            const responses = {
+                stress: [
+                    "Я поруч. Давай зробимо глибокий вдих. Уяви, як тривога виходить із кожним видихом. Ти сильніший/а за свої думки.",
+                    "Все добре. Давай просто порахуємо до десяти. Це відчуття скоро мине, я з тобою.",
+                    "Зроби ковток води і подивись у вікно. Світ великий, і ти в безпеці. Все буде добре."
+                ],
+                tired: [
+                    "Ти сьогодні зробив/ла достатньо. Твоє тіло просить відпочинку, і це нормально. Дозволь собі просто полежати.",
+                    "Відпочинок — це не лінь, це відновлення. Закрий очі на хвилинку і ні про що не думай.",
+                    "Світ почекає. Зараз найголовніше — твій спокій. Ти молодець, що піклуєшся про себе."
+                ],
+                sad: [
+                    "Сумувати — це нормально. Я вислухаю тебе. Пам'ятай, що після дощу завжди з'являється сонце.",
+                    "Дозволь собі відчути цей сум, але не залишайся в ньому надовго. Ти сонечко, яке просто закрили хмари.",
+                    "Я обіймаю тебе ментально. Все налагодиться, крок за кроком. Ти не наодинці."
+                ],
+                happy: [
+                    "Я так радію за тебе! Твоя енергія чудова. Давай збережемо цей момент у пам'яті!",
+                    "Це неймовірно! Твоє щастя надихає. Поділися цією усмішкою з кимось сьогодні!",
+                    "Чудові новини! Ти заслуговуєш на кожну секунду цієї радості. Нехай так буде завжди!"
+                ]
+            };
             
-            switch(situation) {
-                case 'stress':
-                    message = "Я поруч. Давай зробимо глибокий вдих разом із людиною на малюнку. Все буде добре, це просто тимчасовий момент.";
-                    break;
-                case 'tired':
-                    message = "Ти сьогодні зробив/ла достатньо. Твоє тіло просить відпочинку, і це нормально. Дозволь собі просто полежати 5 хвилин.";
-                    break;
-                case 'sad':
-                    message = "Сумувати — це нормально. Я вислухаю тебе. Пам'ятай, що після дощу завжди з'являється сонце.";
-                    break;
-                case 'happy':
-                    message = "Я так радію за тебе! Твоя енергія чудова. Давай збережемо цей момент у пам'яті!";
-                    break;
-            }
+            const options = responses[situation];
+            const randomMessage = options[Math.floor(Math.random() * options.length)];
             
-            box.innerHTML = "<strong>AI Психолог:</strong> " + message;
+            box.innerHTML = "<strong>AI Психолог:</strong> " + randomMessage;
         }
 
-        // Спроба автоматично увімкнути музику при першому кліку на сайті
         document.body.addEventListener('click', function() {
             const music = document.getElementById('bg-music');
             if (music.paused) {
-                music.play().catch(e => console.log("Музика зачекає на взаємодію"));
+                music.play().catch(e => console.log("Музика зачекає"));
             }
         }, { once: true });
     </script>
