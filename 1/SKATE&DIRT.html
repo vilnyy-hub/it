@@ -10,10 +10,10 @@
     <style>
         :root {
             --main-color: #ffcc00;
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #eeeeee;
-            --accent-red: #ff4444;
+            --bg-color: #0c0c0c;
+            --card-bg: #161616;
+            --text-color: #ffffff;
+            --sub-text: #b0b0b0;
         }
 
         body {
@@ -21,235 +21,278 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* Hero Section */
         header {
-            height: 60vh;
+            height: 45vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
-                        url('https://images.unsplash.com/photo-1520156584141-247ff18e044c?q=80&w=1200&auto=format&fit=crop');
-            background-size: cover;
-            background-attachment: fixed;
-            border-bottom: 8px solid var(--main-color);
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(12,12,12,1));
+            border-bottom: 5px solid var(--main-color);
             text-align: center;
         }
 
-        h1 { font-family: 'Oswald', sans-serif; font-size: 5rem; margin: 0; text-transform: uppercase; line-height: 1; }
-        header p { font-size: 1.5rem; color: var(--main-color); letter-spacing: 2px; }
+        h1 { font-family: 'Oswald', sans-serif; font-size: clamp(3rem, 10vw, 5.5rem); margin: 0; letter-spacing: -2px; text-transform: uppercase; }
+        header p { font-size: 1.2rem; color: var(--main-color); letter-spacing: 5px; text-transform: uppercase; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
 
-        /* Grid System */
+        .branching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .branch-card {
+            height: 200px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+            background: #111;
+        }
+
+        .branch-card:hover { border-color: var(--main-color); background: #1a1a1a; }
+        .branch-card.active { background: #1a1a1a; border-color: var(--main-color); box-shadow: 0 0 40px rgba(255, 204, 0, 0.15); }
+        .branch-card h2 { font-family: 'Oswald'; font-size: clamp(2rem, 5vw, 3.5rem); margin: 0; }
+        .branch-card span { color: var(--sub-text); font-size: 0.7rem; letter-spacing: 2px; }
+
+        #dynamic-content { display: none; animation: slideUp 0.6s ease forwards; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Оптимізована сітка для 6 карток */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
+
+        @media (max-width: 992px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 
         .card {
             background: var(--card-bg);
             padding: 40px 20px;
-            border-radius: 20px;
-            border-bottom: 4px solid transparent;
-            cursor: pointer;
-            transition: 0.3s;
+            border-radius: 12px;
             text-align: center;
+            transition: 0.3s;
+            border: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .card:hover {
-            border-color: var(--main-color);
-            transform: translateY(-10px);
-            background: #252525;
-        }
+        .card:hover { border-color: var(--main-color); background: #222; transform: translateY(-5px); }
+        .card i { font-size: 2.5rem; color: var(--main-color); margin-bottom: 15px; }
+        .card h3 { font-family: 'Oswald'; font-size: 1.4rem; margin-bottom: 10px; text-transform: uppercase; }
 
-        .card i { font-size: 3.5rem; color: var(--main-color); margin-bottom: 20px; }
-        .card h3 { font-family: 'Oswald', sans-serif; font-size: 1.8rem; margin-bottom: 10px; }
-
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 2000;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.95);
+            z-index: 9999;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
             overflow-y: auto;
         }
 
         .modal-content {
-            background-color: #1a1a1a;
-            margin: 2% auto;
-            padding: 40px;
-            border-left: 10px solid var(--main-color);
-            width: 90%;
-            max-width: 800px;
-            border-radius: 5px;
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 50px;
+            background: #0f0f0f;
+            border-left: 5px solid var(--main-color);
             position: relative;
         }
 
-        .close {
-            position: absolute;
-            right: 25px; top: 20px;
-            color: var(--main-color);
-            font-size: 40px;
-            cursor: pointer;
-        }
+        .close-btn { position: absolute; right: 25px; top: 15px; font-size: 2.5rem; color: var(--main-color); cursor: pointer; }
 
-        /* Typography inside Modal */
-        .modal-content h2 { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--main-color); border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .spot-item { margin-bottom: 25px; background: #252525; padding: 15px; border-radius: 8px; }
-        .spot-item b { color: var(--main-color); font-size: 1.2rem; display: block; margin-bottom: 5px; }
-        .tag-red { background: var(--accent-red); color: white; padding: 2px 8px; font-size: 0.8rem; border-radius: 4px; text-transform: uppercase; }
+        .content-section h2 { font-family: 'Oswald'; font-size: 2.2rem; color: var(--main-color); text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 30px; }
+        .article-block { background: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .article-block b { color: var(--main-color); font-size: 1.2rem; display: block; margin-bottom: 8px; }
+        .article-block p { color: #ccc; margin: 0; font-size: 0.95rem; }
 
-        /* Stats Section */
-        .stats-section {
-            background: #1e1e1e;
-            padding: 40px;
-            border-radius: 20px;
-            margin-top: 50px;
-            text-align: left;
-        }
-
-        footer { padding: 60px; text-align: center; border-top: 1px solid #333; margin-top: 100px; }
-        .social-icons i { font-size: 2rem; margin: 0 15px; color: var(--main-color); cursor: pointer; }
+        footer { padding: 60px 20px; text-align: center; background: #080808; border-top: 1px solid #222; margin-top: 50px; }
+        .social-links i { font-size: 1.8rem; margin: 0 15px; color: var(--main-color); cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>SKATE & DIRT</h1>
-    <p>LVIV STREET CULTURE 2026</p>
-    <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FSKATE%26DIRT.html&label=RIDERS_ONLINE&icon=bicycle&color=%23ffcc00&style=for-the-badge" style="margin-top: 20px;">
+    <p>LVIV RIDERS HUB // 2026</p>
 </header>
 
 <div class="container">
-    
-    <div style="text-align: center; margin-bottom: 60px;">
-        <h2 style="font-family: 'Oswald'; font-size: 3rem;">ОБЕРИ СВІЙ ШЛЯХ</h2>
-        <p style="color: #888;">Натисни на категорію, щоб отримати повну базу знань</p>
-    </div>
-
-    <div class="grid">
-        <!-- Картка 1: Споти -->
-        <div class="card" onclick="openModal('spots')">
-            <i class="fas fa-map-marker-alt"></i>
-            <h3>ЛОКАЦІЇ & МАПА</h3>
-            <p>Де сьогодні буде двіж? Весь список від центру до околиць.</p>
+    <div class="branching-container">
+        <div class="branch-card skate" onclick="selectDiscipline('skate')">
+            <span>STREET CULTURE</span>
+            <h2>SKATE</h2>
         </div>
-
-        <!-- Картка 2: Гайди -->
-        <div class="card" onclick="openModal('guides')">
-            <i class="fas fa-book-open"></i>
-            <h3>ГАЙДИ ТА ТРЮКИ</h3>
-            <p>Як зробити перший Ollie чи Bunny Hop без травм.</p>
-        </div>
-
-        <!-- Картка 3: Події -->
-        <div class="card" onclick="openModal('events')">
-            <i class="fas fa-calendar-check"></i>
-            <h3>КОНТЕСТИ ТА ЗУСТРІЧІ</h3>
-            <p>Розклад змагань та нічних каток по місту.</p>
+        <div class="branch-card dirt" onclick="selectDiscipline('dirt')">
+            <span>OFF-ROAD ACTION</span>
+            <h2>DIRT</h2>
         </div>
     </div>
 
-    <div class="stats-section">
-        <h2 style="font-family: Oswald; color: var(--main-color);">ЧОМУ ЛЬВІВ?</h2>
-        <p>Наше місто — це ідеальне поєднання старого брукованого центру (для екстремалів) та нових бетонних майданчиків. Кожен район має свою унікальну атмосферу: від технічного катання біля Порохової до швидкісних спусків у парках.</p>
+    <div id="dynamic-content">
+        <div class="grid">
+            <div class="card" onclick="openModal('spots')"><i class="fas fa-map-marked-alt"></i><h3>Локації</h3><p>Де сьогодні сесія?</p></div>
+            <div class="card" onclick="openModal('guides')"><i class="fas fa-graduation-cap"></i><h3>Школа</h3><p>Гайди на трюки</p></div>
+            <div class="card" onclick="openModal('events')"><i class="fas fa-calendar-alt"></i><h3>Події</h3><p>Календар 2026</p></div>
+            <div class="card" onclick="openModal('media')"><i class="fab fa-youtube"></i><h3>Медіа</h3><p>Відео та туторіали</p></div>
+            <div class="card" onclick="openModal('shops')"><i class="fas fa-shopping-bag"></i><h3>Шопи</h3><p>Стафф та одяг</p></div>
+            <div class="card" onclick="openModal('slang')"><i class="fas fa-comments"></i><h3>Сленг</h3><p>Мова ком'юніті</p></div>
+        </div>
     </div>
 </div>
 
-<!-- Modal Structure -->
 <div id="infoModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close-btn" onclick="closeModal()">&times;</span>
         <div id="modalBody"></div>
     </div>
 </div>
 
 <script>
-    const data = {
-        spots: `
-            <h2><i class="fas fa-map"></i> Повна база спотів Львова</h2>
-            <div class="spot-item">
-                <b>📍 Порохова Вежа (Центр)</b>
-                <p>Легендарне місце. Ідеальні грані та флет. <span class="tag-red">HOT</span></p>
-            </div>
-            <div class="spot-item">
-                <b>📍 Скейт-парк "Винниченка"</b>
-                <p>Професійна бетонна чаша та фігури. Підходить для скейтів, самокатів та BMX.</p>
-            </div>
-            <div class="spot-item">
-                <b>📍 Dirt-траса "Погулянка"</b>
-                <p>Трампліни для тих, хто любить землю та високі польоти на байках.</p>
-            </div>
-            <div class="spot-item">
-                <b>📍 Новий Скейт-парк (Сихів)</b>
-                <p>Найсучасніша локація з м'яким покриттям та перилами різної висоти.</p>
-            </div>
-            <p style="color: #888;">*Порада: Будь обережним на бруківці в центрі — вона підступна!</p>
-        `,
-        guides: `
-            <h2><i class="fas fa-graduation-cap"></i> Школа Райдера</h2>
-            <h3>Для скейтерів:</h3>
-            <ul style="line-height: 2;">
-                <li><b>Ollie:</b> Основа всього. Тримай задню ногу на хвості, а передньою витягуй дошку вгору.</li>
-                <li><b>Kickflip:</b> Коли впевнено стрибаєш, додавай закрут носком.</li>
-            </ul>
-            <h3>Для Dirt/BMX:</h3>
-            <ul style="line-height: 2;">
-                <li><b>Bunny Hop:</b> Вчимося висмикувати кермо та підтискати заднє колесо.</li>
-                <li><b>Manual:</b> Баланс на задньому колесі — ключ до стилю.</li>
-            </ul>
-            <div style="background: #332200; padding: 15px; border-radius: 10px;">
-                <b>⚠️ БЕЗПЕКА:</b> Ніколи не катай без шолома на нових спотах. Твій мозок — твій головний інструмент!
-            </div>
-        `,
-        events: `
-            <h2><i class="fas fa-trophy"></i> Календар 2026</h2>
-            <div class="spot-item">
-                <b>📅 15 Травня - "Lviv Summer Jam"</b>
-                <p>Відкриття сезону біля Порохової. Призи від локальних шопіп.</p>
-            </div>
-            <div class="spot-item">
-                <b>📅 Кожна субота - "Night Ride"</b>
-                <p>Збір о 21:00 біля Оперного. Катаємо великою колоною по нічному місту.</p>
-            </div>
-            <div class="spot-item">
-                <b>📅 21 Червня - World Skateboarding Day</b>
-                <p>Наймасштабніший заїзд року. Не пропусти!</p>
-            </div>
-        `
+    let currentDiscipline = '';
+
+    const contentData = {
+        skate: {
+            spots: `
+                <div class="content-section">
+                    <h2>📍 Найкращі споти міста</h2>
+                    <div class="article-block"><b>Порохова Вежа</b><p>Мекка львівського скейту. Тут є ідеальний флет, довгі грані та набір сходів. Місце, де зароджується тусовка кожного вечора.</p></div>
+                    <div class="article-block"><b>Скейт-парк на Винниченка</b><p>Бетонна локація з глибокою чашею (пулом) та різнорівневими квотерами. Найкращий вибір для тих, хто хоче літати та робити технічні вильоти.</p></div>
+                    <div class="article-block"><b>Митна площа</b><p>Швидкісний граніт для тих, хто любить флет-трюки та мануали. У вихідні тут завжди багато райдерів.</p></div>
+                    <div class="article-block"><b>Стрийський парк</b><p>Чудові доріжки для лонгбордингу та круїзингу в затінку дерев.</p></div>
+                </div>`,
+            guides: `
+                <div class="content-section">
+                    <h2>🛹 Майстерня трюків</h2>
+                    <div class="article-block"><b>Ollie (Основа)</b><p>Різкий удар тейлом (pop) та витягування передньої ноги. Секрет у таймінгу. Почни з місця, а потім роби через бордюри.</p></div>
+                    <div class="article-block"><b>Kickflip</b><p>Коли Ollie стабільне, додавай рух носком від себе під кутом. Не завалюй корпус назад.</p></div>
+                    <div class="article-block"><b>Manual</b><p>Баланс на задніх колесах. Використовуй руки для стабілізації та дивись вперед, а не під ноги.</p></div>
+                    <div class="article-block"><b>Boardslide</b><p>Застрибуй серединою дошки на перилу або грань. Тримай вагу по центру, щоб дошка не вилетіла.</p></div>
+                </div>`,
+            events: `
+                <div class="content-section">
+                    <h2>📅 Скейт Календар 2026</h2>
+                    <div class="article-block"><b>Lviv Street Jam (15 червня)</b><p>Велика тусовка біля Порохової. Контест на кращий трюк та Game of Skate.</p></div>
+                    <div class="article-block"><b>Go Skateboarding Day (21 червня)</b><p>Масовий проїзд містом та джем у бетонному парку. Весь Львів на колесах!</p></div>
+                    <div class="article-block"><b>Back to School Contest (6 вересня)</b><p>Змагання для аматорів. Шанс отримати перший спонсорський пакунок від LION.</p></div>
+                </div>`,
+            media: `
+                <div class="content-section">
+                    <h2>🎥 Що подивитись?</h2>
+                    <div class="article-block"><b>Braille Skateboarding</b><p>Найкращий канал для навчання з нуля. Серія "Skateboarding Made Simple" — це база.</p></div>
+                    <div class="article-block"><b>VLSkate</b><p>Розбір найдрібніших помилок. Чому дошка не докручується і як це виправити.</p></div>
+                    <div class="article-block"><b>Thrasher Magazine</b><p>Канал про професійний скейтбординг. Натхнення для твого стилю та вибору одягу.</p></div>
+                </div>`,
+            shops: `
+                <div class="content-section">
+                    <h2>🛒 Де збирати компліт?</h2>
+                    <div class="article-block"><b>LION Store</b><p>Твій бренд вуличного одягу. Худі та футболки, які не рвуться при падіннях.</p></div>
+                    <div class="article-block"><b>Boomerang Boardshop</b><p>Дошки, підвіски, колеса. Тільки перевірене залізо від світових брендів.</p></div>
+                </div>`,
+            slang: `
+                <div class="content-section">
+                    <h2>🗣️ Словник Скейтера</h2>
+                    <div class="article-block"><b>Дека</b><p>Сама дошка (дерев'яна частина).</p></div>
+                    <div class="article-block"><b>Тейл / Ноуз</b><p>Задня (хвіст) та передня (ніс) частини дошки.</p></div>
+                    <div class="article-block"><b>Гріптапа</b><p>Наждак, що клеїться зверху на деку.</p></div>
+                    <div class="article-block"><b>Позер</b><p>Той, хто косить під скейтера, але не катається.</p></div>
+                    <div class="article-block"><b>Світч</b><p>Їзда не в своїй стійці (навпаки).</p></div>
+                </div>`
+        },
+        dirt: {
+            spots: `
+                <div class="content-section">
+                    <h2>📍 Dirt & MTB Локації</h2>
+                    <div class="article-block"><b>Погулянка (Дерти)</b><p>Серія земляних вильотів. Є навчальна лінія (столи) та велика лінія з розривами (gap) для досвідчених.</p></div>
+                    <div class="article-block"><b>Знесіння (Кайзервальд)</b><p>Природні трейли, контр-ухили та дропи. Ідеально для Ендуро та Даунхілу.</p></div>
+                    <div class="article-block"><b>Сихівський Памп-трек</b><p>Асфальтована хвиляста траса для відпрацювання техніки "прокачки" та набору швидкості.</p></div>
+                    <div class="article-block"><b>Брюховицький ліс</b><p>Довгі лісові спуски з корінням та складними технічними ділянками.</p></div>
+                </div>`,
+            guides: `
+                <div class="content-section">
+                    <h2>🚵 Техніка Польоту</h2>
+                    <div class="article-block"><b>Bunny Hop</b><p>Стрибок двома колесами одночасно за рахунок висмикування керма та підтягування байка ногами.</p></div>
+                    <div class="article-block"><b>Manual</b><p>Їзда на задньому колесі без педалювання. База для стабільності на трасі.</p></div>
+                    <div class="article-block"><b>Tabletop</b><p>Нахил байка в повітрі паралельно землі. Один з найкрасивіших базових трюків.</p></div>
+                    <div class="article-block"><b>Whip</b><p>Викидання задньої частини байка в сторону під час стрибка з поверненням назад.</p></div>
+                </div>`,
+            events: `
+                <div class="content-section">
+                    <h2>📅 Dirt Події 2026</h2>
+                    <div class="article-block"><b>Dirt King Lviv (Серпень)</b><p>Головні змагання на Погулянці. Кращі райдери, гучна музика та польоти на 5+ метрів.</p></div>
+                    <div class="article-block"><b>Friday Night Ride</b><p>Нічні масові заїзди лісом з потужними ліхтарями. Кожну п'ятницю о 21:00.</p></div>
+                    <div class="article-block"><b>Lviv Enduro Cup (Жовтень)</b><p>Гонка на час по складних спусках Знесіння.</p></div>
+                </div>`,
+            media: `
+                <div class="content-section">
+                    <h2>🎥 Що подивитись?</h2>
+                    <div class="article-block"><b>GMBN</b><p>Всесвітній канал про MTB. Техніка, залізо, новини.</p></div>
+                    <div class="article-block"><b>Sam Pilgrim</b><p>Неймовірні відео про дерт та фрістайл. Заряд мотивації на кожне тренування.</p></div>
+                    <div class="article-block"><b>Fabio Wibmer</b><p>Вуличний тріал та божевільні спуски містом.</p></div>
+                </div>`,
+            shops: `
+                <div class="content-section">
+                    <h2>🛒 Сервіс та Стафф</h2>
+                    <div class="article-block"><b>LION Extreme</b><p>Захист та одяг для жорсткого катання. Стиль, що не боїться болота.</p></div>
+                    <div class="article-block"><b>Bike Box</b><p>Найкращий сервіс у Львові. Переборка вилок, гальм та збірка коліс.</p></div>
+                </div>`,
+            slang: `
+                <div class="content-section">
+                    <h2>🗣️ Словник Райдера</h2>
+                    <div class="article-block"><b>Хардтейл</b><p>Байк тільки з передньою амортизацією.</p></div>
+                    <div class="article-block"><b>Дів / Геп</b><p>Трамплін, де між вильотом і приземленням є порожнеча.</p></div>
+                    <div class="article-block"><b>Фулфейс</b><p>Шолом, що захищає все обличчя.</p></div>
+                    <div class="article-block"><b>Призем</b><p>Місце, куди ти маєш влучити колесами після стрибка.</p></div>
+                    <div class="article-block"><b>Уборка</b><p>Сильне падіння.</p></div>
+                </div>`
+        }
     };
 
-    function openModal(type) {
-        document.getElementById('modalBody').innerHTML = data[type];
-        document.getElementById('infoModal').style.display = "block";
-        document.body.style.overflow = "hidden"; // Заборонити прокрутку фону
+    function selectDiscipline(type) {
+        currentDiscipline = type;
+        document.querySelectorAll('.branch-card').forEach(card => card.classList.remove('active'));
+        document.querySelector(`.branch-card.${type}`).classList.add('active');
+        document.getElementById('dynamic-content').style.display = 'block';
+        window.scrollTo({ top: document.querySelector('.branching-container').offsetTop, behavior: 'smooth' });
+    }
+
+    function openModal(cat) {
+        if (!currentDiscipline) return;
+        document.getElementById('modalBody').innerHTML = contentData[currentDiscipline][cat];
+        document.getElementById('infoModal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
-        document.getElementById('infoModal').style.display = "none";
-        document.body.style.overflow = "auto";
+        document.getElementById('infoModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
     }
 
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('infoModal')) closeModal();
-    }
+    window.onclick = function(e) { if(e.target == document.getElementById('infoModal')) closeModal(); }
 </script>
 
 <footer>
-    <div class="social-icons">
+    <div class="social-links">
         <i class="fab fa-instagram"></i>
         <i class="fab fa-telegram"></i>
         <i class="fab fa-youtube"></i>
     </div>
-    <p style="margin-top: 20px;">© 2026 SKATE & DIRT LVIV. Created for the community.</p>
+    <p style="margin-top: 30px; opacity: 0.5; letter-spacing: 2px;">© 2026 LION RIDERS HUB</p>
 </footer>
 
 </body>
