@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Formula 1: New Era 2026</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: #fff5f8;
+            margin: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Анімація пелюсток сакури --- */
+        .sakura {
+            position: fixed;
+            top: -10%;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- Слайдер --- */
+        .slider-wrap {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 850px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding-bottom: 20px;
+        }
+
+        .slides-container {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide {
+            min-width: 100%;
+            padding: 40px;
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+        h1, h2 {
+            color: #e10600;
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+
+        .main-img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 5px solid #e10600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            background: #e10600;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover { background: #b00500; transform: scale(1.05); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ffd1dc; padding: 10px; text-align: center; }
+        th { background: #e10600; color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="sakura-box"></div>
+
+    <div class="slider-wrap">
+        <div class="slides-container" id="slider">
+            
+            <!-- Слайд 1: Загальна інформація -->
+            <div class="slide">
+                <h1>🏁 Formula 1: The Basics</h1>
+                <p><strong>Формула-1</strong> — це не просто спорт, це пік інженерної думки. У 2026 році світ побачив радикальні зміни в дизайні та потужності болідів.</p>
+                <img src="https://img2.51gt3.com/rac/article/202512/d66de9780ef74747926161c00bb604b5.jpg" class="main-img">
+                <p><em>In English:</em> F1 is the highest class of international racing. Each season consists of Grand Prix races held on iconic tracks like Monaco, Silverstone, and Spa-Francorchamps.</p>
+            </div>
+
+            <!-- Слайд 2: Результати 2026 -->
+            <div class="slide">
+                <h2>🏆 Результати сезону 2026</h2>
+                <p>Ось як виглядає залік після перших етапів цього року:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Етап</th>
+                            <th>Гран-прі</th>
+                            <th>Переможець</th>
+                            <th>Команда</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>🇦🇺 Австралія</td>
+                            <td>Дж. Расселл</td>
+                            <td>Mercedes</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>🇨🇳 Китай</td>
+                            <td>К. Антонеллі</td>
+                            <td>Mercedes</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>🇯🇵 Японія</td>
+                            <td>К. Антонеллі</td>
+                            <td>Mercedes</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>🇺🇸 Маямі</td>
+                            <td>К. Антонеллі</td>
+                            <td>Mercedes</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 15px; font-size: 0.9rem;">Наступна гонка відбудеться в Канаді (Монреаль). Боротьба за титул лише загострюється!</p>
+            </div>
+
+            <!-- Слайд 3: Команди та зірки (НОВИЙ) -->
+            <div class="slide">
+                <h2>🌟 Команди та Пілоти 2026</h2>
+                <div class="info-grid">
+                    <div class="card">
+                        <strong>Audi F1 Team</strong>
+                        <p>Нова легенда на старті! Німецький гігант офіційно приєднався до сітки, замінивши Sauber.</p>
+                    </div>
+                    <div class="card">
+                        <strong>Mercedes Domination</strong>
+                        <p>Після зміни регламенту Mercedes знову виглядають непереможними з дуетом Расселл-Антонеллі.</p>
+                    </div>
+                    <div class="card">
+                        <strong>Ferrari Power</strong>
+                        <p>Льюїс Хемілтон продовжує свій шлях у червоному боліді, борючись за свій 8-й титул.</p>
+                    </div>
+                    <div class="card">
+                        <strong>New Logistics</strong>
+                        <p><em>English:</em> The 2026 calendar is optimized for sustainability, grouping races by region to reduce carbon emissions during travel.</p>
+                    </div>
+                </div>
+                <p style="margin-top: 20px;"><strong>Склад команд:</strong> Зараз у чемпіонаті 11 команд. Це означає, що на старті ми бачимо 22 найшвидші машини у світі!</p>
+            </div>
+
+        </div>
+
+        <div class="controls">
+            <button class="nav-btn" onclick="prevSlide()">⬅ Назад</button>
+            <button class="nav-btn" onclick="nextSlide()">Вперед ➡</button>
+        </div>
+    </div>
+
+    <script>
+        // Логіка слайдера
+        let current = 0;
+        const slider = document.getElementById('slider');
+        const totalSlides = 3;
+
+        function nextSlide() {
+            current = (current + 1) % totalSlides;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            current = (current - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${current * 100}%)`;
+        }
+
+        // Логіка падаючої сакури
+        function createSakura() {
+            const container = document.getElementById('sakura-box');
+            const petal = document.createElement('div');
+            petal.classList.add('sakura');
+            petal.innerText = '🌸';
+            
+            const startPos = Math.random() * window.innerWidth;
+            const delay = Math.random() * 5;
+            const duration = Math.random() * 3 + 5;
+            const size = Math.random() * 10 + 15;
+
+            petal.style.left = startPos + 'px';
+            petal.style.animationDelay = delay + 's';
+            petal.style.animationDuration = duration + 's';
+            petal.style.fontSize = size + 'px';
+            petal.style.opacity = Math.random() * 0.6 + 0.4;
+
+            container.appendChild(petal);
+            setTimeout(() => petal.remove(), (delay + duration) * 1000);
+        }
+        setInterval(createSakura, 250);
+    </script>
+</body>
+</html>
