@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Monkey Island Games 🏝️</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background: linear-gradient(180deg, #4fc3f7 0%, #29b6f6 70%, #ffd54f 100%);
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0; overflow: hidden; transition: 0.8s;
+        }
+
+        body.party-mode { background: radial-gradient(circle, #2c003e 0%, #000000 100%); }
+
+        .decoration { position: fixed; font-size: 80px; z-index: 1; pointer-events: none; }
+        .palm-l { bottom: 20px; left: 20px; }
+        .palm-r { bottom: 20px; right: 20px; }
+
+        .island-card {
+            background: rgba(255, 253, 231, 0.95);
+            padding: 25px; border-radius: 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            max-width: 500px; width: 95%; text-align: center;
+            border: 6px solid #fbc02d; z-index: 10; position: relative;
+        }
+
+        body.party-mode .island-card { background: #111; border-color: #0ff; color: #fff; box-shadow: 0 0 30px #0ff; }
+
+        .game-screen { display: none; margin-top: 15px; }
+        .active { display: block; }
+
+        button {
+            background: #fbc02d; border: none; padding: 10px 18px;
+            font-size: 16px; font-weight: bold; border-radius: 20px;
+            cursor: pointer; margin: 5px; transition: 0.2s;
+        }
+        body.party-mode button { background: #f0f; color: #fff; }
+        button:hover { transform: scale(1.1); }
+
+        /* ГРА МАВПОЧКА */
+        #monkey-area {
+            width: 100%; height: 200px; background: #e1f5fe;
+            border-radius: 20px; position: relative; overflow: hidden;
+            border: 2px solid #81d4fa; cursor: crosshair;
+        }
+        .target { position: absolute; font-size: 40px; cursor: pointer; user-select: none; }
+
+        #gameCanvas { background: #f0f0f0; border-radius: 10px; border-bottom: 3px solid #555; }
+        .neon-text { transition: 0.5s; }
+        body.party-mode .neon-text { color: #0ff; text-shadow: 0 0 10px #0ff; }
+    </style>
+</head>
+<body id="mainBody">
+
+<div class="decoration palm-l">🌴</div>
+<div class="decoration palm-r">🌴</div>
+
+<div class="island-card">
+    <h1 id="title">Paradise Games 🏝️</h1>
+    <div class="neon-text" style="font-size: 22px; font-weight: bold;">
+        Золото: <span id="balance">0</span> 🪙
+    </div>
+    
+    <div id="menu" class="game-screen active">
+        <button onclick="toggleParty()">НЕОНОВА НІЧ 🌌</button><br>
+        <button onclick="showGame('clicker')">💰 Клікер</button>
+        <button onclick="showGame('wheel')">🎡 Рулетка</button><br>
+        <button onclick="startDinoGame()">🏃 Beach Run (Краб)</button>
+        <button onclick="startMonkeyGame()">🐒 Скарби Мавпи</button>
+    </div>
+
+    <!-- ГРА ДИНОЗАВРИК (КРАБ) -->
+    <div id="dino" class="game-screen">
+        <canvas id="gameCanvas" width="400" height="150"></canvas>
+        <p>Тисни пробіл для стрибка!</p>
+        <button onmousedown="jump()">СТРИБОК</button>
+        <button onclick="stopDinoGame()">Вийти</button>
+    </div>
+
+    <!-- НОВА ГРА: СКАРБИ МАВПОЧКИ -->
+    <div id="monkey" class="game-screen">
+        <div id="monkey-area" id="monkeyArea">
+            <p style="margin-top: 80px; color: #888;">Лови фрукти!</p>
+        </div>
+        <p>Клікай на фрукти та золото! Не чіпай бомби 💣</p>
+        <button onclick="stopMonkeyGame()">Вийти</button>
+    </div>
+
+    <!-- КЛІКЕР -->
+    <div id="clicker" class="game-screen">
+        <button style="background:none; font-size: 80px;" onclick="addMoney(10)">💰</button>
+        <p>Збирай золото на пляжі!</p>
+        <button onclick="showGame('menu')">Назад</button>
+    </div>
+
+    <!-- РУЛЕТКА -->
+    <div id="wheel" class="game-screen">
+        <div id="wd" style="font-size: 60px;">🎰</div>
+        <button onclick="spinWheel()">СПІН (100$)</button>
+        <button onclick="showGame('menu')">Назад</button>
+    </div>
+</div>
+
+<script>
+    let gold = 0;
+    function addMoney(n) { gold += n; document.getElementById('balance').innerText = gold; }
+
+    function showGame(id) {
+        document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function toggleParty() { document.body.classList.toggle('party-mode'); }
+
+    // --- ЛОГІКА ГРИ "СКАРБИ МАВПОЧКИ" ---
+    let monkeyTimer;
+    function startMonkeyGame() {
+        showGame('monkey');
+        monkeyTimer = setInterval(spawnTarget, 800);
+    }
+
+    function stopMonkeyGame() {
+        clearInterval(monkeyTimer);
+        document.getElementById('monkey-area').innerHTML = '<p style="margin-top: 80px; color: #888;">Лови фрукти!</p>';
+        showGame('menu');
+    }
+
+    function spawnTarget() {
+        const area = document.getElementById('monkey-area');
+        const target = document.createElement('div');
+        const items = ['🍌', '🍍', '🥥', '💰', '💰', '💣'];
+        const item = items[Math.floor(Math.random() * items.length)];
+        
+        target.className = 'target';
+        target.innerText = item;
+        target.style.left = Math.random() * (area.clientWidth - 40) + 'px';
+        target.style.top = Math.random() * (area.clientHeight - 40) + 'px';
+        
+        target.onclick = function() {
+            if (item === '💣') {
+                alert("БУМ! Ти втратив 100 золота!");
+                addMoney(-100);
+            } else if (item === '💰') {
+                addMoney(50);
+            } else {
+                addMoney(15);
+            }
+            target.remove();
+        };
+
+        area.appendChild(target);
+        setTimeout(() => { if(target) target.remove(); }, 1500);
+    }
+
+    // --- ЛОГІКА КРАБА (БІГУНА) ---
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let isPlaying = false, crabY = 120, jumpSpeed = 0, isJumping = false, obstacleX = 400, score = 0;
+
+    function startDinoGame() { showGame('dino'); isPlaying = true; score = 0; obstacleX = 400; requestAnimationFrame(gameLoop); }
+    function stopDinoGame() { isPlaying = false; showGame('menu'); }
+    function jump() { if (!isJumping) { jumpSpeed = -12; isJumping = true; } }
+    window.addEventListener('keydown', (e) => { if(e.code === 'Space') jump(); });
+
+    function gameLoop() {
+        if (!isPlaying) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (isJumping) { crabY += jumpSpeed; jumpSpeed += 0.8; if (crabY >= 120) { crabY = 120; isJumping = false; } }
+        ctx.font = "30px Arial";
+        ctx.fillText("🦀", 20, crabY);
+        obstacleX -= (5 + score/500);
+        ctx.fillText("🌵", obstacleX, 130);
+        if (obstacleX < -20) { obstacleX = 400; score += 10; addMoney(5); }
+        if (obstacleX > 10 && obstacleX < 40 && crabY > 100) { alert("Game Over! Score: " + score); stopDinoGame(); }
+        requestAnimationFrame(gameLoop);
+    }
+
+    function spinWheel() {
+        if(gold < 100) return alert("Мало золота!");
+        addMoney(-100);
+        const win = Math.random() > 0.7;
+        setTimeout(() => {
+            if(win) { addMoney(1000); alert("ДІАМАНТ! +1000"); }
+            else alert("Нічого не випало...");
+        }, 500);
+    }
+</script>
+</body>
+</html>
