@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Lover | Perfect Game</title>
+    
+    <style>
+        :root {
+            --soft-pink: #ffdae9;
+            --main-pink: #ff85a2;
+            --dark-pink: #e6738f;
+            --white: #ffffff;
+            --soft-blue: #bfe6ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--soft-pink);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(var(--main-pink) 0.8px, transparent 0.8px);
+            background-size: 30px 30px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 15px 35px rgba(255, 133, 162, 0.2);
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            border: 4px solid var(--white);
+        }
+
+        .id-label {
+            font-size: 9px; 
+            color: var(--main-pink); 
+            text-align: left; 
+            margin-bottom: 10px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-family: 'Impact', sans-serif;
+            font-size: 3.5rem;
+            color: var(--main-pink);
+            text-transform: lowercase;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: var(--dark-pink);
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .dog-tag {
+            color: var(--white);
+            font-size: 0.9rem;
+            background: var(--soft-blue);
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .main-img {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 5px solid var(--soft-pink);
+        }
+
+        .btn {
+            background: var(--main-pink);
+            border: none;
+            color: var(--white);
+            padding: 15px 30px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: 0.3s;
+        }
+
+        .btn-game { background: var(--soft-blue); color: #5d5d5d; }
+
+        /* ГРА */
+        #game-container {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(to bottom, #fffafa, #ffffff);
+            border-bottom: 4px solid var(--main-pink);
+            margin-top: 20px;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        #dog-player {
+            position: absolute;
+            bottom: 0;
+            left: 40px; /* Початкова позиція пса */
+            font-size: 40px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .obstacle {
+            position: absolute;
+            bottom: 0;
+            right: -50px;
+            font-size: 30px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-weight: bold;
+            color: var(--dark-pink);
+        }
+
+        .jump { animation: jump-anim 0.6s cubic-bezier(0.25, 0.1, 0.25, 1); }
+        @keyframes jump-anim {
+            0% { bottom: 0; }
+            50% { bottom: 100px; }
+            100% { bottom: 0; }
+        }
+
+        .falling-emoji { position: fixed; top: -10vh; z-index: 9999; pointer-events: none; animation: fallAnimation linear forwards; }
+        @keyframes fallAnimation {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .counter { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="id-label">ID: DOG_LOVER_SECURED | LOC: 67_COORD</div>
+        
+        <h1>dog</h1>
+        <p class="subtitle">love dogs</p>
+        <p class="dog-tag">dog lover 🦴🐕</p>
+
+        <img src="https://s3.animalia.bio/pets/animals/photos/full/1x1/tKodBr3mBxcvAp298qf4uu13VoFESfXVkq8IOcJD.webp?id=d7573e3102c763b877f919964367ab41" class="main-img">
+
+        <br>
+        
+        <button class="btn" onclick="initiateDogDrop()">Емодзі-десант! ✨</button>
+        <button class="btn btn-game" id="start-btn" onclick="toggleGame()">Грати 🐾</button>
+
+        <div id="game-container" onclick="jump()">
+            <div id="score">Очки: 0</div>
+            <div id="dog-player">🐕</div>
+        </div>
+
+        <div class="counter">
+            <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2F%28%E2%97%8F%27%E2%97%A1%27%E2%97%8F%29.html&label=users&icon=bookmark-heart&color=%23e685b5&message=&style=social&tz=UTC">
+        </div>
+    </div>
+
+    <script>
+        function initiateDogDrop() {
+            const items = ['🐕', '🐩', '🦴', '❤️', '🐾', '🎀', '🌸'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'falling-emoji';
+                    emoji.innerText = items[Math.floor(Math.random() * items.length)];
+                    emoji.style.left = Math.random() * 100 + 'vw';
+                    emoji.style.fontSize = Math.random() * 20 + 25 + 'px';
+                    const dur = Math.random() * 2 + 3;
+                    emoji.style.animationDuration = dur + 's';
+                    document.body.appendChild(emoji);
+                    setTimeout(() => emoji.remove(), dur * 1000);
+                }, i * 100);
+            }
+        }
+
+        let isPlaying = false;
+        let score = 0;
+        let speed = 6;
+        const dog = document.getElementById('dog-player');
+        const container = document.getElementById('game-container');
+        const scoreElement = document.getElementById('score');
+        const startBtn = document.getElementById('start-btn');
+
+        function toggleGame() {
+            if (isPlaying) return;
+            isPlaying = true;
+            score = 0;
+            speed = 6;
+            scoreElement.innerText = "Очки: 0";
+            container.style.display = 'block';
+            startBtn.style.visibility = 'hidden';
+            spawnObstacle();
+        }
+
+        function jump() {
+            if (isPlaying && !dog.classList.contains('jump')) {
+                dog.classList.add('jump');
+                setTimeout(() => dog.classList.remove('jump'), 600);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') { e.preventDefault(); jump(); }
+        });
+
+        function spawnObstacle() {
+            if (!isPlaying) return;
+
+            const obstacle = document.createElement('div');
+            obstacle.className = 'obstacle';
+            const types = ['🌵', '📦', '🧱', '🐌'];
+            obstacle.innerText = types[Math.floor(Math.random() * types.length)];
+            container.appendChild(obstacle);
+
+            let pos = 420;
+
+            let move = setInterval(() => {
+                if (!isPlaying) {
+                    clearInterval(move);
+                    obstacle.remove();
+                    return;
+                }
+
+                pos -= speed;
+                obstacle.style.left = pos + 'px';
+
+                // --- ПЕРЕВІРКА ЗІТКНЕННЯ (ФІКС) ---
+                let dogRect = dog.getBoundingClientRect();
+                let obsRect = obstacle.getBoundingClientRect();
+
+                // Перевіряємо перетин прямокутників з невеликим відступом (10px), щоб було чесно
+                if (
+                    dogRect.right - 10 > obsRect.left &&
+                    dogRect.left + 10 < obsRect.right &&
+                    dogRect.bottom - 5 > obsRect.top
+                ) {
+                    gameOver();
+                    clearInterval(move);
+                }
+
+                if (pos < -50) {
+                    clearInterval(move);
+                    obstacle.remove();
+                    score++;
+                    scoreElement.innerText = "Очки: " + score;
+                    if (score % 5 === 0) speed += 0.8;
+                    spawnObstacle();
+                }
+            }, 20);
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            alert("Кінець гри! Очки: " + score);
+            container.style.display = 'none';
+            startBtn.style.visibility = 'visible';
+            startBtn.innerText = "Ще раз? 🐾";
+            document.querySelectorAll('.obstacle').forEach(o => o.remove());
+        }
+    </script>
+</body>
+</html>
