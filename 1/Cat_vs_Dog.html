@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>CatsVSdogs</title>
+    <style>
+        body {
+            font-family: 'Lucida Console', Monaco, monospace;
+            text-align: center;
+            background-color: #FFFFCC;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .description {
+            color: gray;
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+
+        .battle-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Робимо картинки однакового розміру */
+        .vote-img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover; /* Обрізає фото, щоб воно вписалося в квадрат */
+            border-radius: 30%;
+            border: 5px solid white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .vote-img:active {
+            transform: scale(0.95);
+        }
+
+        .vote-button {
+            display: block;
+            margin: 15px auto;
+            padding: 10px 25px;
+            font-size: 18px;
+            font-family: inherit;
+            cursor: pointer;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .vote-button:hover {
+            background-color: #ffaa00;
+        }
+
+        .counter {
+            font-size: 24px;
+            font-weight: bold;
+            color: #444;
+            margin-top: 10px;
+        }
+
+        .vs-badge {
+            font-size: 40px;
+            font-weight: bold;
+            align-self: center;
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Cats VS Dogs</h1>
+    <p class="description">
+        Vote "Cat🐱" if you think that cats are better than dogs and click "Dog🐶" if you think that they are better
+    </p>
+
+    <div class="battle-container">
+        <!-- Секція Котів -->
+        <div class="card">
+            <img src="https://ih1.redbubble.net/image.2576697061.4736/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" 
+                 alt="Cat" class="vote-img" onclick="addVote('cat')">
+            <button class="vote-button" onclick="addVote('cat')">Cat 🐱</button>
+            <div class="counter" id="cat-count">0</div>
+        </div>
+
+        <div class="vs-badge">VS</div>
+
+        <!-- Секція Псів -->
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9HyDYIkrx8l2wHgq54XErKxegMmrmcQuGnw&s" 
+                 alt="Dog" class="vote-img" onclick="addVote('dog')">
+            <button class="vote-button" onclick="addVote('dog')">Dog 🐶</button>
+            <div class="counter" id="dog-count">0</div>
+        </div>
+    </div>
+
+    <!-- Лічильник відвідувань (з твого коду) -->
+    <div style="margin-top: 50px;">
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1&label=refreshes&icon=hand-thumbs-up-fill&color=%230d6efd&message=&style=flat&tz=UTC" alt="hits">
+    </div>
+
+    <script>
+        // Початкові значення лічильників
+        let catVotes = 0;
+        let dogVotes = 0;
+
+        function addVote(type) {
+            if (type === 'cat') {
+                catVotes++;
+                document.getElementById('cat-count').innerText = catVotes;
+                console.log("Vote for Cat!");
+            } else if (type === 'dog') {
+                dogVotes++;
+                document.getElementById('dog-count').innerText = dogVotes;
+                console.log("Vote for Dog!");
+            }
+        }
+    </script>
+
+</body>
+</html>
