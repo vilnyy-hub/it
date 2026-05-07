@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Hub | Новини команд</title>
+    
+    <style>
+        :root {
+            --f1-red: #e10600;
+            --bg-color: #f4f4f4;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --accent-blue: #4169E1;
+            --mercedes-cyan: #00a19c;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: 0.3s;
+        }
+
+        /* Навігація */
+        .team-nav {
+            background: #15151e;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .team-link {
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 5px 8px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .team-link:hover {
+            background: var(--f1-red);
+            border-color: var(--f1-red);
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            color: var(--f1-red);
+            font-size: clamp(40px, 8vw, 60px);
+            font-style: italic;
+            font-weight: 900;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        /* Стиль для лічильника відвідувань */
+        .hits-counter-img {
+            display: block;
+            margin: 15px auto;
+            border-radius: 10px;
+            width: 180px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .news-card {
+            display: flex;
+            background: var(--card-bg);
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 15px;
+            align-items: flex-start;
+        }
+
+        .news-card img {
+            width: 180px; 
+            height: auto;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .news-content {
+            padding-left: 20px;
+            flex: 1;
+        }
+
+        .news-content h2 {
+            margin: 0 0 10px 0;
+            color: var(--accent-blue);
+            font-size: 20px;
+        }
+
+        .extra-text {
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        body.dark-mode .extra-text { color: #aaa; border-color: #333; }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--f1-red);
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--f1-red);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1001;
+        }
+
+        @media (max-width: 600px) {
+            .news-card { flex-direction: column; align-items: center; text-align: center; }
+            .news-card img { width: 100%; max-width: 200px; }
+            .news-content { padding: 15px 0 0 0; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="team-nav">
+    <a href="#redbull" class="team-link">RED BULL</a>
+    <a href="#mclaren" class="team-link">MCLAREN</a>
+    <a href="#ferrari" class="team-link">FERRARI</a>
+    <a href="#mercedes" class="team-link">MERCEDES</a>
+    <a href="#aston" class="team-link">ASTON MARTIN</a>
+    <a href="#alpine" class="team-link">ALPINE</a>
+</nav>
+
+<header>
+    <h1>F1 NEWS</h1>
+    
+    <!-- Твій Hits Counter -->
+    <img class="hits-counter-img" src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FFormula1.html&label=hello%F0%9F%91%8B&icon=cursor&color=%238c68cd&message=&style=flat&tz=UTC" alt="Hits Counter">
+    
+    <p>Розширений огляд подій пелотону</p>
+</header>
+
+<div class="container">
+
+    <!-- Red Bull -->
+    <article class="news-card" id="redbull">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjywV_BCuUJltN6suCS8y3BdDOi14d76A2SQ&s" alt="Red Bull">
+        <div class="news-content">
+            <h2>Red Bull: Оновлення днища в Барселоні</h2>
+            <p>Технічний департамент команди підготував радикально нову концепцію днища для стабілізації потоку повітря.</p>
+            <div class="extra-text" id="text1">
+                Крістіан Хорнер підкреслив, що це оновлення є частиною плану розвитку на літо. Макс Ферстаппен відзначив, що машина стала менш чутливою до вітру. Інженери сподіваються на зменшення зносу задніх шин.
+            </div>
+            <button class="read-more-btn" onclick="toggleText('text1', this)">Читати далі ↓</button>
+        </div>
+    </article>
+
+    <!-- McLaren -->
+    <article class="news-card" id="mclaren">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVOCk3ymsemrvsjx2b_OfEM7T3n2__pZIFfQ&s" alt="McLaren">
+        <div class="news-content">
+            <h2>McLaren: Боротьба за кубок конструкторів</h2>
+            <p>Після перемог Ландо Норріса, McLaren офіційно включилися в боротьбу за командне лідерство.</p>
+            <div class="extra-text" id="text2">
+                Андреа Стелла заявив про оптимізацію DRS. Оскар Піастрі отримає нову специфікацію крила для покращення входу в повороти. Аналітики пророкують McLaren домінування в Європі.
+            </div>
+            <button class="read-more-btn" onclick="toggleText('text2', this)">Читати далі ↓</button>
+        </div>
+    </article>
+
+    <!-- Ferrari -->
+    <article class="news-card" id="ferrari">
+        <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR8wQ5XN26z_wBq6o9j4j_vC8kX-2fX5zG1Jw&s" alt="Ferrari">
+        <div class="news-content">
+            <h2>Ferrari: Новий режим роботи двигуна</h2>
+            <p>У Маранелло знайшли спосіб підвищити ефективність гібридної складової силової установки.</p>
+            <div class="extra-text" id="text3">
+                Фредерік Вассер зауважив, що цей "кваліфікаційний режим" допоможе Шарлю Леклеру боротися за поули. Ferrari також зосередилися на механічному зчепленні підвіски.
+            </div>
+            <button class="read-more-btn" onclick="toggleText('text3', this)">Читати далі ↓</button>
+        </div>
+    </article>
+
+    <!-- Mercedes -->
+    <article class="news-card" id="mercedes">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfF8XjO6L3-mP_X0e3V3-5QW2T_y9uHn9I5g&s" alt="Mercedes">
+        <div class="news-content">
+            <h2 style="color: var(--mercedes-cyan);">Mercedes: Домінування повертається?</h2>
+            <p>Після серії перемог «Срібні стріли» офіційно очолили чемпіонат завдяки новій енергоефективній установці.</p>
+            <div class="extra-text" id="text4">
+                Тото Вольфф підтвердив ідеальну адаптацію до регламенту. Система активної аеродинаміки боліда W17 демонструє феноменальну стабільність. Джордж Расселл зазначає повернення впевненості.
+            </div>
+            <button class="read-more-btn" onclick="toggleText('text4', this)">Читати далі ↓</button>
+        </div>
+    </article>
+
+    <!-- Додаткові команди Aston Martin та Alpine аналогічно... -->
+
+</div>
+
+<button class="theme-toggle" id="themeBtn">Змінити тему</button>
+
+<script>
+    function toggleText(id, btn) {
+        const text = document.getElementById(id);
+        if (text.style.display === "block") {
+            text.style.display = "none";
+            btn.textContent = "Читати далі ↓";
+        } else {
+            text.style.display = "block";
+            btn.textContent = "Згорнути ↑";
+        }
+    }
+
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+    });
+
+    document.querySelectorAll('.team-link').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            window.scrollTo({
+                top: target.offsetTop - 60,
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
