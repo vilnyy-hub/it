@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 News & Champions</title>
+    
+    <!-- CSS стилі всередині HTML -->
+    <style>
+        :root {
+            --f1-red: #e10600;
+            --dark-bg: #15151e;
+            --card-bg: #1f1f27;
+            --text-white: #ffffff;
+            --f1-green: #00ff85;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-white);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Стилізація лічильника */
+        .counter-wrapper {
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.05);
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: var(--f1-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 3px solid var(--f1-red);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .question {
+            color: var(--f1-green);
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 30px 0;
+        }
+
+        /* Картка фаворита */
+        .favorite-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin: 20px auto;
+            max-width: 400px;
+            transition: transform 0.3s ease;
+        }
+
+        .favorite-card:hover {
+            transform: translateY(-10px);
+            border: 1px solid var(--f1-red);
+        }
+
+        .favorite-card img {
+            width: 100%;
+            border-radius: 15px;
+            display: block;
+        }
+
+        /* Секція коментарів */
+        .comments-box {
+            background: var(--card-bg);
+            margin-top: 50px;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: left;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: #2b2b35;
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .btn-submit {
+            background: var(--f1-red);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.8;
+        }
+
+        .comment-list {
+            margin-top: 30px;
+        }
+
+        .comment-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--f1-red);
+        }
+
+        .comment-date {
+            font-size: 0.8em;
+            color: #888;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Лічильник відвідувань -->
+    <div class="counter-wrapper">
+       <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fformula1.html&label=&icon=github&color=%23198754&message=&style=social&tz=UTC">
+    </div>
+
+    <h1>News and Championships</h1>
+    
+    <p class="question">Who will be champion this season?</p>
+
+    <h2>Мій фаворит:</h2>
+    
+    <div class="favorite-card">
+        <img src="https://images.ctfassets.net/1fvlg6xqnm65/5wgQ6aoKoop3VTUOEZQj9o/d2a5b4485246385c79681c1e5a3d7506/Kimi-Catch-Up-MOBILE.jpg?w=626&q=75&fm=webp" alt="Driver">
+        <h3 style="margin-top: 15px;">Kimi Antonelli</h3>
+    </div>
+
+    <!-- Блок коментарів -->
+    <div class="comments-box">
+        <h3>Обговорення 🏎️</h3>
+        <textarea id="commentInput" placeholder="Напишіть свою думку про майбутній сезон..."></textarea>
+        <button class="btn-submit" onclick="postComment()">Залишити коментар</button>
+
+        <div id="commentList" class="comment-list">
+            <!-- Тут з'являтимуться коментарі -->
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript логіка -->
+<script>
+    // Завантаження коментарів з локальної пам'яті при відкритті сторінки
+    window.onload = function() {
+        displayComments();
+    };
+
+    function postComment() {
+        const input = document.getElementById('commentInput');
+        const text = input.value.trim();
+
+        if (text === "") {
+            alert("Будь ласка, введіть текст коментаря!");
+            return;
+        }
+
+        const newComment = {
+            text: text,
+            date: new Date().toLocaleString('uk-UA')
+        };
+
+        // Отримуємо старі коментарі або створюємо порожній масив
+        let comments = JSON.parse(localStorage.getItem('f1_comments') || '[]');
+        
+        // Додаємо новий коментар на початок списку
+        comments.unshift(newComment);
+        
+        // Зберігаємо назад у LocalStorage
+        localStorage.setItem('f1_comments', JSON.stringify(comments));
+
+        input.value = ""; // Очищуємо поле
+        displayComments(); // Оновлюємо список на екрані
+    }
+
+    function displayComments() {
+        const list = document.getElementById('commentList');
+        const comments = JSON.parse(localStorage.getItem('f1_comments') || '[]');
+
+        list.innerHTML = comments.map(comment => `
+            <div class="comment-item">
+                <span class="comment-date">${comment.date}</span>
+                <div>${comment.text}</div>
+            </div>
+        `).join('');
+    }
+</script>
+
+</body>
+</html>
