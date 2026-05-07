@@ -3,121 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shtrusdel - Яблучко</title>
+    <title>Shtrusdel Mood - Яблучко 4.5</title>
     <style>
-        /* Основні стилі */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+        :root {
+            --primary-color: #ff4757;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             text-align: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--bg-gradient);
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            color: #333;
+            color: #2f3542;
+            transition: background 0.5s ease;
+            overflow-x: hidden;
+            padding: 20px;
         }
 
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
             padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 400px;
-            transition: transform 0.3s ease;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            max-width: 450px;
+            width: 100%;
+            margin-bottom: 20px;
         }
 
-        h1 {
-            color: #d32f2f;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        h1 { color: var(--primary-color); font-weight: 900; margin-bottom: 10px; }
+
+        /* --- БЛОК НАСТРОЮ --- */
+        .mood-box {
+            background: white;
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 450px;
+            transition: all 0.3s ease;
         }
 
-        p {
-            font-style: italic;
-            color: #666;
-            margin-bottom: 1.5rem;
+        .mood-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
         }
 
-        /* Стилізація зображення */
-        .apple-img {
-            width: 200px;
-            height: auto;
+        .btn-mood {
+            border: 2px solid transparent;
+            padding: 12px 8px;
             border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #f1f2f6;
         }
 
-        .apple-img:hover {
-            transform: scale(1.1) rotate(5deg);
+        .btn-mood:hover { transform: scale(1.05); background: #dfe4ea; }
+        .btn-mood:active { transform: scale(0.95); }
+
+        #mood-result {
+            margin-top: 25px;
+            display: none;
+            animation: bounceIn 0.6s ease;
         }
 
-        .apple-img:active {
-            transform: scale(0.9);
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            60% { transform: translateY(-5px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Лічильник відвідувань */
-        .counter {
-            margin-top: 20px;
-            opacity: 0.8;
+        .mood-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%; /* Кругле яблучко */
+            border: 5px solid var(--primary-color);
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        /* Кнопка для JS */
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: none;
-            background: #4CAF50;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
+        /* --- ГРА --- */
+        #game-stats {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: white; padding: 12px 30px; border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-weight: 900;
+            display: none; z-index: 1000; border: 3px solid #2ed573;
         }
 
-        button:hover {
-            background: #45a049;
+        .game-apple {
+            position: absolute; font-size: 3rem; cursor: pointer; z-index: 100;
+            user-select: none;
+        }
+
+        .btn-shiny {
+            padding: 14px 28px; border: none; background: var(--primary-color);
+            color: white; border-radius: 50px; cursor: pointer; font-weight: 900;
+            text-transform: uppercase; margin: 5px; box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
         }
     </style>
 </head>
 <body>
 
+    <div id="game-stats">🍏 ЗІБРАНО: <span id="score">0</span></div>
+
     <div class="container">
-        <h1>🍎 Яблучко</h1>
-        <p id="quote">паяльнік, ммм нє? Юраа, дата придата</p>
-        
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYQRvm0q2VWtUmzRm0lah8xUUGArlqQM-RCw&s"
-             alt="Штрудель" 
-             class="apple-img" 
-             id="main-apple">
+        <h1>🍎 Shtrusdel</h1>
+        <p>Привіт, Юра! Відпочиваємо?</p>
+        <button class="btn-shiny" style="background: #2ed573; box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);" onclick="startGame()">Почати збір 🧺</button>
+    </div>
 
-        <br>
-        <button onclick="changeColor()">Змінити настрій</button>
+    <div class="mood-box">
+        <h2 style="margin-top: 0; font-size: 1.2rem;">Яке ти сьогодні яблучко?</h2>
+        <div class="mood-buttons">
+            <button class="btn-mood" onclick="checkMood('sad')">😢 Сумний</button>
+            <button class="btn-mood" onclick="checkMood('romantic')">💖 Романтик</button>
+            <button class="btn-mood" onclick="checkMood('happy')">🤩 Радісний</button>
+            <button class="btn-mood" onclick="checkMood('angry')">🤬 Злий</button>
+            <button class="btn-mood" onclick="checkMood('hungry')">🤤 Голодний</button>
+        </div>
 
-        <div class="counter">
-            <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fjabluchko.html&label=&icon=dice-4&color=%239eeaf9&message=&style=flat&tz=UTC" alt="hits">
+        <div id="mood-result">
+            <img id="res-img" class="mood-img" src="" alt="apple">
+            <h3 id="res-name" style="margin: 5px 0; color: var(--primary-color);"></h3>
+            <p id="res-desc" style="font-size: 0.95rem; line-height: 1.4; color: #57606f; padding: 0 10px;"></p>
+            <button onclick="document.getElementById('mood-result').style.display='none'" style="background: none; border: none; color: #a4b0be; cursor: pointer; font-size: 0.8rem; text-decoration: underline;">Скинути</button>
         </div>
     </div>
 
     <script>
-        // Функція для зміни кольору заголовка
-        function changeColor() {
-            const colors = ['#d32f2f', '#388e3c', '#1976d2', '#fbc02d', '#7b1fa2'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.querySelector('h1').style.color = randomColor;
+        const moodData = {
+            sad: {
+                name: "Симиренко",
+                desc: "Спокійне зелене яблучко. Трохи кисле, але дуже корисне. Саме час для затишного фільму.",
+                img: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=400",
+                color: "#2ed573"
+            },
+            romantic: {
+                name: "Рожева Леді",
+                desc: "Ніжне, солодке та рожеве. Сьогодні в повітрі літає любов!",
+                img: "https://images.unsplash.com/photo-1590005354167-6da97870c757?w=400",
+                color: "#ff81ff"
+            },
+            happy: {
+                name: "Голден",
+                desc: "Золотисте та солодке, як мед. Твоя енергія заряджає всіх навколо!",
+                img: "https://images.unsplash.com/photo-1560806887-1e4cd0b6bccb?w=400",
+                color: "#ffa502"
+            },
+            angry: {
+                name: "Гренні Сміт",
+                desc: "Міцне та супер-кисле! Краще спрямуй цю енергію в тренування або роботу.",
+                img: "https://images.unsplash.com/photo-1610397648930-475581727c6d?w=400",
+                color: "#ff4757"
+            },
+            hungry: {
+                name: "Фуджі",
+                desc: "Величезне, соковите та поживне. Час перекусити чимось смачненьким!",
+                img: "https://images.unsplash.com/photo-1576179635662-9d1983e97e1e?w=400",
+                color: "#eb4b4b"
+            }
+        };
+
+        function checkMood(mood) {
+            const resultDiv = document.getElementById('mood-result');
+            const data = moodData[mood];
+            
+            const imgEl = document.getElementById('res-img');
+            imgEl.src = data.img;
+            imgEl.style.borderColor = data.color;
+            
+            const nameEl = document.getElementById('res-name');
+            nameEl.innerText = `Сорт: ${data.name}`;
+            nameEl.style.color = data.color;
+            
+            document.getElementById('res-desc').innerText = data.desc;
+            
+            resultDiv.style.display = 'block';
+            
+            // Плавний скрол до результату
+            setTimeout(() => {
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
         }
 
-        // Клік на картинку викликає повідомлення
-        const apple = document.getElementById('main-apple');
-        apple.addEventListener('click', function() {
-            alert('Юрааа, це ж штрудель! Дата придата на 100%!');
-        });
+        // --- ГРА ---
+        let score = 0;
+        let gameActive = false;
 
-        // Консольне привітання
-        console.log("Сайт 'Штрудель' успішно завантажено. Привіт Юрі!");
+        function startGame() {
+            if(gameActive) return;
+            gameActive = true;
+            score = 0;
+            document.getElementById('score').innerText = score;
+            document.getElementById('game-stats').style.display = 'block';
+            
+            const gameInterval = setInterval(() => {
+                if(!gameActive) { clearInterval(gameInterval); return; }
+                createGameApple();
+            }, 1000);
+
+            setTimeout(() => {
+                gameActive = false;
+                alert(`Урожай зібрано! Твій результат: ${score} 🍎`);
+                document.getElementById('game-stats').style.display = 'none';
+            }, 15000); // 15 секунд для швидкого раунду
+        }
+
+        function createGameApple() {
+            const apple = document.createElement('div');
+            apple.className = 'game-apple';
+            apple.innerText = Math.random() > 0.85 ? '💰' : '🍎';
+            apple.style.left = 50 + Math.random() * (window.innerWidth - 100) + 'px';
+            apple.style.top = 50 + Math.random() * (window.innerHeight - 100) + 'px';
+            apple.onclick = () => {
+                score += (apple.innerText === '💰' ? 5 : 1);
+                document.getElementById('score').innerText = score;
+                apple.style.transform = 'scale(0)';
+                setTimeout(() => apple.remove(), 200);
+            };
+            document.body.appendChild(apple);
+            setTimeout(() => { if(apple.parentNode) apple.remove(); }, 1500);
+        }
     </script>
-
 </body>
 </html>
