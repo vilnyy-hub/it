@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UA FOOTBALL — Футбол та Футзал України</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+
+<style>
+/* ═══════════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════════ */
+:root{
+  --blue:#005BBB;
+  --blue2:#003d85;
+  --yellow:#FFD700;
+  --yellow2:#e6c200;
+  --dark:#05080f;
+  --dark2:#080c18;
+  --card:#0d1322;
+  --card2:#111827;
+  --border:#1a2540;
+  --border2:#232f4a;
+  --muted:#4a5a7a;
+  --muted2:#6a7a9a;
+  --text:#b8c8e8;
+  --white:#eef4ff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  background:var(--dark);
+  color:var(--text);
+  font-family:'Barlow',sans-serif;
+  overflow-x:hidden;
+  cursor:default;
+}
+a{text-decoration:none;color:inherit}
+img{display:block;width:100%;height:100%;object-fit:cover}
+button{font-family:inherit;border:none;background:none;cursor:pointer}
+
+/* scrollbar */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--dark)}
+::-webkit-scrollbar-thumb{background:var(--yellow);border-radius:2px}
+
+/* ═══════════════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════════════ */
+.cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--yellow);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transition:transform .15s ease,opacity .15s;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:difference;
+}
+.cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid rgba(255,215,0,.4);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transition:transform .08s ease,width .2s,height .2s,opacity .2s;
+  transform:translate(-50%,-50%);
+}
+body:has(a:hover) .cursor-ring,
+body:has(button:hover) .cursor-ring,
+body:has([onclick]:hover) .cursor-ring{
+  width:60px;height:60px;
+  border-color:rgba(255,215,0,.8);
+}
+
+/* ═══════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;
+  background:rgba(5,8,15,0.88);
+  backdrop-filter:blur(20px) saturate(1.8);
+  border-bottom:1px solid var(--border);
+  transition:all .3s;
+}
+nav.scrolled{
+  height:54px;
+  background:rgba(5,8,15,0.96);
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;letter-spacing:4px;
+  display:flex;align-items:center;gap:10px;
+  color:var(--white);
+}
+.ua-flag{
+  width:28px;height:18px;border-radius:2px;overflow:hidden;
+  display:flex;flex-direction:column;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+.ua-flag-top{flex:1;background:var(--blue)}
+.ua-flag-bot{flex:1;background:var(--yellow)}
+.nav-menu{display:flex;align-items:center;gap:2.5rem}
+.nav-menu a{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:500;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);
+  transition:color .2s;
+  position:relative;
+}
+.nav-menu a::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;
+  height:1px;background:var(--yellow);
+  transform:scaleX(0);transform-origin:right;
+  transition:transform .3s;
+}
+.nav-menu a:hover{color:var(--white)}
+.nav-menu a:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-live{
+  display:flex;align-items:center;gap:8px;
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  letter-spacing:2px;color:var(--yellow);
+  border:1px solid rgba(255,215,0,.3);
+  padding:5px 12px;border-radius:2px;
+}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#ff3b3b;
+  animation:pulse-dot 1.4s ease-in-out infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,.6)}
+  50%{box-shadow:0 0 0 6px rgba(255,59,59,0)}
+}
+.burger{display:none;flex-direction:column;gap:5px;padding:4px}
+.burger span{width:24px;height:2px;background:var(--white);transition:all .3s}
+@media(max-width:768px){
+  .nav-menu{display:none}.burger{display:flex}
+  nav{padding:0 1.5rem}
+}
+.mob-menu{
+  display:none;position:fixed;inset:0;z-index:490;
+  background:rgba(5,8,15,.97);
+  flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.mob-menu.open{display:flex;opacity:1;pointer-events:all}
+.mob-menu a{
+  font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:4px;
+  color:var(--white);transition:color .2s;
+}
+.mob-menu a:hover{color:var(--yellow)}
+
+/* ═══════════════════════════════════════════════
+   HERO — cinematic full-height
+═══════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  position:relative;
+  display:flex;align-items:flex-end;
+  padding:0 4rem 7rem;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:var(--dark);
+}
+/* Photo from Unsplash - football stadium */
+.hero-photo{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1600&q=80');
+  background-size:cover;background-position:center 30%;
+  animation:hero-zoom 20s ease-in-out infinite alternate;
+}
+@keyframes hero-zoom{
+  from{transform:scale(1) translateX(0)}
+  to{transform:scale(1.06) translateX(-1%)}
+}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to right, rgba(5,8,15,.95) 40%, rgba(5,8,15,.3) 100%),
+    linear-gradient(to top, rgba(5,8,15,.8) 0%, transparent 50%);
+}
+.hero-grain{
+  position:absolute;inset:0;opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+/* pitch grid decoration */
+.hero-pitch-deco{
+  position:absolute;inset:0;opacity:.025;
+  background-image:
+    linear-gradient(white 1px, transparent 1px),
+    linear-gradient(90deg, white 1px, transparent 1px),
+    radial-gradient(circle 400px at 60% 40%, white .5px, transparent 1px);
+  background-size:50px 50px,50px 50px,cover;
+}
+.hero-content{
+  position:relative;z-index:2;max-width:760px;
+}
+.hero-eyebrow{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--yellow);margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:12px;
+  opacity:0;animation:fade-up .8s .3s forwards;
+}
+.ey-line{width:40px;height:1px;background:var(--yellow)}
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(5rem,13vw,12rem);
+  line-height:.88;letter-spacing:2px;
+  color:var(--white);
+  margin-bottom:1.6rem;
+  opacity:0;animation:fade-up .9s .5s forwards;
+}
+.hero h1 em{
+  font-style:normal;
+  -webkit-text-stroke:1.5px rgba(255,215,0,.5);
+  color:transparent;
+  display:block;
+}
+.hero-desc{
+  font-size:1.1rem;color:var(--muted2);
+  max-width:500px;line-height:1.75;
+  border-left:3px solid var(--yellow);padding-left:1.2rem;
+  margin-bottom:2.5rem;
+  opacity:0;animation:fade-up .9s .7s forwards;
+}
+.hero-desc strong{color:var(--text)}
+.hero-actions{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  opacity:0;animation:fade-up .9s .9s forwards;
+}
+.btn-primary{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  background:var(--yellow);color:#05080f;
+  padding:14px 36px;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+  transition:background .2s,transform .15s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-primary:hover{background:#ffe033;transform:translateY(-2px)}
+.btn-outline{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase;
+  border:1px solid var(--border2);color:var(--text);
+  padding:14px 36px;
+  transition:border-color .2s,color .2s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-outline:hover{border-color:var(--yellow);color:var(--yellow)}
+@keyframes fade-up{
+  from{opacity:0;transform:translateY(28px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.hero-stats-bar{
+  position:absolute;bottom:0;left:0;right:0;z-index:2;
+  background:rgba(5,8,15,.8);
+  backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);
+  display:flex;
+  opacity:0;animation:fade-up .9s 1.1s forwards;
+}
+.hero-stat{
+  flex:1;padding:1.2rem 2rem;
+  border-right:1px solid var(--border);
+  text-align:center;
+}
+.hero-stat:last-child{border-right:none}
+.hs-val{
+  font-family:'Bebas Neue',sans-serif;font-size:2.2rem;
+  color:var(--yellow);letter-spacing:2px;line-height:1;
+}
+.hs-lbl{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin-top:4px;
+}
+.hero-scroll-hint{
+  position:absolute;right:3rem;bottom:5rem;z-index:2;
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--muted);
+  writing-mode:vertical-rl;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-scroll-hint::after{
+  content:'';width:1px;height:60px;
+  background:linear-gradient(var(--muted),transparent);
+}
+
+/* ═══════════════════════════════════════════════
+   LIVE TICKER
+═══════════════════════════════════════════════ */
+.ticker{
+  background:var(--blue);
+  border-top:2px solid var(--yellow);
+  border-bottom:1px solid rgba(255,215,0,.15);
+  padding:.75rem 0;overflow:hidden;
+  position:relative;
+}
+.ticker-label{
+  position:absolute;left:0;top:0;bottom:0;
+  background:var(--yellow);color:#05080f;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:13px;letter-spacing:3px;
+  display:flex;align-items:center;padding:0 1.2rem;
+  z-index:2;
+  white-space:nowrap;
+}
+.ticker-track{
+  display:flex;gap:0;
+  animation:ticker 35s linear infinite;
+  padding-left:180px;
+}
+.ticker-track:hover{animation-play-state:paused}
+@keyframes ticker{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+.tick{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:500;letter-spacing:1px;
+  padding:0 3rem;color:var(--white);white-space:nowrap;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.tick::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--yellow);flex-shrink:0;
+}
+.tick .score{color:var(--yellow);font-weight:700;margin:0 4px}
+
+/* ═══════════════════════════════════════════════
+   SECTIONS BASE
+═══════════════════════════════════════════════ */
+section{padding:7rem 3rem}
+.container{max-width:1240px;margin:0 auto}
+.sec-label{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--yellow);margin-bottom:.6rem;
+}
+.sec-label::before{content:'// '}
+.sec-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.5rem,6vw,5rem);
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--white);line-height:.95;
+  margin-bottom:3rem;
+}
+
+/* ═══════════════════════════════════════════════
+   PHOTO GRID — GALLERY STRIP
+═══════════════════════════════════════════════ */
+.photo-strip{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  grid-template-rows:320px 220px;
+  gap:4px;
+  margin-bottom:0;
+}
+.photo-strip-item{
+  overflow:hidden;position:relative;cursor:pointer;
+}
+.photo-strip-item img{
+  transition:transform .6s ease,filter .4s;
+  filter:brightness(.8) saturate(.9);
+}
+.photo-strip-item:hover img{
+  transform:scale(1.06);
+  filter:brightness(.95) saturate(1.1);
+}
+.photo-strip-item:first-child{grid-row:span 2}
+.photo-strip-item .photo-caption{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(5,8,15,.9));
+  padding:1.5rem 1rem .75rem;
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--white);
+  opacity:0;transition:opacity .3s;
+}
+.photo-strip-item:hover .photo-caption{opacity:1}
+
+/* ═══════════════════════════════════════════════
+   CLUBS SECTION
+═══════════════════════════════════════════════ */
+.clubs-section{background:var(--dark2)}
+.clubs-scroll{
+  display:flex;gap:1.5rem;
+  overflow-x:auto;padding-bottom:1rem;
+  scrollbar-width:thin;
+  scrollbar-color:var(--yellow) var(--dark);
+}
+.club-card{
+  flex-shrink:0;width:300px;
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:0;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .3s,border-color .3s;
+  position:relative;
+}
+.club-card:hover{transform:translateY(-6px);border-color:rgba(255,215,0,.3)}
+.club-photo{height:180px;overflow:hidden;position:relative}
+.club-photo img{
+  transition:transform .5s;
+  filter:brightness(.7) saturate(.8);
+}
+.club-card:hover .club-photo img{
+  transform:scale(1.08);
+  filter:brightness(.85) saturate(1);
+}
+.club-photo-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(transparent 40%,var(--card) 100%);
+}
+.club-badge-wrap{
+  position:absolute;bottom:-20px;left:1.5rem;
+  width:50px;height:50px;
+  background:var(--blue);
+  border:2px solid var(--yellow);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;
+  box-shadow:0 4px 20px rgba(0,91,187,.5);
+}
+.club-body{padding:2.5rem 1.5rem 1.5rem}
+.club-league-tag{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--yellow);margin-bottom:.4rem;
+}
+.club-name{
+  font-family:'Bebas Neue',sans-serif;font-size:1.6rem;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--white);margin-bottom:.6rem;
+}
+.club-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:1.25rem}
+.club-stats{
+  display:flex;gap:1.5rem;
+  padding-top:1rem;border-top:1px solid var(--border);
+}
+.cs{text-align:center}
+.cs-v{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--yellow);letter-spacing:1px}
+.cs-l{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.club-cta{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:2px;color:var(--muted2);margin-top:1rem;
+  display:flex;align-items:center;gap:6px;
+}
+.club-cta::after{content:'→';color:var(--yellow);transition:transform .2s}
+.club-card:hover .club-cta::after{transform:translateX(4px)}
+
+/* ═══════════════════════════════════════════════
+   LEAGUE TABLE SECTION
+═══════════════════════════════════════════════ */
+.table-section{border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.table-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:2rem}
+.tab-btn{
+  font-family:'Barlow Condensed',sans-serif;font-size:13px;
+  font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  padding:.9rem 2rem;color:var(--muted);
+  border-bottom:2px solid transparent;
+  transition:all .2s;cursor:pointer;
+}
+.tab-btn.active,.tab-btn:hover{color:var(--yellow);border-bottom-color:var(--yellow)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.league-table{width:100%;border-collapse:collapse}
+.league-table th{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);padding:.75rem 1rem;
+  border-bottom:1px solid var(--border);text-align:left;
+}
+.league-table th:not(:first-child):not(:nth-child(2)){text-align:center}
+.league-table td{
+  padding:.85rem 1rem;font-size:14px;
+  border-bottom:1px solid var(--border);
+  transition:background .15s;
+}
+.league-table tr:hover td{background:rgba(255,215,0,.03)}
+.league-table tr:last-child td{border-bottom:none}
+.t-pos{
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;
+  color:var(--muted);width:40px;
+}
+.t-pos.top{color:var(--yellow)}
+.t-pos.euro{color:#4a90d9}
+.t-pos.rel{color:#e05252}
+.t-club-name{
+  font-family:'Barlow Condensed',sans-serif;font-size:15px;
+  font-weight:600;letter-spacing:.5px;color:var(--white);
+}
+.t-club-city{font-size:12px;color:var(--muted);letter-spacing:.5px}
+.t-num{
+  text-align:center;font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:600;
+}
+.t-pts{color:var(--yellow);font-size:16px;font-weight:700}
+.form-dots{display:flex;gap:3px}
+.f-dot{
+  width:9px;height:9px;border-radius:50%;
+  font-size:0;
+}
+.f-w{background:#22c55e}.f-d{background:#94a3b8}.f-l{background:#ef4444}
+
+/* ═══════════════════════════════════════════════
+   FUTSAL SECTION
+═══════════════════════════════════════════════ */
+.futsal-section{background:var(--dark2)}
+.futsal-split{
+  display:grid;grid-template-columns:1fr 1fr;gap:5rem;
+  align-items:center;
+}
+@media(max-width:900px){.futsal-split{grid-template-columns:1fr;gap:3rem}}
+.futsal-photo-collage{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;
+  position:relative;
+}
+.futsal-photo-collage::before{
+  content:'FUTSAL';
+  position:absolute;inset:0;
+  font-family:'Bebas Neue',sans-serif;font-size:9rem;
+  color:rgba(255,215,0,.03);letter-spacing:10px;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;z-index:2;
+}
+.fpc-item{overflow:hidden;cursor:pointer}
+.fpc-item:first-child{grid-row:span 2}
+.fpc-item img{height:100%;min-height:180px;transition:transform .5s,filter .4s;filter:brightness(.7)}
+.fpc-item:hover img{transform:scale(1.07);filter:brightness(.9)}
+.futsal-text .sec-title{margin-bottom:1.5rem}
+.futsal-text p{
+  font-size:15px;color:var(--muted);line-height:1.8;
+  margin-bottom:1.25rem;
+}
+.futsal-text strong{color:var(--text)}
+.futsal-pills{display:flex;flex-wrap:wrap;gap:.6rem;margin:2rem 0}
+.f-pill{
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;
+  font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  background:var(--card);border:1px solid var(--border2);
+  color:var(--text);padding:6px 16px;
+  transition:border-color .2s,color .2s;cursor:pointer;
+}
+.f-pill:hover{border-color:var(--yellow);color:var(--yellow)}
+.futsal-features{
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem;
+}
+.ff-item{
+  background:var(--card);border:1px solid var(--border);
+  padding:1.25rem;cursor:pointer;
+  transition:border-color .2s,transform .2s;
+}
+.ff-item:hover{border-color:rgba(255,215,0,.3);transform:translateY(-2px)}
+.ff-icon{font-size:1.4rem;margin-bottom:.6rem}
+.ff-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:.9rem;
+  font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--white);margin-bottom:.3rem;
+}
+.ff-desc{font-size:12px;color:var(--muted)}
+
+/* ═══════════════════════════════════════════════
+   PHOTO GALLERY FULL
+═══════════════════════════════════════════════ */
+.gallery-section{padding-top:0;padding-bottom:0}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:260px;
+  gap:4px;
+}
+.gallery-grid .g-wide{grid-column:span 2}
+.gallery-grid .g-tall{grid-row:span 2}
+.g-item{
+  overflow:hidden;position:relative;cursor:pointer;
+}
+.g-item img{
+  transition:transform .6s ease,filter .4s;
+  filter:brightness(.75) saturate(.85);
+}
+.g-item:hover img{transform:scale(1.08);filter:brightness(1) saturate(1.1)}
+.g-item .g-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(transparent 50%,rgba(5,8,15,.85) 100%);
+  opacity:0;transition:opacity .3s;
+  display:flex;align-items:flex-end;padding:1rem;
+}
+.g-item:hover .g-overlay{opacity:1}
+.g-overlay-text{
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--white);
+}
+
+/* ═══════════════════════════════════════════════
+   NEWS SECTION
+═══════════════════════════════════════════════ */
+.news-section{border-top:1px solid var(--border)}
+.news-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:2rem;
+}
+@media(max-width:900px){.news-grid{grid-template-columns:1fr}}
+.news-hero-card{
+  background:var(--card);border:1px solid var(--border);
+  overflow:hidden;cursor:pointer;
+  transition:border-color .25s;
+  position:relative;
+}
+.news-hero-card:hover{border-color:rgba(255,215,0,.3)}
+.news-hero-photo{height:320px;overflow:hidden;position:relative}
+.news-hero-photo img{transition:transform .6s;filter:brightness(.7)}
+.news-hero-card:hover .news-hero-photo img{transform:scale(1.04)}
+.news-hero-photo::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:60%;
+  background:linear-gradient(transparent,var(--card));
+}
+.news-hero-body{padding:1.75rem 2rem 2rem}
+.n-tag{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--yellow);
+  margin-bottom:.5rem;
+}
+.news-hero-body h3{
+  font-family:'Bebas Neue',sans-serif;font-size:1.9rem;
+  letter-spacing:1px;text-transform:uppercase;
+  color:var(--white);line-height:1.1;margin-bottom:.75rem;
+}
+.news-hero-body p{font-size:14px;color:var(--muted);line-height:1.7}
+.n-date{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--muted);margin-top:1rem;letter-spacing:1px;
+}
+.news-sidebar{display:flex;flex-direction:column;gap:1rem}
+.news-item{
+  background:var(--card);border:1px solid var(--border);
+  display:grid;grid-template-columns:100px 1fr;gap:0;
+  overflow:hidden;cursor:pointer;
+  transition:border-color .2s,transform .2s;
+}
+.news-item:hover{border-color:rgba(255,215,0,.25);transform:translateX(3px)}
+.ni-photo{overflow:hidden;height:90px}
+.ni-photo img{transition:transform .5s;filter:brightness(.7)}
+.news-item:hover .ni-photo img{transform:scale(1.1)}
+.ni-body{padding:.75rem 1rem}
+.ni-tag{
+  font-family:'Share Tech Mono',monospace;font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--yellow);
+  margin-bottom:.3rem;
+}
+.ni-body h4{
+  font-family:'Barlow Condensed',sans-serif;font-size:.95rem;
+  font-weight:600;letter-spacing:.3px;
+  color:var(--white);line-height:1.3;
+}
+.ni-body p{font-size:12px;color:var(--muted);margin-top:.25rem}
+
+/* ═══════════════════════════════════════════════
+   REGIONS SECTION
+═══════════════════════════════════════════════ */
+.regions-section{background:var(--dark2)}
+.regions-map-wrap{
+  position:relative;
+  background:var(--card);border:1px solid var(--border);
+  padding:3rem;margin-bottom:3rem;
+  min-height:360px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.regions-map-bg{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1606167668584-78701c57f13d?w=1200&q=60');
+  background-size:cover;background-position:center;
+  filter:brightness(.15) saturate(0);opacity:.6;
+}
+.regions-map-text{
+  position:relative;text-align:center;
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,7rem);
+  letter-spacing:6px;color:var(--white);line-height:1;
+}
+.regions-map-text span{display:block;color:var(--yellow);font-size:70%}
+.regions-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem;
+}
+.region-card{
+  background:var(--card);border:1px solid var(--border);
+  overflow:hidden;cursor:pointer;
+  transition:transform .25s,border-color .25s;
+}
+.region-card:hover{transform:translateY(-4px);border-color:rgba(0,91,187,.5)}
+.region-photo{height:110px;overflow:hidden;position:relative}
+.region-photo img{
+  transition:transform .5s,filter .4s;
+  filter:brightness(.6) saturate(.7);
+}
+.region-card:hover .region-photo img{transform:scale(1.1);filter:brightness(.8) saturate(1)}
+.region-body{padding:1rem}
+.region-flag-dot{
+  display:inline-block;width:8px;height:8px;
+  border-radius:50%;background:var(--yellow);margin-right:6px;
+}
+.region-name{
+  font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1.5px;
+  color:var(--white);
+}
+.region-clubs{font-size:12px;color:var(--muted);margin-top:.25rem}
+
+/* ═══════════════════════════════════════════════
+   STATS HERO BAND
+═══════════════════════════════════════════════ */
+.stats-band{
+  background:linear-gradient(135deg,var(--blue) 0%,#002d6e 100%);
+  border-top:2px solid var(--yellow);
+  border-bottom:1px solid rgba(255,215,0,.15);
+  padding:4rem 3rem;
+  position:relative;overflow:hidden;
+}
+.stats-band::before{
+  content:'';position:absolute;inset:0;opacity:.06;
+  background-image:
+    linear-gradient(white 1px, transparent 1px),
+    linear-gradient(90deg, white 1px, transparent 1px);
+  background-size:40px 40px;
+}
+.stats-inner{
+  max-width:1240px;margin:0 auto;
+  display:flex;flex-wrap:wrap;gap:3rem;justify-content:space-around;
+  position:relative;
+}
+.stat-item{text-align:center;cursor:default}
+.stat-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3rem,6vw,5.5rem);
+  color:var(--yellow);letter-spacing:3px;line-height:1;
+}
+.stat-label{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,.45);margin-top:.4rem;
+}
+
+/* ═══════════════════════════════════════════════
+   LIVE MATCH WIDGET
+═══════════════════════════════════════════════ */
+.live-widget{
+  position:fixed;bottom:5rem;right:2rem;z-index:400;
+  width:280px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-top:3px solid #ff3b3b;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  transition:transform .3s;
+}
+.live-widget.hidden{transform:translateX(320px)}
+.lw-header{
+  padding:.75rem 1rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.lw-live{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:2px;color:#ff3b3b;
+}
+.lw-close{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:var(--muted);cursor:pointer;
+  padding:2px 6px;border:1px solid var(--border);
+  transition:color .2s;
+}
+.lw-close:hover{color:var(--yellow)}
+.lw-match{padding:1rem;border-bottom:1px solid var(--border)}
+.lw-teams{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.6rem;
+}
+.lw-team{
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;
+  letter-spacing:1px;color:var(--white);
+}
+.lw-score{
+  font-family:'Bebas Neue',sans-serif;font-size:2rem;
+  color:var(--yellow);letter-spacing:4px;
+}
+.lw-meta{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:2px;color:var(--muted);text-align:center;
+}
+.lw-time{
+  padding:.6rem 1rem;text-align:center;
+  font-family:'Bebas Neue',sans-serif;font-size:1rem;
+  letter-spacing:2px;color:#ff3b3b;
+}
+.lw-open{
+  position:fixed;bottom:5rem;right:2rem;z-index:400;
+  background:var(--card2);border:1px solid var(--border);
+  border-top:2px solid #ff3b3b;
+  padding:.65rem 1.1rem;cursor:pointer;
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  letter-spacing:2px;color:#ff3b3b;
+  display:flex;align-items:center;gap:7px;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+/* ═══════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════ */
+.modal-bg{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(5,8,15,.92);
+  display:flex;align-items:center;justify-content:center;
+  padding:1rem;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s;
+  backdrop-filter:blur(8px);
+}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-top:3px solid var(--yellow);
+  width:100%;max-width:680px;max-height:90vh;
+  overflow-y:auto;position:relative;
+  transform:translateY(24px) scale(.98);
+  transition:transform .3s;
+}
+.modal-bg.open .modal{transform:translateY(0) scale(1)}
+.modal-photo{height:240px;overflow:hidden;flex-shrink:0;position:relative}
+.modal-photo img{transition:transform .6s}
+.modal:hover .modal-photo img{transform:scale(1.04)}
+.modal-photo::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:50%;
+  background:linear-gradient(transparent,var(--card));
+}
+.modal-content{padding:2rem 2.5rem 2.5rem}
+.modal-close{
+  position:absolute;top:1rem;right:1rem;z-index:2;
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;
+  font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  background:var(--dark2);border:1px solid var(--border);
+  color:var(--muted);padding:5px 14px;cursor:pointer;
+  transition:all .2s;
+}
+.modal-close:hover{color:var(--yellow);border-color:var(--yellow)}
+.modal-eyebrow{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--yellow);margin-bottom:.5rem;
+}
+.modal h2{
+  font-family:'Bebas Neue',sans-serif;font-size:2.5rem;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--white);margin-bottom:1.25rem;line-height:1;
+}
+.modal p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:1rem}
+.modal ul{list-style:none;margin-bottom:1.25rem}
+.modal ul li{
+  font-size:14px;color:var(--muted);
+  padding:7px 0 7px 1rem;
+  border-bottom:1px solid var(--border);position:relative;
+}
+.modal ul li::before{content:'▸';color:var(--yellow);position:absolute;left:0}
+.m-stat-row{
+  display:flex;gap:1.5rem;flex-wrap:wrap;
+  margin:1rem 0;padding:1.25rem;
+  background:var(--dark2);border:1px solid var(--border);
+}
+.ms{text-align:center}
+.ms-v{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--yellow);letter-spacing:1px}
+.ms-l{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.modal-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.5rem}
+
+/* ═══════════════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════════════ */
+.lightbox{
+  position:fixed;inset:0;z-index:700;
+  background:rgba(5,8,15,.97);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;
+}
+.lightbox.open{opacity:1;pointer-events:all}
+.lightbox img{
+  max-width:90vw;max-height:85vh;
+  object-fit:contain;width:auto;height:auto;
+  box-shadow:0 30px 80px rgba(0,0,0,.8);
+}
+.lb-close{
+  position:absolute;top:1.5rem;right:2rem;
+  font-family:'Bebas Neue',sans-serif;font-size:2rem;
+  color:var(--white);cursor:pointer;letter-spacing:2px;
+  transition:color .2s;
+}
+.lb-close:hover{color:var(--yellow)}
+.lb-caption{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--muted);
+  white-space:nowrap;
+}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+footer{
+  background:var(--dark2);
+  border-top:1px solid var(--border);
+  padding:4rem 3rem 2rem;
+}
+.footer-top{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;
+  max-width:1240px;margin:0 auto;
+  padding-bottom:3rem;border-bottom:1px solid var(--border);
+}
+@media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.footer-top{grid-template-columns:1fr}}
+.footer-brand{
+  font-family:'Bebas Neue',sans-serif;font-size:1.8rem;
+  letter-spacing:4px;color:var(--white);
+  display:flex;align-items:center;gap:10px;margin-bottom:.75rem;
+}
+.footer-about{font-size:14px;color:var(--muted);line-height:1.7;margin-top:.5rem}
+.footer-col-title{
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+  font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--yellow);margin-bottom:1.25rem;
+}
+.footer-col a{
+  display:block;font-size:14px;color:var(--muted);
+  margin-bottom:.5rem;transition:color .2s;
+}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom-bar{
+  max-width:1240px;margin:2rem auto 0;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+}
+.footer-copy{font-size:13px;color:var(--muted)}
+.footer-ext{display:flex;gap:1.5rem}
+.footer-ext a{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  letter-spacing:2px;color:var(--muted);transition:color .2s;
+}
+.footer-ext a:hover{color:var(--yellow)}
+
+/* ═══════════════════════════════════════════════
+   BACK TO TOP
+═══════════════════════════════════════════════ */
+#btt{
+  position:fixed;bottom:2rem;left:2rem;z-index:400;
+  width:46px;height:46px;
+  background:var(--yellow);color:#05080f;
+  font-size:18px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;
+  clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
+  opacity:0;transform:translateY(10px);
+  transition:all .3s;
+}
+#btt.show{opacity:1;transform:translateY(0)}
+#btt:hover{background:#ffe033}
+
+/* ═══════════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:.1s}
+.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}
+.reveal-d4{transition-delay:.4s}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE HELPERS
+═══════════════════════════════════════════════ */
+@media(max-width:900px){
+  .photo-strip{grid-template-columns:1fr 1fr;grid-template-rows:200px 200px}
+  .photo-strip-item:first-child{grid-row:span 1;grid-column:span 2}
+  section{padding:5rem 1.5rem}
+  .hero{padding:0 1.5rem 8rem}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .gallery-grid .g-wide{grid-column:span 2}
+  .gallery-grid .g-tall{grid-row:span 1}
+}
+@media(max-width:600px){
+  .gallery-grid{grid-template-columns:1fr}
+  .gallery-grid .g-wide{grid-column:span 1}
+  .news-grid{grid-template-columns:1fr}
+  .hero-stats-bar{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">
+    <div class="ua-flag"><div class="ua-flag-top"></div><div class="ua-flag-bot"></div></div>
+    UA FOOTBALL
+  </div>
+  <div class="nav-menu">
+    <a href="#clubs">Клуби</a>
+    <a href="#league">УПЛ</a>
+    <a href="#futsal">Футзал</a>
+    <a href="#gallery">Фото</a>
+    <a href="#news">Новини</a>
+    <a href="#regions">Регіони</a>
+  </div>
+  <div class="nav-live">
+    <div class="live-dot"></div>
+    LIVE
+  </div>
+  <button class="burger" id="burger-btn" onclick="toggleMob()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mob-menu">
+  <a href="#clubs" onclick="toggleMob()">Клуби</a>
+  <a href="#league" onclick="toggleMob()">УПЛ</a>
+  <a href="#futsal" onclick="toggleMob()">Футзал</a>
+  <a href="#gallery" onclick="toggleMob()">Фото</a>
+  <a href="#news" onclick="toggleMob()">Новини</a>
+  <a href="#regions" onclick="toggleMob()">Регіони</a>
+</div>
+
+<!-- ═════════════ HERO ═════════════ -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-photo"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-pitch-deco"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow"><div class="ey-line"></div>Сезон 2025–2026</div>
+    <h1>ФУТБОЛ<br/><em>УКРАЇНИ</em></h1>
+    <p class="hero-desc">
+      Від <strong>Шахтаря та Динамо</strong> до вуличного футзалу в Львові — повний гід по українському футболу. Клуби, ліги, регіони, результати.
+    </p>
+    <div class="hero-actions">
+      <a href="#clubs" class="btn-primary">Клуби →</a>
+      <a href="#futsal" class="btn-outline">Футзал</a>
+    </div>
+  </div>
+
+  <div class="hero-stats-bar">
+    <div class="hero-stat"><div class="hs-val">16</div><div class="hs-lbl">Клубів УПЛ</div></div>
+    <div class="hero-stat"><div class="hs-val">2 026+</div><div class="hs-lbl">Ліцензованих клубів</div></div>
+    <div class="hero-stat"><div class="hs-val">1 200+</div><div class="hs-lbl">Футзал команд</div></div>
+    <div class="hero-stat"><div class="hs-val">30+</div><div class="hs-lbl">Регіональних ліг</div></div>
+    <div class="hero-stat"><div class="hs-val" id="live-clock">--:--</div><div class="hs-lbl">Поточний час</div></div>
+  </div>
+  <div class="hero-scroll-hint">прокрути</div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">🔴 LIVE</div>
+  <div class="ticker-track">
+    <div class="tick">Шахтар — Динамо <span class="score">2:1</span> · УПЛ тур 28</div>
+    <div class="tick">Карпати — Рух <span class="score">3:0</span> · Квітень 2026 · Арена Львів</div>
+    <div class="tick">Збірна України — кваліфікація ЧС 2026</div>
+    <div class="tick">КІВС in.IT U-15 — чемпіони України з футзалу 🏆</div>
+    <div class="tick">Металіст — Ворскла <span class="score">1:1</span> · УПЛ</div>
+    <div class="tick">АФЛ Львів · Новий сезон 2026 розпочато</div>
+    <div class="tick">Динамо Київ — Шахтар · Суперкубок 2026</div>
+    <div class="tick">Рух Львів — молодіжна академія · 12 нових підписань</div>
+    <div class="tick">Шахтар — Динамо <span class="score">2:1</span> · УПЛ тур 28</div>
+    <div class="tick">Карпати — Рух <span class="score">3:0</span> · Квітень 2026 · Арена Львів</div>
+    <div class="tick">Збірна України — кваліфікація ЧС 2026</div>
+    <div class="tick">КІВС in.IT U-15 — чемпіони України з футзалу 🏆</div>
+    <div class="tick">Металіст — Ворскла <span class="score">1:1</span> · УПЛ</div>
+    <div class="tick">АФЛ Львів · Новий сезон 2026 розпочато</div>
+    <div class="tick">Динамо Київ — Шахтар · Суперкубок 2026</div>
+    <div class="tick">Рух Львів — молодіжна академія · 12 нових підписань</div>
+  </div>
+</div>
+
+<!-- ═════════════ PHOTO STRIP ═════════════ -->
+<div class="photo-strip">
+  <div class="photo-strip-item" onclick="openLightbox('https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=1600&q=85','Стадіон — атмосфера матчу')">
+    <img src="https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=900&q=75" alt="stadium"/>
+    <div class="photo-caption">Атмосфера стадіону</div>
+  </div>
+  <div class="photo-strip-item" onclick="openLightbox('https://images.unsplash.com/photo-1580748141549-71748dbe0bdc?w=1200&q=85','Гравець у дії')">
+    <img src="https://images.unsplash.com/photo-1580748141549-71748dbe0bdc?w=600&q=75" alt="player"/>
+    <div class="photo-caption">Гравець у дії</div>
+  </div>
+  <div class="photo-strip-item" onclick="openLightbox('https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&q=85','Фанати')">
+    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=75" alt="fans"/>
+    <div class="photo-caption">Фанати</div>
+  </div>
+  <div class="photo-strip-item" onclick="openLightbox('https://images.unsplash.com/photo-1551958219-acbc595b8a5d?w=1200&q=85','Нічний матч')">
+    <img src="https://images.unsplash.com/photo-1551958219-acbc595b8a5d?w=600&q=75" alt="night"/>
+    <div class="photo-caption">Нічний матч</div>
+  </div>
+  <div class="photo-strip-item" onclick="openLightbox('https://images.unsplash.com/photo-1434648957308-5e6a859697e0?w=1200&q=85','М\'яч')">
+    <img src="https://images.unsplash.com/photo-1434648957308-5e6a859697e0?w=600&q=75" alt="ball"/>
+    <div class="photo-caption">М'яч</div>
+  </div>
+</div>
+
+<!-- ═════════════ CLUBS ═════════════ -->
+<section id="clubs" class="clubs-section">
+  <div class="container">
+    <div class="reveal"><div class="sec-label">Топ клуби</div><div class="sec-title">Клуби України</div></div>
+    <div class="clubs-scroll reveal">
+
+      <div class="club-card" onclick="openModal('shakhtar')">
+        <div class="club-photo">
+          <img src="https://images.unsplash.com/photo-1459865264687-595d652de67e?w=400&q=70" alt="Шахтар"/>
+          <div class="club-photo-overlay"></div>
+          <div class="club-badge-wrap">⚫</div>
+        </div>
+        <div class="club-body">
+          <div class="club-league-tag">Прем'єр-ліга · Донецьк</div>
+          <div class="club-name">Шахтар Донецьк</div>
+          <div class="club-desc">Найтитулованіший клуб сучасної України. Лауреати Кубку УЄФА 2009. Грають за кордоном через вторгнення.</div>
+          <div class="club-stats">
+            <div class="cs"><div class="cs-v">13×</div><div class="cs-l">Чемп.</div></div>
+            <div class="cs"><div class="cs-v">1936</div><div class="cs-l">Рік</div></div>
+            <div class="cs"><div class="cs-v">КЄ</div><div class="cs-l">2009</div></div>
+          </div>
+          <div class="club-cta">детальніше</div>
+        </div>
+      </div>
+
+      <div class="club-card" onclick="openModal('dynamo')">
+        <div class="club-photo">
+          <img src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=400&q=70" alt="Динамо"/>
+          <div class="club-photo-overlay"></div>
+          <div class="club-badge-wrap">🔵</div>
+        </div>
+        <div class="club-body">
+          <div class="club-league-tag">Прем'єр-ліга · Київ</div>
+          <div class="club-name">Динамо Київ</div>
+          <div class="club-desc">Найіменитіший клуб в українській історії. 16 чемпіонств. Шевченко, Блохін, Лобановський.</div>
+          <div class="club-stats">
+            <div class="cs"><div class="cs-v">16×</div><div class="cs-l">Чемп.</div></div>
+            <div class="cs"><div class="cs-v">1927</div><div class="cs-l">Рік</div></div>
+            <div class="cs"><div class="cs-v">2×</div><div class="cs-l">КВК</div></div>
+          </div>
+          <div class="club-cta">детальніше</div>
+        </div>
+      </div>
+
+      <div class="club-card" onclick="openModal('karpaty')">
+        <div class="club-photo">
+          <img src="https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=400&q=70" alt="Карпати"/>
+          <div class="club-photo-overlay"></div>
+          <div class="club-badge-wrap">🟡</div>
+        </div>
+        <div class="club-body">
+          <div class="club-league-tag">Прем'єр-ліга · Львів</div>
+          <div class="club-name">Карпати Львів</div>
+          <div class="club-desc">Символ Заходу України. В квітні 2026 розгромили Рух 3:0 у гарячому дербі на Арені Львів.</div>
+          <div class="club-stats">
+            <div class="cs"><div class="cs-v">1963</div><div class="cs-l">Рік</div></div>
+            <div class="cs"><div class="cs-v">3:0</div><div class="cs-l">Дербі '26</div></div>
+            <div class="cs"><div class="cs-v">34 900</div><div class="cs-l">Арена</div></div>
+          </div>
+          <div class="club-cta">детальніше</div>
+        </div>
+      </div>
+
+      <div class="club-card" onclick="openModal('rukh')">
+        <div class="club-photo">
+          <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=70" alt="Рух"/>
+          <div class="club-photo-overlay"></div>
+          <div class="club-badge-wrap">🟢</div>
+        </div>
+        <div class="club-body">
+          <div class="club-league-tag">Прем'єр-ліга · Львів</div>
+          <div class="club-name">Рух Львів</div>
+          <div class="club-desc">Сучасний проект із ставкою на молодь. Суперник Карпат у міському дербі. Один із найцікавіших клубів УПЛ.</div>
+          <div class="club-stats">
+            <div class="cs"><div class="cs-v">1987</div><div class="cs-l">Рік</div></div>
+            <div class="cs"><div class="cs-v">УПЛ</div><div class="cs-l">Ліга</div></div>
+            <div class="cs"><div class="cs-v">Молодь</div><div class="cs-l">Акцент</div></div>
+          </div>
+          <div class="club-cta">детальніше</div>
+        </div>
+      </div>
+
+      <div class="club-card" onclick="openModal('metalist')">
+        <div class="club-photo">
+          <img src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400&q=70" alt="Металіст"/>
+          <div class="club-photo-overlay"></div>
+          <div class="club-badge-wrap">🟠</div>
+        </div>
+        <div class="club-body">
+          <div class="club-league-tag">Прем'єр-ліга · Харків</div>
+          <div class="club-name">Металіст Харків</div>
+          <div class="club-desc">Харківська гордість із великою фанбазою. Чвертьфінал Ліги Європи 2012. Відроджений і знову сильний.</div>
+          <div class="club-stats">
+            <div class="cs"><div class="cs-v">1925</div><div class="cs-l">Рік</div></div>
+            <div class="cs"><div class="cs-v">ЄЛ</div><div class="cs-l">Євро</div></div>
+            <div class="cs"><div class="cs-v">38 633</div><div class="cs-l">Стадіон</div></div>
+          </div>
+          <div class="club-cta">детальніше</div>
+        </div>
+      </div>
+
+      <div class="club-card" onclick="openModal('ukraine_nt')">
+        <div class="club-photo">
+          <img src="https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=400&q=70" alt="Збірна"/>
+          <div class="club-photo-overlay"></div>
+          <div class="club-badge-wrap">🇺🇦</div>
+        </div>
+        <div class="club-body">
+          <div class="club-league-tag">Збірна · УЄФА · ФІФА</div>
+          <div class="club-name">Збірна України</div>
+          <div class="club-desc">Жовто-сині. ЧС 2006 — чвертьфінал. Євро 2012, 2020. Кваліфікація на ЧС 2026 — головна мета.</div>
+          <div class="club-stats">
+            <div class="cs"><div class="cs-v">ЧС</div><div class="cs-l">Мета 2026</div></div>
+            <div class="cs"><div class="cs-v">24</div><div class="cs-l">ФІФА рейт.</div></div>
+            <div class="cs"><div class="cs-v">1991</div><div class="cs-l">У ФІФА</div></div>
+          </div>
+          <div class="club-cta">детальніше</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-item reveal"><div class="stat-num" data-count="16">0</div><div class="stat-label">Клубів УПЛ</div></div>
+    <div class="stat-item reveal reveal-d1"><div class="stat-num" data-count="2026">0</div><div class="stat-label">Ліцензованих клубів</div></div>
+    <div class="stat-item reveal reveal-d2"><div class="stat-num" data-count="1200">0</div><div class="stat-label">Футзал команд</div></div>
+    <div class="stat-item reveal reveal-d3"><div class="stat-num" data-count="30">0</div><div class="stat-label">Регіональних ліг</div></div>
+    <div class="stat-item reveal reveal-d4"><div class="stat-num" data-count="7">0</div><div class="stat-label">Ліг УАФ</div></div>
+  </div>
+</div>
+
+<!-- ═════════════ LEAGUE TABLE ═════════════ -->
+<section id="league" class="table-section">
+  <div class="container">
+    <div class="reveal"><div class="sec-label">2025–2026</div><div class="sec-title">Таблиця УПЛ</div></div>
+    <div class="table-tabs reveal">
+      <button class="tab-btn active" onclick="switchTab('upl',this)">Прем'єр-ліга</button>
+      <button class="tab-btn" onclick="switchTab('futsal_table',this)">Футзал Екстра</button>
+    </div>
+    <div class="tab-panel active" id="tab-upl">
+      <div style="overflow-x:auto">
+      <table class="league-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Клуб</th><th>І</th><th>В</th><th>Н</th><th>П</th><th>Г</th><th>Очки</th><th>Форма</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="t-pos top">1</td><td><div class="t-club-name">Шахтар Донецьк</div><div class="t-club-city">Донецьк / Варшава</div></td><td class="t-num">28</td><td class="t-num">20</td><td class="t-num">5</td><td class="t-num">3</td><td class="t-num">58:21</td><td class="t-num t-pts">65</td><td><div class="form-dots"><div class="f-dot f-w"></div><div class="f-dot f-w"></div><div class="f-dot f-d"></div><div class="f-dot f-w"></div><div class="f-dot f-w"></div></div></td></tr>
+          <tr><td class="t-pos top">2</td><td><div class="t-club-name">Динамо Київ</div><div class="t-club-city">Київ</div></td><td class="t-num">28</td><td class="t-num">18</td><td class="t-num">6</td><td class="t-num">4</td><td class="t-num">52:20</td><td class="t-num t-pts">60</td><td><div class="form-dots"><div class="f-dot f-w"></div><div class="f-dot f-d"></div><div class="f-dot f-w"></div><div class="f-dot f-w"></div><div class="f-dot f-l"></div></div></td></tr>
+          <tr><td class="t-pos euro">3</td><td><div class="t-club-name">Карпати Львів</div><div class="t-club-city">Львів</div></td><td class="t-num">28</td><td class="t-num">16</td><td class="t-num">6</td><td class="t-num">6</td><td class="t-num">47:28</td><td class="t-num t-pts">54</td><td><div class="form-dots"><div class="f-dot f-w"></div><div class="f-dot f-w"></div><div class="f-dot f-w"></div><div class="f-dot f-d"></div><div class="f-dot f-w"></div></div></td></tr>
+          <tr><td class="t-pos euro">4</td><td><div class="t-club-name">Металіст Харків</div><div class="t-club-city">Харків</div></td><td class="t-num">28</td><td class="t-num">14</td><td class="t-num">8</td><td class="t-num">6</td><td class="t-num">40:25</td><td class="t-num t-pts">50</td><td><div class="form-dots"><div class="f-dot f-d"></div><div class="f-dot f-w"></div><div class="f-dot f-d"></div><div class="f-dot f-w"></div><div class="f-dot f-w"></div></div></td></tr>
+          <tr><td class="t-pos">5</td><td><div class="t-club-name">Рух Львів</div><div class="t-club-city">Львів</div></td><td class="t-num">28</td><td class="t-num">13</td><td class="t-num">7</td><td class="t-num">8</td><td class="t-num">38:32</td><td class="t-num t-pts">46</td><td><div class="form-dots"><div class="f-dot f-l"></div><div class="f-dot f-w"></div><div class="f-dot f-w"></div><div class="f-dot f-d"></div><div class="f-dot f-l"></div></div></td></tr>
+          <tr><td class="t-pos">6</td><td><div class="t-club-name">Ворскла Полтава</div><div class="t-club-city">Полтава</div></td><td class="t-num">28</td><td class="t-num">11</td><td class="t-num">9</td><td class="t-num">8</td><td class="t-num">35:30</td><td class="t-num t-pts">42</td><td><div class="form-dots"><div class="f-dot f-d"></div><div class="f-dot f-d"></div><div class="f-dot f-w"></div><div class="f-dot f-d"></div><div class="f-dot f-w"></div></div></td></tr>
+          <tr><td class="t-pos">7</td><td><div class="t-club-name">Дніпро-1</div><div class="t-club-city">Дніпро</div></td><td class="t-num">28</td><td class="t-num">10</td><td class="t-num">8</td><td class="t-num">10</td><td class="t-num">31:34</td><td class="t-num t-pts">38</td><td><div class="form-dots"><div class="f-dot f-w"></div><div class="f-dot f-l"></div><div class="f-dot f-d"></div><div class="f-dot f-w"></div><div class="f-dot f-d"></div></div></td></tr>
+          <tr><td class="t-pos">8</td><td><div class="t-club-name">Чорноморець Одеса</div><div class="t-club-city">Одеса</div></td><td class="t-num">28</td><td class="t-num">9</td><td class="t-num">7</td><td class="t-num">12</td><td class="t-num">28:38</td><td class="t-num t-pts">34</td><td><div class="form-dots"><div class="f-dot f-l"></div><div class="f-dot f-d"></div><div class="f-dot f-w"></div><div class="f-dot f-l"></div><div class="f-dot f-d"></div></div></td></tr>
+          <tr><td class="t-pos rel">14</td><td><div class="t-club-name">Металург Запоріжжя</div><div class="t-club-city">Запоріжжя</div></td><td class="t-num">28</td><td class="t-num">4</td><td class="t-num">6</td><td class="t-num">18</td><td class="t-num">18:55</td><td class="t-num t-pts">18</td><td><div class="form-dots"><div class="f-dot f-l"></div><div class="f-dot f-l"></div><div class="f-dot f-d"></div><div class="f-dot f-l"></div><div class="f-dot f-l"></div></div></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div style="display:flex;gap:1.5rem;margin-top:1.25rem;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)"><div style="width:10px;height:10px;background:var(--yellow);border-radius:2px"></div>Ліга чемпіонів</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)"><div style="width:10px;height:10px;background:#4a90d9;border-radius:2px"></div>Ліга Європи</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)"><div style="width:10px;height:10px;background:#e05252;border-radius:2px"></div>Вилітає</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="tab-futsal_table">
+      <div style="overflow-x:auto">
+      <table class="league-table">
+        <thead>
+          <tr><th>#</th><th>Команда</th><th>І</th><th>В</th><th>Н</th><th>П</th><th>Г</th><th>Очки</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="t-pos top">1</td><td><div class="t-club-name">Спортивний клуб Дніпро</div><div class="t-club-city">Дніпро</div></td><td class="t-num">22</td><td class="t-num">18</td><td class="t-num">2</td><td class="t-num">2</td><td class="t-num">112:48</td><td class="t-num t-pts">56</td></tr>
+          <tr><td class="t-pos top">2</td><td><div class="t-club-name">Енергія Нова Каховка</div><div class="t-club-city">Нова Каховка</div></td><td class="t-num">22</td><td class="t-num">16</td><td class="t-num">3</td><td class="t-num">3</td><td class="t-num">98:52</td><td class="t-num t-pts">51</td></tr>
+          <tr><td class="t-pos euro">3</td><td><div class="t-club-name">КІВС in.IT Львів</div><div class="t-club-city">Львів</div></td><td class="t-num">22</td><td class="t-num">14</td><td class="t-num">4</td><td class="t-num">4</td><td class="t-num">87:54</td><td class="t-num t-pts">46</td></tr>
+          <tr><td class="t-pos">4</td><td><div class="t-club-name">Ураган Іршава</div><div class="t-club-city">Іршава</div></td><td class="t-num">22</td><td class="t-num">12</td><td class="t-num">4</td><td class="t-num">6</td><td class="t-num">78:58</td><td class="t-num t-pts">40</td></tr>
+          <tr><td class="t-pos">5</td><td><div class="t-club-name">Продексім Херсон</div><div class="t-club-city">Херсон</div></td><td class="t-num">22</td><td class="t-num">10</td><td class="t-num">5</td><td class="t-num">7</td><td class="t-num">65:60</td><td class="t-num t-pts">35</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ FUTSAL ═════════════ -->
+<section id="futsal" class="futsal-section">
+  <div class="container">
+    <div class="futsal-split">
+      <div class="futsal-photo-collage reveal">
+        <div class="fpc-item" onclick="openLightbox('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&q=85','Футзал — гра в залі')">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=70" alt="futsal"/>
+        </div>
+        <div class="fpc-item" onclick="openLightbox('https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=1200&q=85','Молодіжний футзал')">
+          <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=500&q=70" alt="futsal2"/>
+        </div>
+        <div class="fpc-item" onclick="openLightbox('https://images.unsplash.com/photo-1464983953574-0892a716854b?w=1200&q=85','Тренування')">
+          <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?w=500&q=70" alt="futsal3"/>
+        </div>
+      </div>
+      <div class="futsal-text reveal reveal-d2">
+        <div class="sec-label">Залний футбол</div>
+        <div class="sec-title">Футзал<br/>в Україні</div>
+        <p>Футзал в Україні — це <strong>не просто хобі</strong>. Це повноцінна система змагань від дитячого до профрівня. Понад 1200 команд по всій країні, 30+ регіональних асоціацій.</p>
+        <p>Багато зірок УПЛ починали саме з футзальних залів — <strong>Харків, Львів, Дніпро, Одеса</strong>. Швидкий, технічний, розумний — футзал виховує найкращих.</p>
+        <div class="futsal-pills">
+          <span class="f-pill" onclick="openModal('afl_lviv')">АФЛ Львів</span>
+          <span class="f-pill" onclick="openModal('kivs')">КІВС U-15</span>
+          <span class="f-pill" onclick="openModal('futsal_nat')">Збірна з футзалу</span>
+          <span class="f-pill" onclick="openModal('futsal_dev')">Розвиток</span>
+        </div>
+        <div class="futsal-features">
+          <div class="ff-item" onclick="openModal('afl_lviv')">
+            <div class="ff-icon">🏟</div>
+            <div class="ff-title">АФЛ Львів</div>
+            <div class="ff-desc">Найрозвиненіша регіональна ліга. Супер, Перша, Друга ліга + юнацькі</div>
+          </div>
+          <div class="ff-item" onclick="openModal('kivs')">
+            <div class="ff-icon">🏆</div>
+            <div class="ff-title">КІВС in.IT U-15</div>
+            <div class="ff-desc">Чемпіони України 2026 у юнацькому футзалі — Львів</div>
+          </div>
+          <div class="ff-item" onclick="openModal('futsal_nat')">
+            <div class="ff-icon">🇺🇦</div>
+            <div class="ff-title">Збірна з футзалу</div>
+            <div class="ff-desc">Учасники чемпіонатів УЄФА та ФІФА. Зростаючий рівень</div>
+          </div>
+          <div class="ff-item" onclick="openModal('futsal_dev')">
+            <div class="ff-icon">⚡</div>
+            <div class="ff-title">Нові зали</div>
+            <div class="ff-desc">Будівництво по всій Україні. Доступний спорт цілий рік</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ GALLERY ═════════════ -->
+<section id="gallery" class="gallery-section" style="padding:0">
+  <div class="gallery-grid">
+    <div class="g-item g-wide g-tall reveal" onclick="openLightbox('https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1600&q=85','Стадіон — повні трибуни')">
+      <img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=800&q=75" alt="gallery1"/>
+      <div class="g-overlay"><div class="g-overlay-text">Повні трибуни</div></div>
+    </div>
+    <div class="g-item reveal reveal-d1" onclick="openLightbox('https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&q=85','Гол!')">
+      <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&q=75" alt="gallery2"/>
+      <div class="g-overlay"><div class="g-overlay-text">Гол!</div></div>
+    </div>
+    <div class="g-item reveal reveal-d2" onclick="openLightbox('https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=1200&q=85','Тренування збірної')">
+      <img src="https://images.unsplash.com/photo-1606925797300-0b35e9d1794e?w=600&q=75" alt="gallery3"/>
+      <div class="g-overlay"><div class="g-overlay-text">Тренування</div></div>
+    </div>
+    <div class="g-item g-wide reveal reveal-d1" onclick="openLightbox('https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=1600&q=85','Атака')">
+      <img src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=800&q=75" alt="gallery4"/>
+      <div class="g-overlay"><div class="g-overlay-text">Атака</div></div>
+    </div>
+    <div class="g-item reveal reveal-d2" onclick="openLightbox('https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=1200&q=85','Вболівальники')">
+      <img src="https://images.unsplash.com/photo-1599458252573-56ae36120de1?w=600&q=75" alt="gallery5"/>
+      <div class="g-overlay"><div class="g-overlay-text">Вболівальники</div></div>
+    </div>
+    <div class="g-item reveal reveal-d3" onclick="openLightbox('https://images.unsplash.com/photo-1484482340112-e1e2682b4856?w=1200&q=85','Нічний матч')">
+      <img src="https://images.unsplash.com/photo-1484482340112-e1e2682b4856?w=600&q=75" alt="gallery6"/>
+      <div class="g-overlay"><div class="g-overlay-text">Нічний матч</div></div>
+    </div>
+    <div class="g-item reveal reveal-d4" onclick="openLightbox('https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=1200&q=85','Молодіжний футбол')">
+      <img src="https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=600&q=75" alt="gallery7"/>
+      <div class="g-overlay"><div class="g-overlay-text">Молодіжний футбол</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ NEWS ═════════════ -->
+<section id="news" class="news-section">
+  <div class="container">
+    <div class="reveal"><div class="sec-label">Актуально</div><div class="sec-title">Новини</div></div>
+    <div class="news-grid">
+      <div class="news-hero-card reveal" onclick="openModal('news_derby')">
+        <div class="news-hero-photo">
+          <img src="https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=800&q=75" alt="derby"/>
+        </div>
+        <div class="news-hero-body">
+          <div class="n-tag">Дербі · Квітень 2026</div>
+          <h3>Карпати розгромили Рух 3:0 у львівському дербі</h3>
+          <p>На «Арені Львів» відбувся один із найяскравіших матчів сезону. Косенко, Чачуа і Педросу — автори голів. Карпати підтвердили лідерські амбіції у поточному сезоні УПЛ.</p>
+          <div class="n-date">// 12 квітня 2026 · УПЛ · Арена Львів · 28 000 глядачів</div>
+        </div>
+      </div>
+      <div class="news-sidebar reveal reveal-d2">
+        <div class="news-item" onclick="openModal('news_kivs')">
+          <div class="ni-photo"><img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=200&q=70" alt="kivs"/></div>
+          <div class="ni-body">
+            <div class="ni-tag">Футзал · Молодь</div>
+            <h4>КІВС in.IT — чемпіони U-15</h4>
+            <p>Львів підкорив Україну</p>
+          </div>
+        </div>
+        <div class="news-item" onclick="openModal('news_nt')">
+          <div class="ni-photo"><img src="https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=200&q=70" alt="nt"/></div>
+          <div class="ni-body">
+            <div class="ni-tag">Збірна · ЧС 2026</div>
+            <h4>Збірна у кваліфікації</h4>
+            <p>Жовто-сині йдуть вперед</p>
+          </div>
+        </div>
+        <div class="news-item" onclick="openModal('news_infra')">
+          <div class="ni-photo"><img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=200&q=70" alt="stadium"/></div>
+          <div class="ni-body">
+            <div class="ni-tag">Інфраструктура</div>
+            <h4>Нові стадіони та зали</h4>
+            <p>Програма модернізації УАФ</p>
+          </div>
+        </div>
+        <div class="news-item" onclick="openModal('news_euro')">
+          <div class="ni-photo"><img src="https://images.unsplash.com/photo-1459865264687-595d652de67e?w=200&q=70" alt="euro"/></div>
+          <div class="ni-body">
+            <div class="ni-tag">Євро · Клуби</div>
+            <h4>Шахтар у єврокубках</h4>
+            <p>Продовження традиції</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ REGIONS ═════════════ -->
+<section id="regions" class="regions-section">
+  <div class="container">
+    <div class="reveal"><div class="sec-label">Географія</div><div class="sec-title">Регіони</div></div>
+    <div class="regions-map-wrap reveal">
+      <div class="regions-map-bg"></div>
+      <div class="regions-map-text">
+        УКРАЇНА<span>Football Nation</span>
+      </div>
+    </div>
+    <div class="regions-grid">
+      <div class="region-card reveal" onclick="openModal('r_kyiv')">
+        <div class="region-photo"><img src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=400&q=65" alt="Київ"/></div>
+        <div class="region-body"><span class="region-flag-dot"></span><div class="region-name">Київ</div><div class="region-clubs">Динамо · НСК Олімпійський</div></div>
+      </div>
+      <div class="region-card reveal reveal-d1" onclick="openModal('r_donetsk')">
+        <div class="region-photo"><img src="https://images.unsplash.com/photo-1459865264687-595d652de67e?w=400&q=65" alt="Донецьк"/></div>
+        <div class="region-body"><span class="region-flag-dot"></span><div class="region-name">Донецьк</div><div class="region-clubs">Шахтар · Традиція</div></div>
+      </div>
+      <div class="region-card reveal reveal-d2" onclick="openModal('r_lviv')">
+        <div class="region-photo"><img src="https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=400&q=65" alt="Львів"/></div>
+        <div class="region-body"><span class="region-flag-dot"></span><div class="region-name">Львів</div><div class="region-clubs">Карпати · Рух · АФЛ</div></div>
+      </div>
+      <div class="region-card reveal reveal-d3" onclick="openModal('r_kharkiv')">
+        <div class="region-photo"><img src="https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=400&q=65" alt="Харків"/></div>
+        <div class="region-body"><span class="region-flag-dot"></span><div class="region-name">Харків</div><div class="region-clubs">Металіст · Стадіон Металіст</div></div>
+      </div>
+      <div class="region-card reveal" onclick="openModal('r_dnipro')">
+        <div class="region-photo"><img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=65" alt="Дніпро"/></div>
+        <div class="region-body"><span class="region-flag-dot"></span><div class="region-name">Дніпро</div><div class="region-clubs">Дніпро-1 · Традиції</div></div>
+      </div>
+      <div class="region-card reveal reveal-d1" onclick="openModal('r_odesa')">
+        <div class="region-photo"><img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&q=65" alt="Одеса"/></div>
+        <div class="region-body"><span class="region-flag-dot"></span><div class="region-name">Одеса</div><div class="region-clubs">Чорноморець · Чорне море</div></div>
+      </div>
+      <div class="region-card reveal reveal-d2" onclick="openModal('r_zaporizhzhia')">
+        <div class="region-photo"><img src="https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=400&q=65" alt="Запоріжжя"/></div>
+        <div class="region-body"><span class="region-flag-dot"></span><div class="region-name">Запоріжжя</div><div class="region-clubs">Металург · Промисловість</div></div>
+      </div>
+      <div class="region-card reveal reveal-d3" onclick="openModal('r_poltava')">
+        <div class="region-photo"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=400&q=65" alt="Полтава"/></div>
+        <div class="region-body"><span class="region-flag-dot"></span><div class="region-name">Полтава</div><div class="region-clubs">Ворскла · Поля Полтавщини</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ FOOTER ═════════════ -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">
+        <div class="ua-flag"><div class="ua-flag-top"></div><div class="ua-flag-bot"></div></div>
+        UA FOOTBALL
+      </div>
+      <p class="footer-about">Повний гід по українському футболу та футзалу. Клуби, ліги, регіони, результати — все в одному місці. Сезон 2025–2026.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Клуби</div>
+      <a href="#" onclick="openModal('shakhtar');return false">Шахтар Донецьк</a>
+      <a href="#" onclick="openModal('dynamo');return false">Динамо Київ</a>
+      <a href="#" onclick="openModal('karpaty');return false">Карпати Львів</a>
+      <a href="#" onclick="openModal('rukh');return false">Рух Львів</a>
+      <a href="#" onclick="openModal('metalist');return false">Металіст Харків</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Ліги</div>
+      <a href="#league">Прем'єр-ліга</a>
+      <a href="#league">Перша ліга</a>
+      <a href="#futsal">Футзал Екстра</a>
+      <a href="#futsal">АФЛ Регіони</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Посилання</div>
+      <a href="https://uaf.ua" target="_blank">УАФ — uaf.ua</a>
+      <a href="https://upl.ua" target="_blank">УПЛ — upl.ua</a>
+      <a href="https://futsal.lviv.ua" target="_blank">АФЛ Львів</a>
+      <a href="https://fcdynamo.ua" target="_blank">ФК Динамо</a>
+      <a href="https://shakhtar.com" target="_blank">ФК Шахтар</a>
+    </div>
+  </div>
+  <div class="footer-bottom-bar">
+    <p class="footer-copy">© 2026 UA Football & Futsal · Сезон 2025–2026 · Зроблено в Україні 🇺🇦</p>
+    <div class="footer-ext">
+      <a href="https://uaf.ua" target="_blank">УАФ</a>
+      <a href="https://upl.ua" target="_blank">УПЛ</a>
+      <a href="https://futsal.lviv.ua" target="_blank">АФЛ</a>
+    </div>
+  </div>
+</footer>
+
+<a href="#top" id="btt">↑</a>
+
+<!-- LIVE WIDGET -->
+<div class="live-widget" id="live-widget">
+  <div class="lw-header">
+    <div class="lw-live"><div class="live-dot"></div>LIVE</div>
+    <div class="lw-close" onclick="hideLiveWidget()">✕</div>
+  </div>
+  <div class="lw-match">
+    <div class="lw-meta" style="margin-bottom:.5rem">УПЛ · Тур 28</div>
+    <div class="lw-teams">
+      <div class="lw-team">Шахтар</div>
+      <div class="lw-score" id="lw-score">2:1</div>
+      <div class="lw-team">Динамо</div>
+    </div>
+    <div class="lw-meta">Арена Варшава · 68'</div>
+  </div>
+  <div class="lw-time" id="lw-time">⏱ 68:24</div>
+</div>
+<button class="lw-open" id="lw-open-btn" style="display:none" onclick="showLiveWidget()">
+  <div class="live-dot"></div>LIVE · 2:1
+</button>
+
+<!-- MODAL -->
+<div class="modal-bg" id="main-modal" onclick="handleModalBgClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕ ЗАКРИТИ</button>
+    <div class="modal-photo" id="modal-photo-wrap">
+      <img id="modal-img" src="" alt=""/>
+    </div>
+    <div class="modal-content">
+      <div class="modal-eyebrow" id="modal-eye"></div>
+      <h2 id="modal-title"></h2>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lb-close" onclick="closeLightbox()">✕ ЗАКРИТИ</div>
+  <img id="lb-img" src="" alt=""/>
+  <div class="lb-caption" id="lb-cap"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── CURSOR ── */
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('cur-ring');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+  curRing.style.left = e.clientX + 'px';
+  curRing.style.top = e.clientY + 'px';
+});
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 80);
+  document.getElementById('btt').classList.toggle('show', window.scrollY > 600);
+});
+
+/* ── LIVE CLOCK ── */
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const el = document.getElementById('live-clock');
+  if (el) el.textContent = h + ':' + m;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* ── LIVE MATCH TIMER ── */
+let matchMinutes = 68, matchSeconds = 24;
+function updateMatchTimer() {
+  matchSeconds++;
+  if (matchSeconds >= 60) { matchSeconds = 0; matchMinutes++; }
+  const el = document.getElementById('lw-time');
+  if (el) el.textContent = `⏱ ${String(matchMinutes).padStart(2,'0')}:${String(matchSeconds).padStart(2,'0')}`;
+}
+setInterval(updateMatchTimer, 1000);
+function hideLiveWidget() {
+  document.getElementById('live-widget').classList.add('hidden');
+  document.getElementById('lw-open-btn').style.display = 'flex';
+}
+function showLiveWidget() {
+  document.getElementById('live-widget').classList.remove('hidden');
+  document.getElementById('lw-open-btn').style.display = 'none';
+}
+
+/* ── MOBILE MENU ── */
+function toggleMob() {
+  document.getElementById('mob-menu').classList.toggle('open');
+}
+
+/* ── SCROLL REVEAL ── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ── ANIMATED COUNTERS ── */
+function animateCounter(el, target) {
+  let start = 0;
+  const duration = 1800;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target).toLocaleString('uk-UA');
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target.toLocaleString('uk-UA');
+  };
+  requestAnimationFrame(step);
+}
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.counted) {
+      e.target.dataset.counted = '1';
+      const target = parseInt(e.target.dataset.count);
+      animateCounter(e.target, target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+
+/* ── TABS ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+/* ── LIGHTBOX ── */
+function openLightbox(src, cap) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap || '';
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── MODAL DATA ── */
+const modalData = {
+  shakhtar: {
+    img: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=700&q=80',
+    eye: 'Прем\'єр-ліга · Донецьк / Варшава',
+    title: 'ШАХТАР ДОНЕЦЬК',
+    body: `<p>Найтитулованіший клуб сучасної України і один із найвідоміших брендів Східної Європи. Шахтар виграли УПЛ 13 разів і здобули Кубок УЄФА 2009 — найбільший успіх українського клубу в Єврокубках.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">1936</div><div class="ms-l">Рік</div></div>
+      <div class="ms"><div class="ms-v">13×</div><div class="ms-l">Чемпіон</div></div>
+      <div class="ms"><div class="ms-v">КЄ 2009</div><div class="ms-l">Єврокубок</div></div>
+      <div class="ms"><div class="ms-v">52 000</div><div class="ms-l">Донбас Арена</div></div>
+    </div>
+    <ul>
+      <li>Вимушені грати домашні матчі за кордоном через вторгнення</li>
+      <li>Бразильська школа — десятки бразильців за 20 років</li>
+      <li>Академія «Шахтаря» — одна з найкращих у Східній Європі</li>
+      <li>Тренер Луческу тренував клуб понад 12 років</li>
+      <li>Лідери УПЛ 2025–2026 — 65 очок після 28 турів</li>
+    </ul>
+    <div class="modal-actions">
+      <a class="btn-primary" href="https://shakhtar.com" target="_blank">Офіційний сайт →</a>
+    </div>`
+  },
+  dynamo: {
+    img: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=700&q=80',
+    eye: 'Прем\'єр-ліга · Київ',
+    title: 'ДИНАМО КИЇВ',
+    body: `<p>Найіменитіший клуб в історії українського футболу. 16 чемпіонств, двічі Кубок Кубків УЄФА (1975, 1986). Виховали Валерія Лобановського, Андрія Шевченка, Олега Блохіна.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">1927</div><div class="ms-l">Рік</div></div>
+      <div class="ms"><div class="ms-v">16×</div><div class="ms-l">Чемпіон</div></div>
+      <div class="ms"><div class="ms-v">2×</div><div class="ms-l">КВК УЄФА</div></div>
+      <div class="ms"><div class="ms-v">70 050</div><div class="ms-l">НСК Олімп.</div></div>
+    </div>
+    <ul>
+      <li>Шевченко — Золотий м'яч ФІФА 2004</li>
+      <li>Блохін — найкращий бомбардир Ліги чемпіонів у 1970-х</li>
+      <li>Лобановський — один із найгеніальніших тренерів в історії</li>
+      <li>НСК «Олімпійський» — стадіон для Євро 2012, 70 050 місць</li>
+      <li>Другі у таблиці УПЛ 2025–2026 — 60 очок</li>
+    </ul>
+    <div class="modal-actions">
+      <a class="btn-primary" href="https://fcdynamo.ua" target="_blank">Офіційний сайт →</a>
+    </div>`
+  },
+  karpaty: {
+    img: 'https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=700&q=80',
+    eye: 'Прем\'єр-ліга · Львів',
+    title: 'КАРПАТИ ЛЬВІВ',
+    body: `<p>Заснований у 1963 році, Карпати — серце футбольної культури Заходу України. В квітні 2026 вони розгромили суперника Рух 3:0 у дербі на «Арені Львів» перед 28 000 глядачами.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">1963</div><div class="ms-l">Рік</div></div>
+      <div class="ms"><div class="ms-v">3:0</div><div class="ms-l">Дербі квіт. '26</div></div>
+      <div class="ms"><div class="ms-v">34 900</div><div class="ms-l">Арена Львів</div></div>
+    </div>
+    <ul>
+      <li>Голи у дербі: Косенко (31'), Чачуа (58'), Педросу (74')</li>
+      <li>Домашня арена «Арена Львів» — збудована для Євро 2012</li>
+      <li>Історична арена — стадіон «Україна»</li>
+      <li>Треті у таблиці УПЛ 2025–2026 — 54 очки</li>
+      <li>Активна молодіжна академія та широка фанбаза</li>
+    </ul>
+    <div class="modal-actions">
+      <a class="btn-primary" href="https://karpaty.lviv.ua" target="_blank">Офіційний сайт →</a>
+    </div>`
+  },
+  rukh: {
+    img: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=700&q=80',
+    eye: 'Прем\'єр-ліга · Львів',
+    title: 'РУХ ЛЬВІВ',
+    body: `<p>Сучасний клуб з 1987 року з чіткою філософією: все на молоді. Рух виросли до Прем'єр-ліги і стали гідним суперником у міському дербі. Один із найцікавіших проектів УПЛ.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">1987</div><div class="ms-l">Рік</div></div>
+      <div class="ms"><div class="ms-v">УПЛ</div><div class="ms-l">Ліга</div></div>
+      <div class="ms"><div class="ms-v">5-те</div><div class="ms-l">Позиція '26</div></div>
+    </div>
+    <ul>
+      <li>Молодіжна академія — пріоритет №1</li>
+      <li>П'яті у таблиці УПЛ 2025–2026 — 46 очок</li>
+      <li>Суперник Карпат у львівському дербі</li>
+      <li>Зелено-білі кольори</li>
+    </ul>
+    <div class="modal-actions">
+      <a class="btn-primary" href="https://rukh.com.ua" target="_blank">Офіційний сайт →</a>
+    </div>`
+  },
+  metalist: {
+    img: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=700&q=80',
+    eye: 'Прем\'єр-ліга · Харків',
+    title: 'МЕТАЛІСТ ХАРКІВ',
+    body: `<p>Один із найпопулярніших клубів Сходу України. Металіст відомий потужним виступом у Лізі Європи — чвертьфінал 2012. Велика харківська фанбаза.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">1925</div><div class="ms-l">Рік</div></div>
+      <div class="ms"><div class="ms-v">4-те</div><div class="ms-l">УПЛ '26</div></div>
+      <div class="ms"><div class="ms-v">38 633</div><div class="ms-l">Стадіон</div></div>
+    </div>
+    <ul>
+      <li>Стадіон «Металіст» — 38 633 місць</li>
+      <li>Чвертьфінал Ліги Європи 2012</li>
+      <li>Жовто-сині кольори</li>
+      <li>Четверті у таблиці УПЛ 2025–2026 — 50 очок</li>
+    </ul>`
+  },
+  ukraine_nt: {
+    img: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=700&q=80',
+    eye: 'УЄФА · ФІФА',
+    title: 'ЗБІРНА УКРАЇНИ',
+    body: `<p>Жовто-сині вперше кваліфікувались на ЧС у 2006 році (чвертьфінал!), виступали на Євро 2012 і Євро 2020. Кваліфікація на ЧС 2026 — основна мета поточного сезону.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">1991</div><div class="ms-l">У ФІФА</div></div>
+      <div class="ms"><div class="ms-v">1/4</div><div class="ms-l">ЧС 2006</div></div>
+      <div class="ms"><div class="ms-v">24-те</div><div class="ms-l">Рейтинг</div></div>
+    </div>
+    <ul>
+      <li>Легенда — Андрій Шевченко, Золотий м'яч ФІФА 2004</li>
+      <li>Домашня арена — НСК «Олімпійський», Київ</li>
+      <li>Тренуються в умовах воєнного часу — гідність і мужність</li>
+      <li>Кваліфікація на ЧС 2026 у розпалі</li>
+    </ul>
+    <div class="modal-actions">
+      <a class="btn-primary" href="https://uaf.ua" target="_blank">УАФ — uaf.ua →</a>
+    </div>`
+  },
+  afl_lviv: {
+    img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&q=80',
+    eye: 'Футзал · Львівська область',
+    title: 'АФЛ ЛЬВІВ',
+    body: `<p>Асоціація футзалу Львівщини — одна з найрозвиненіших регіональних ліг в Україні. Повноцінна піраміда від Супер-ліги до дебютних турнірів.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">5</div><div class="ms-l">Ліг</div></div>
+      <div class="ms"><div class="ms-v">200+</div><div class="ms-l">Команд</div></div>
+      <div class="ms"><div class="ms-v">12 міс.</div><div class="ms-l">Сезон</div></div>
+    </div>
+    <ul>
+      <li>Супер-ліга Львівщини — Tier 1</li>
+      <li>Перша ліга — Tier 2</li>
+      <li>Друга ліга — Tier 3</li>
+      <li>Юнацькі ліги — U-10, U-12, U-14, U-15, U-17</li>
+      <li>AFL Debut Cup — вхідний турнір для нових команд</li>
+    </ul>
+    <div class="modal-actions">
+      <a class="btn-primary" href="https://futsal.lviv.ua" target="_blank">futsal.lviv.ua →</a>
+    </div>`
+  },
+  kivs: {
+    img: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=700&q=80',
+    eye: 'Юнацький футзал · Львів · 2026',
+    title: 'КІВС IN.IT U-15',
+    body: `<p>Молодіжна футзальна команда КІВС in.IT здобула титул чемпіонів України у категорії U-15 у 2026 році. Це визначний успіх для Львова і підтвердження статусу регіону як одного з провідних центрів розвитку футзалу в країні.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">🏆</div><div class="ms-l">Чемпіони</div></div>
+      <div class="ms"><div class="ms-v">U-15</div><div class="ms-l">Категорія</div></div>
+      <div class="ms"><div class="ms-v">2026</div><div class="ms-l">Рік</div></div>
+    </div>
+    <ul>
+      <li>Перший національний титул для клубу</li>
+      <li>Вихованці АФЛ Львів</li>
+      <li>Підтверджують високий рівень юнацького футзалу Заходу України</li>
+      <li>Гравці мають шанс потрапити до юнацьких збірних</li>
+    </ul>
+    <div class="modal-actions">
+      <a class="btn-primary" href="https://futsal.lviv.ua" target="_blank">АФЛ Львів →</a>
+    </div>`
+  },
+  futsal_nat: {
+    img: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=700&q=80',
+    eye: 'УЄФА · ФІФА Футзал',
+    title: 'ЗБІРНА УКРАЇНИ З ФУТЗАЛУ',
+    body: `<p>Україна регулярно бере участь у чемпіонатах УЄФА та ФІФА з футзалу. Рівень зростає з кожним роком завдяки розвиненій регіональній системі змагань.</p>
+    <ul>
+      <li>Учасник чемпіонатів Європи УЄФА з футзалу</li>
+      <li>Кваліфікаційні раунди ЧС ФІФА</li>
+      <li>База — сотні клубів з усіх регіонів</li>
+      <li>Гравці збірної — вихованці регіональних АФЛ</li>
+    </ul>`
+  },
+  futsal_dev: {
+    img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&q=80',
+    eye: 'Інфраструктура · 2025–2026',
+    title: 'РОЗВИТОК ФУТЗАЛУ',
+    body: `<p>УАФ та регіональні асоціації активно будують і модернізують футзальну інфраструктуру по всій Україні. Навіть в умовах воєнного часу — спорт живе.</p>
+    <ul>
+      <li>Нові критих зали у 10+ регіонах</li>
+      <li>Програма підтримки університетських команд</li>
+      <li>Молодіжні академії при провідних клубах</li>
+      <li>Доступний спорт цілий рік — незалежно від погоди</li>
+      <li>Партнерство з УЄФА у розвитку футзалу</li>
+    </ul>`
+  },
+  news_derby: {
+    img: 'https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=700&q=80',
+    eye: 'УПЛ · Квітень 2026 · Арена Львів',
+    title: 'КАРПАТИ 3:0 РУХ',
+    body: `<p>Визначний матч сезону. «Арена Львів» була заповнена до відказу — 28 000 глядачів. Карпати домінували від першої до останньої хвилини і показали клас.</p>
+    <div class="m-stat-row">
+      <div class="ms"><div class="ms-v">3:0</div><div class="ms-l">Рахунок</div></div>
+      <div class="ms"><div class="ms-v">28 000</div><div class="ms-l">Глядачів</div></div>
+      <div class="ms"><div class="ms-v">12.04</div><div class="ms-l">Дата</div></div>
+    </div>
+    <ul>
+      <li>Косенко — 31 хвилина, впевнений удар з 18 метрів</li>
+      <li>Чачуа — 58 хвилина, гол після відмінної комбінації</li>
+      <li>Педросу — 74 хвилина, фінальний цвях у кришку</li>
+      <li>Карпати зміцнили 3-тє місце в таблиці УПЛ</li>
+    </ul>`
+  },
+  news_kivs: {
+    img: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=700&q=80',
+    eye: 'Юнацький футзал · Україна · 2026',
+    title: 'КІВС IN.IT — ЧЕМПІОНИ U-15',
+    body: `<p>Сенсаційна перемога молодіжної команди зі Львова на чемпіонаті України з футзалу у категорії U-15. Регіон пишається своїми талантами.</p>
+    <ul>
+      <li>Перемога у фінальному турнірі чемпіонату України</li>
+      <li>Команда тренується в системі АФЛ Львів</li>
+      <li>Рівень підготовки відповідає національним стандартам</li>
+      <li>Гравці — претенденти на збірну</li>
+    </ul>
+    <div class="modal-actions">
+      <a class="btn-primary" href="https://futsal.lviv.ua" target="_blank">АФЛ Львів →</a>
+    </div>`
+  },
+  news_nt: {
+    img: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=700&q=80',
+    eye: 'Збірна · Кваліфікація ЧС 2026',
+    title: 'ЗБІРНА В КВАЛІФІКАЦІЇ',
+    body: `<p>Жовто-сині наполегливо борються за місце на Чемпіонаті світу 2026, який пройде у Канаді, США та Мексиці. Попри все — уперед!</p>
+    <ul>
+      <li>Кваліфікація УЄФА — група продовжується</li>
+      <li>Ключові матчі у 2026 році</li>
+      <li>Підтримка всієї країни — в кожному матчі</li>
+      <li>ЧС 2026 — у Канаді, США, Мексиці</li>
+    </ul>`
+  },
+  news_infra: {
+    img: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=700&q=80',
+    eye: 'УАФ · Інфраструктура · 2025–26',
+    title: 'НОВІ СТАДІОНИ ТА ЗАЛИ',
+    body: `<p>УАФ оголосила масштабну програму модернізації спортивних об'єктів по всій Україні. Незважаючи на виклики, спортивна інфраструктура продовжує розвиватись.</p>
+    <ul>
+      <li>Реконструкція регіональних стадіонів</li>
+      <li>Нові критих футзальні зали в 10 містах</li>
+      <li>Підтримка від УЄФА та міжнародних партнерів</li>
+      <li>Фокус на безпечних умовах для проведення матчів</li>
+    </ul>`
+  },
+  news_euro: {
+    img: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=700&q=80',
+    eye: 'Єврокубки · УЄФА',
+    title: 'ШАХТАР У ЄВРОКУБКАХ',
+    body: `<p>Шахтар продовжує традицію участі в єврокубкових турнірах УЄФА. Незважаючи на вимушене базування за кордоном, клуб залишається в топі.</p>
+    <ul>
+      <li>Участь у групових етапах УЄФА</li>
+      <li>Домашні матчі у Польщі та інших країнах</li>
+      <li>Підтримка від Донецька — де б не грали</li>
+      <li>Академія продовжує виховувати таланти</li>
+    </ul>`
+  },
+  r_kyiv: {
+    img: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=700&q=80',
+    eye: 'Регіон · Столиця України',
+    title: 'КИЇВ',
+    body: `<p>Серце українського футболу. НСК «Олімпійський» — арена для Євро 2012 і домашня арена Динамо та Збірної. Київ — центр футбольного управління України.</p>
+    <ul>
+      <li>Динамо Київ — 16× чемпіон</li>
+      <li>НСК «Олімпійський» — 70 050 місць</li>
+      <li>УАФ штаб-квартира у Києві</li>
+      <li>Місце проведення Євро 2012 фіналу</li>
+    </ul>`
+  },
+  r_donetsk: {
+    img: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=700&q=80',
+    eye: 'Регіон · Схід України',
+    title: 'ДОНЕЦЬК',
+    body: `<p>Донецьк — домівка Шахтаря. «Донбас Арена» — один із найсучасніших стадіонів колишнього СРСР. Через вторгнення клуб вимушений грати за кордоном.</p>
+    <ul>
+      <li>Шахтар Донецьк — 13× чемпіон УПЛ</li>
+      <li>Донбас Арена — 52 000 місць (недоступна)</li>
+      <li>Клуб продовжує боротись і не здається</li>
+    </ul>`
+  },
+  r_lviv: {
+    img: 'https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=700&q=80',
+    eye: 'Регіон · Захід України',
+    title: 'ЛЬВІВ',
+    body: `<p>Футбольна столиця Заходу України. Два клуби у Прем'єр-лізі — Карпати і Рух. Найрозвиненіша система футзалу через АФЛ. Арена Євро 2012.</p>
+    <ul>
+      <li>Карпати Львів — 3-ті у УПЛ 2025–26</li>
+      <li>Рух Львів — 5-ті у УПЛ 2025–26</li>
+      <li>АФЛ Львів — 200+ футзальних команд</li>
+      <li>КІВС in.IT — чемпіони України U-15 2026</li>
+      <li>Арена Львів — 34 900 місць</li>
+    </ul>`
+  },
+  r_kharkiv: {
+    img: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=700&q=80',
+    eye: 'Регіон · Північний Схід України',
+    title: 'ХАРКІВ',
+    body: `<p>Харків — футбольне місто з великою традицією. Металіст і стадіон «Металіст» — символи регіону. Велика і відданий фанбаза.</p>
+    <ul>
+      <li>Металіст Харків — 4-ті у УПЛ 2025–26</li>
+      <li>Стадіон «Металіст» — 38 633 місць</li>
+      <li>Чвертьфінал Ліги Європи 2012</li>
+    </ul>`
+  },
+  r_dnipro: {
+    img: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=700&q=80',
+    eye: 'Регіон · Центр України',
+    title: 'ДНІПРО',
+    body: `<p>Місто на Дніпрі з багатою футбольною традицією. Дніпро-1 продовжує традиції легендарного «Дніпра» — переможця Кубку УЄФА 1988.</p>
+    <ul>
+      <li>Дніпро-1 — 7-ті у УПЛ 2025–26</li>
+      <li>Дніпро (попередник) — КЄ 1988</li>
+      <li>Стадіон «Дніпро-Арена» — 31 003 місць</li>
+    </ul>`
+  },
+  r_odesa: {
+    img: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700&q=80',
+    eye: 'Регіон · Чорноморське узбережжя',
+    title: 'ОДЕСА',
+    body: `<p>Портове місто з колоритною футбольною культурою. Чорноморець — улюбленці одеситів. Стадіон «Чорноморець» на схилах над морем.</p>
+    <ul>
+      <li>Чорноморець Одеса — 8-мі у УПЛ 2025–26</li>
+      <li>Стадіон «Чорноморець» — 34 164 місць</li>
+      <li>Унікальна одеська атмосфера та гумор</li>
+    </ul>`
+  },
+  r_zaporizhzhia: {
+    img: 'https://images.unsplash.com/photo-1556056504-5c7696c4c28d?w=700&q=80',
+    eye: 'Регіон · Південний Схід',
+    title: 'ЗАПОРІЖЖЯ',
+    body: `<p>Промислове місто з козацькими традиціями. Металург — клуб, який пережив злети і падіння. Запоріжжя — місто де футбол у генах.</p>
+    <ul>
+      <li>Металург Запоріжжя — у нижній частині таблиці</li>
+      <li>Козацька гордість і дух незламності</li>
+      <li>Відновлення клубу після складних часів</li>
+    </ul>`
+  },
+  r_poltava: {
+    img: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=700&q=80',
+    eye: 'Регіон · Центральна Україна',
+    title: 'ПОЛТАВА',
+    body: `<p>Ворскла — стабільний представник УПЛ з Полтавщини. Зелені поля Полтавщини виховали чимало хороших гравців.</p>
+    <ul>
+      <li>Ворскла Полтава — 6-ті у УПЛ 2025–26 — 42 очки</li>
+      <li>Стадіон «Ворскла» — 24 795 місць</li>
+      <li>Один із стабільних клубів у середині таблиці</li>
+    </ul>`
+  }
+};
+
+/* ── MODAL OPEN/CLOSE ── */
+function openModal(id) {
+  const d = modalData[id];
+  if (!d) return;
+  document.getElementById('modal-img').src = d.img || '';
+  document.getElementById('modal-photo-wrap').style.display = d.img ? 'block' : 'none';
+  document.getElementById('modal-eye').textContent = d.eye || '';
+  document.getElementById('modal-title').textContent = d.title || '';
+  document.getElementById('modal-body').innerHTML = d.body || '';
+  document.getElementById('main-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('main-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleModalBgClick(e) {
+  if (e.target === e.currentTarget) closeModal();
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeLightbox(); }
+});
+</script>
+</body>
+</html>
