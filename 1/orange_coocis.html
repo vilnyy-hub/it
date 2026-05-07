@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍊 Апельсинове печиво — Інтерактивний Рецепт</title>
+    <style>
+        :root {
+            --orange-main: #ff8c00;
+            --orange-dark: #e67e22;
+            --bg-color: #fff5e6;
+            --success: #27ae60;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffecd2 100%);
+            color: #444;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: var(--orange-main);
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .interactive-panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        button {
+            background: var(--orange-main);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background: var(--orange-dark);
+            transform: translateY(-2px);
+        }
+
+        .servings-display {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--orange-dark);
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .recipe-header {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .recipe-image {
+            border-radius: 25px;
+            width: 320px;
+            height: 320px;
+            object-fit: cover; /* Щоб фото не розтягувалось */
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 30px rgba(255, 140, 0, 0.2);
+        }
+
+        .recipe-image:hover { transform: scale(1.05) rotate(-2deg); }
+
+        .ingredients-box {
+            flex: 1;
+            background: linear-gradient(145deg, #fff9f0, #ffecd2);
+            padding: 25px;
+            border-radius: 25px;
+            border-right: 8px solid var(--orange-main);
+        }
+
+        ul { list-style: none; padding: 0; }
+        ul li { 
+            padding: 10px 0; 
+            border-bottom: 1px dashed rgba(255, 140, 0, 0.2); 
+            display: flex; 
+            justify-content: space-between; 
+        }
+
+        .instruction-step {
+            background: white;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #fff1e0;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .instruction-step:hover { border-left: 5px solid var(--orange-main); }
+        .instruction-step.completed { opacity: 0.6; text-decoration: line-through; background: #f8f8f8; }
+
+        .step-tag { color: var(--orange-main); font-weight: bold; margin-right: 10px; }
+
+        .timer-btn { background: #34495e; margin-top: 10px; }
+
+        @media (max-width: 600px) {
+            .recipe-header { justify-content: center; }
+            .recipe-image { width: 100%; height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍊 Апельсинове печиво 🍊</h1>
+
+    <div class="interactive-panel">
+        <button onclick="updateServings(-1)">−</button>
+        <div class="servings-display">Порції: <span id="servings-count">1</span></div>
+        <button onclick="updateServings(1)">+</button>
+    </div>
+
+    <div class="recipe-header">
+        <!-- Оновлена картинка: якісне соковите печиво -->
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4K4QGmwkwKtf-wBa1cLa8iJtV1Cub8gwlLA&s" alt="Апельсинове печиво" class="recipe-image">
+        
+        <div class="ingredients-box">
+            <h2>Інгредієнти</h2>
+            <ul id="ingredients-list">
+                <li><span>🍊 Апельсин</span> <strong><span class="qty" data-base="1">1</span> шт.</strong></li>
+                <li><span>☁️ Цукрова пудра</span> <strong><span class="qty" data-base="150">150</span> г</strong></li>
+                <li><span>🌾 Борошно</span> <strong><span class="qty" data-base="650">650</span> г</strong></li>
+                <li><span>🍬 Цукор</span> <strong><span class="qty" data-base="220">220</span> г</strong></li>
+                <li><span>🥚 Яйця</span> <strong><span class="qty" data-base="4">4</span> шт.</strong></li>
+                <li><span>🧈 Масло</span> <strong><span class="qty" data-base="200">200</span> г</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>Приготування <small>(натисніть на крок, щоб відмітити)</small></h3>
+    
+    <div id="steps-container">
+        <div class="instruction-step" onclick="this.classList.toggle('completed')">
+            <span class="step-tag">01.</span> Натріть цедру, вичавіть сік. Змішайте м'яке масло з цукром.
+        </div>
+        <div class="instruction-step" onclick="this.classList.toggle('completed')">
+            <span class="step-tag">02.</span> Додайте яйця по одному, збиваючи суміш до однорідності.
+        </div>
+        <div class="instruction-step" onclick="this.classList.toggle('completed')">
+            <span class="step-tag">03.</span> Влийте сік, додайте борошно та розпушувач. Замісіть тісто.
+        </div>
+        <div class="instruction-step" onclick="this.classList.toggle('completed')">
+            <span class="step-tag">04.</span> Сформуйте невеликі кульки, обваляйте їх у пудрі.
+        </div>
+        <div class="instruction-step">
+            <span class="step-tag">05.</span> Випікайте 15-20 хв при 180°C.
+            <br>
+            <button class="timer-btn" onclick="startTimer(this)">⏱️ Поставити таймер на 20 хв</button>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <button style="background: var(--success); padding: 20px 40px; font-size: 1.2em;" onclick="alert('Смачного! 🍊✨')">Спечено! 🎉</button>
+    </div>
+</div>
+
+<script>
+    let currentServings = 1;
+
+    function updateServings(change) {
+        currentServings += change;
+        if (currentServings < 1) currentServings = 1;
+        document.getElementById('servings-count').innerText = currentServings;
+        document.querySelectorAll('.qty').forEach(span => {
+            const baseValue = parseFloat(span.getAttribute('data-base'));
+            span.innerText = (baseValue * currentServings).toLocaleString('uk-UA');
+        });
+    }
+
+    function startTimer(button) {
+        let timeLeft = 20 * 60;
+        button.disabled = true;
+        const interval = setInterval(() => {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            button.innerText = `⏳ Залишилось: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                button.innerText = "🔔 ГОТОВО!";
+                alert("Час вийшов! 🍪");
+            }
+            timeLeft--;
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
