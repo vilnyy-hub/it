@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sasha's Armor & Tanks | Tactical Terminal v2.1</title>
+<style>
+    /* Основні налаштування фону у стилі "мілітарі" */
+    body {
+        background-color: #0d0e0d; /* Майже чорний */
+        color: #00ff41; /* Класичний зелений колір монітора */
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+        background-image: 
+            linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px; /* Ефект сітки на фоні */
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    /* Опція 1: Сканер (Scanline effect) */
+    .scanline {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: rgba(0, 255, 65, 0.3);
+        opacity: 0.7;
+        z-index: 9999;
+        pointer-events: none;
+        animation: scanlineAnimation 4s linear infinite;
+        box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+    }
+
+    @keyframes scanlineAnimation {
+        0% { transform: translateY(-100vh); }
+        100% { transform: translateY(100vh); }
+    }
+
+    /* Опція 3: Індикатори/Координати у кутах */
+    .coord {
+        position: fixed;
+        font-size: 10px;
+        color: #1a632e; /* Більш тьмяний зелений */
+        text-transform: uppercase;
+        pointer-events: none;
+        z-index: 10;
+    }
+    .top-left { top: 10px; left: 10px; text-align: left; }
+    .top-right { top: 10px; right: 10px; text-align: right; }
+    .bottom-left { bottom: 10px; left: 10px; text-align: left; }
+    .bottom-right { bottom: 10px; right: 10px; text-align: right; }
+
+    /* Стиль заголовка як системного сповіщення */
+    h1 {
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        border-bottom: 2px solid #4b5320;
+        display: inline-block;
+        padding-bottom: 10px;
+        color: #e0e0e0;
+        text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        margin-top: 50px;
+    }
+
+    /* Контейнер для тексту */
+    .terminal-box {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background: rgba(26, 31, 20, 0.8); /* Темно-оливковий скляний фон */
+        border: 1px solid #4b5320;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        line-height: 1.6;
+        text-align: left;
+    }
+
+    /* Стилізація зображення танка */
+    .tank-preview {
+        border: 2px solid #4b5320;
+        border-radius: 5px; /* Військовий стиль зазвичай гостріший */
+        height: auto;
+        width: 100%;
+        max-width: 600px;
+        filter: sepia(30%) contrast(110%) brightness(80%);
+        transition: 0.3s;
+        margin-top: 20px;
+        margin-bottom: 50px;
+        cursor: pointer; /* Для Опції 2 */
+    }
+
+    /* Ефект при наведенні для Опції 2 */
+    .tank-preview:hover {
+        filter: none;
+        border-color: #00ff41;
+        box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+    }
+
+    /* Декоративний статус-бар */
+    .status-bar {
+        font-size: 0.8em;
+        color: #4b5320;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 11;
+    }
+
+    /* Кнопка активації терміналу для звуку */
+    #activate-btn {
+        background: transparent;
+        border: 2px solid #00ff41;
+        color: #00ff41;
+        padding: 15px 30px;
+        font-family: inherit;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-bottom: 30px;
+    }
+    #activate-btn:hover {
+        background: rgba(0, 255, 65, 0.2);
+    }
+
+    /* Кнопка відкриття каталогу */
+    .open-catalog-btn {
+        margin-top: 30px;
+        padding: 15px 40px;
+        background: #4b5320;
+        color: #e0e0e0;
+        border: 1px solid #00ff41;
+        font-family: inherit;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 0 10px rgba(75, 83, 32, 0.5);
+    }
+
+    .open-catalog-btn:hover {
+        background: #00ff41;
+        color: #0d0e0d;
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+    }
+
+    /* Фонове затінення (Overlay) */
+    .modal-overlay {
+        display: none; /* Сховано за замовчуванням */
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Вікно каталогу */
+    .catalog-window {
+        width: 80%;
+        max-width: 700px;
+        background: #1a1f14;
+        border: 2px solid #00ff41;
+        padding: 30px;
+        position: relative;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .catalog-header {
+        border-bottom: 1px solid #00ff41;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .close-btn {
+        color: #ff4141;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    .tank-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+        text-align: left;
+    }
+
+    .tank-item:hover {
+        background: rgba(0, 255, 65, 0.05);
+    }
+
+    .tank-price { color: #ffb000; }
+</style>
+
+<!-- Додай це в <body> після заголовка або опису -->
+<button class="open-catalog-btn" onclick="toggleCatalog(true)">[ Open Armory Catalog ]</button>
+
+<!-- Структура самого каталогу -->
+<div id="catalogModal" class="modal-overlay">
+    <div class="catalog-window">
+        <div class="catalog-header">
+            <h2 style="margin:0;">CLASSIFIED INVENTORY</h2>
+            <span class="close-btn" onclick="toggleCatalog(false)">[ CLOSE ]</span>
+        </div>
+        
+        <div class="tank-list">
+            <div class="tank-item">
+                <span>01. Leopard 2A7 (Germany)</span>
+                <span class="tank-price">85 UAN</span>
+            </div>
+            <div class="tank-item">
+                <span>02. M1A2 Abrams (USA)</span>
+                <span class="tank-price">85 UAN</span>
+            </div>
+            <div class="tank-item">
+                <span>03. Challenger 2 (UK)</span>
+                <span class="tank-price">85 UAN</span>
+            </div>
+            <div class="tank-item">
+                <span>04. T-84 Oplot (Ukraine)</span>
+                <span class="tank-price">85 UAN</span>
+            </div>
+            <div class="tank-item">
+                <span>05. Custom LION Project</span>
+                <span class="tank-price">CONTACT ADMIN</span>
+            </div>
+        </div>
+        
+        <p style="font-size: 10px; color: #4b5320; margin-top: 20px;">
+            WARNING: Unauthorized distribution of this data is prohibited by military protocol.
+        </p>
+    </div>
+</div>
+
+<!-- Додай це в <script> -->
+<script>
+    function toggleCatalog(show) {
+        const modal = document.getElementById('catalogModal');
+        modal.style.display = show ? 'flex' : 'none';
+        
+        // Відтворюємо звук при відкритті/закритті
+        if (typeof playClickSound === "function") {
+            playClickSound();
+        }
+    }
+</script>
+
+</style>
+</head>
+<body onload="updateCoords()">
+
+    <!-- Кнопка для активації звуку браузером -->
+    <button id="activate-btn" onclick="startTerminal()">[ Active Terminal ]</button>
+
+    <!-- Ефект сканера -->
+    <div class="scanline"></div>
+
+    <!-- Індикатори координат -->
+    <div class="coord top-left">
+        LAT: <span id="lat-val">50.45</span><br>
+        LON: <span id="lon-val">30.52</span><br>
+        SYS: ACQUIRING...
+    </div>
+    <div class="coord top-right">
+        UNIT: HA-DIV<br>
+        NET: SECURED<br>
+        <span id="time-val">12:00:00</span>
+    </div>
+    <div class="coord bottom-left">
+        TEMP: 24C<br>
+        CPU: <span id="cpu-val">12</span>%<br>
+        STATUS: STABLE
+    </div>
+    <div class="coord bottom-right">
+        AUTH: ADMIN<br>
+        SESSION: <span id="session-id"></span><br>
+        ENC: AES-256
+    </div>
+
+    <div class="status-bar">
+        System: Active | Auth: Admin | Unit: Heavy Armor Division v2.1
+    </div>
+
+    <h1>Heavy Armor Catalog</h1>
+
+    <div class="terminal-box">
+        <p>> INITIALIZING DATABASE...</p>
+        <p>> ACCESSING INVENTORY...</p>
+        <p>Вітаю! Тут ви знайдете найкращі зразки бронетехніки. 
+        У наявності моделі з різних країн світу. 
+        Якщо потрібної одиниці немає в списку — залиште запит на електронну пошту для індивідуального замовлення. oleksandr.dmitriyev@gmail.com
+        Термін виконання: до 21 дня.</p>
+        <p>> STATUS: READY FOR ORDERS.</p>
+    </div>
+
+    <!-- Фото, яке видає звук при кліку (Опція 2) -->
+    <img src="https://p.turbosquid.com/ts-thumb/a4/ObgLYc/RJ/1/jpg/1674841488/1920x1080/fit_q87/91d3c8a7f701ee93ebfda78a52309917e8f64a93/1.jpg" 
+         alt="Tank Model" 
+         class="tank-preview"
+         id="tank-photo">
+
+    <!--Sasha-tanks-models-->
+
+    <!-- Аудіо файл (Опція 2) -->
+    <audio id="click-sound" preload="auto">
+        <source src="https://cdn.pixabay.com/audio/2022/03/19/audio_145d5a6b0c.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Елементи
+        const clickSound = document.getElementById('click-sound');
+        const tankPhoto = document.getElementById('tank-photo');
+        const activateBtn = document.getElementById('activate-btn');
+
+        // Опція 2: Функція відтворення звуку при взаємодії
+        function playClickSound() {
+            // Скидаємо звук на початок, щоб можна було клікати швидко
+            clickSound.currentTime = 0; 
+            clickSound.play().catch(e => console.log("Sound waiting for user interaction"));
+        }
+
+        // Функція для старту терміналу (потрібна для активації звуку в Chrome)
+        function startTerminal() {
+            activateBtn.style.display = 'none'; // Ховаємо кнопку
+            // Тепер браузер дозволить звук
+            playClickSound(); // Тестовий звук
+        }
+
+        // Опція 2: Додаємо звук при наведенні ТА кліку на танк
+        tankPhoto.addEventListener('mouseenter', playClickSound);
+        tankPhoto.addEventListener('click', playClickSound);
+
+
+        // Опція 3: JavaScript для динамічних координат та цифр
+        function updateCoords() {
+            // Генерація випадкової сесії при завантаженні
+            document.getElementById('session-id').innerText = Math.random().toString(16).slice(2, 8).toUpperCase();
+
+            setInterval(() => {
+                // Випадкові координати навколо України
+                document.getElementById('lat-val').innerText = (44 + Math.random() * 8).toFixed(4);
+                document.getElementById('lon-val').innerText = (22 + Math.random() * 18).toFixed(4);
+                
+                // Випадкове навантаження CPU
+                document.getElementById('cpu-val').innerText = Math.floor(Math.random() * 40) + 10;
+                
+                // Поточний час
+                const now = new Date();
+                document.getElementById('time-val').innerText = now.toTimeString().split(' ')[0];
+
+            }, 1000); // Оновлення кожну секунду
+        }
+    </script>
+
+</body>
+</html>
