@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football World | WC & Champions League</title>
+    <style>
+        /* CSS СТИЛІ */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #004d98, #a50044);
+            color: white;
+            padding: 50px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #004d98;
+            border-bottom: 3px solid #a50044;
+            display: inline-block;
+            margin-top: 30px;
+            padding-bottom: 5px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .football-img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: transform 0.3s ease;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        .football-img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Таблиця */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th {
+            background-color: #004d98;
+            color: white;
+            padding: 12px;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Клас для підсвічування через JS */
+        .selected-row {
+            background-color: #ffe0e0 !important;
+            transition: 0.3s;
+        }
+
+        .winner-bold {
+            font-weight: bold;
+            color: #a50044;
+        }
+
+        footer {
+            background-color: #222;
+            color: white;
+            padding: 40px 20px;
+            margin-top: 50px;
+        }
+
+        .hit-counter {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Football World</h1>
+</header>
+
+<div class="container">
+    <h2>The Beautiful Game</h2>
+    <p>
+        Football is one of the most popular sports in the world, bringing together millions of people regardless of age, country, or culture. 
+        It is played both by professional athletes in large stadiums and by children in schoolyards or local fields.
+    </p>
+
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCtqNwSkLixDESeIVOt4y8R37s6dRQgLksNQ&s" class="football-img" alt="Football action">
+
+    <h2>The FIFA World Cup</h2>
+    <p>
+        The <strong>FIFA World Cup</strong> is the ultimate football competition. It started in 1930 and has grown into the most-watched sporting event globally. Every four years, the world stops to see which nation will claim the title of world champion.
+    </p>
+
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSttVC5WOCF1aAT6YqmGXDIknPNnXeVnkEXQQ&s" class="football-img" id="img-cl" alt="Fans and Stadium">
+
+    <!-- НОВИЙ РОЗДІЛ: CHAMPIONS LEAGUE -->
+    <h2>UEFA Champions League</h2>
+    <p>
+        While the World Cup is for nations, the <strong>UEFA Champions League</strong> is the peak of club football. 
+        It features the best clubs from across Europe, such as Real Madrid, Manchester City, and Bayern Munich. 
+        The competition is famous for its iconic anthem and the "Big Ears" trophy. 
+        Winning the Champions League is considered the highest achievement for any professional football club.
+    </p>
+    <p>
+        Real Madrid remains the most successful club in the history of the tournament, holding a record number of titles that seems almost impossible to beat.
+    </p>
+
+    <h2>Complete List of WC Winners (1930 - 2026)</h2>
+    <div class="table-container">
+        <table id="winnersTable">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Host</th>
+                    <th>Winner</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background-color: #fff3cd; font-weight: bold;">
+                    <td>2026</td>
+                    <td>USA / Canada / Mexico</td>
+                    <td>Coming Soon!</td>
+                </tr>
+                <tr><td>2022</td><td>Qatar</td><td class="winner-bold">🇦🇷 Argentina</td></tr>
+                <tr><td>2018</td><td>Russia</td><td class="winner-bold">🇫🇷 France</td></tr>
+                <tr><td>2014</td><td>Brazil</td><td class="winner-bold">🇩🇪 Germany</td></tr>
+                <tr><td>2010</td><td>South Africa</td><td class="winner-bold">🇪🇸 Spain</td></tr>
+                <tr><td>2006</td><td>Germany</td><td class="winner-bold">🇮🇹 Italy</td></tr>
+                <tr><td>2002</td><td>South Korea / Japan</td><td class="winner-bold">🇧🇷 Brazil</td></tr>
+                <tr><td>1998</td><td>France</td><td class="winner-bold">🇫🇷 France</td></tr>
+                <tr><td>1994</td><td>USA</td><td class="winner-bold">🇧🇷 Brazil</td></tr>
+                <tr><td>1990</td><td>Italy</td><td class="winner-bold">🇩🇪 West Germany</td></tr>
+                <tr><td>1986</td><td>Mexico</td><td class="winner-bold">🇦🇷 Argentina</td></tr>
+                <tr><td>1982</td><td>Spain</td><td class="winner-bold">🇮🇹 Italy</td></tr>
+                <tr><td>1978</td><td>Argentina</td><td class="winner-bold">🇦🇷 Argentina</td></tr>
+                <tr><td>1974</td><td>West Germany</td><td class="winner-bold">🇩🇪 West Germany</td></tr>
+                <tr><td>1970</td><td>Mexico</td><td class="winner-bold">🇧🇷 Brazil</td></tr>
+                <tr><td>1966</td><td>England</td><td class="winner-bold">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</td></tr>
+                <tr><td>1962</td><td>Chile</td><td class="winner-bold">🇧🇷 Brazil</td></tr>
+                <tr><td>1958</td><td>Sweden</td><td class="winner-bold">🇧🇷 Brazil</td></tr>
+                <tr><td>1954</td><td>Switzerland</td><td class="winner-bold">🇩🇪 West Germany</td></tr>
+                <tr><td>1950</td><td>Brazil</td><td class="winner-bold">🇺🇾 Uruguay</td></tr>
+                <tr><td>1938</td><td>France</td><td class="winner-bold">🇮🇹 Italy</td></tr>
+                <tr><td>1934</td><td>Italy</td><td class="winner-bold">🇮🇹 Italy</td></tr>
+                <tr><td>1930</td><td>Uruguay</td><td class="winner-bold">🇺🇾 Uruguay</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <div>© 2026 Football Enthusiasts Hub</div>
+    <div class="hit-counter">
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FChat+FOOTBALL.html&label=PEOPLE%3A&icon=badge-vr-fill&color=%23fff&message=&style=flat&tz=UTC" alt="Visitor Counter">
+    </div>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+    // Додаємо інтерактивність таблиці
+    const rows = document.querySelectorAll("#winnersTable tbody tr");
+    
+    rows.forEach(row => {
+        row.addEventListener("click", () => {
+            // Видаляємо клас у всіх рядків
+            rows.forEach(r => r.classList.remove("selected-row"));
+            // Додаємо клас натиснутому рядку
+            row.classList.add("selected-row");
+        });
+    });
+
+    // Маленьке привітання в консолі
+    console.log("Welcome to Football World! Enjoy the statistics.");
+</script>
+
+</body>
+</html>
