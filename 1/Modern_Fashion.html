@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Store | Магазин одягу</title>
+    <style>
+
+        /* CSS Стилі */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        h1 {
+            margin: 0 0 15px 0;
+            color: #222;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: #ff4757;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            display: block;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .product-title {
+            font-size: 18px;
+            margin: 0 0 10px 0;
+            color: #222;
+        }
+
+        .product-price {
+            color: #ff4757;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #777;
+            display: none;
+        }
+/* Контейнер для фото */
+.product-image-container {
+    width: 100%;
+    height: 350px; /* Можеш змінити висоту під свій смак */
+    overflow: hidden; /* Щоб картинка не вилазила за межі заокруглених кутів */
+    background-color: #f0f0f0;
+}
+
+/* Стиль самого зображення */
+.product-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Це важливо: картинка заповнить блок без деформації */
+    object-position: center; /* Центрування фото */
+    transition: transform 0.5s ease; /* Плавна анімація */
+}
+
+/* Ефект збільшення фото при наведенні на картку */
+.product-card:hover .product-image-container img {
+    transform: scale(1.1);
+}
+
+/* Додатково: кнопка "Купити" для кращого вигляду */
+.buy-button {
+    background-color: #222;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.buy-button:hover {
+    background-color: #ff4757;
+}
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Modern Fashion</h1>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Пошук одягу (наприклад: плаття, худі)..." onkeyup="filterProducts()">
+    </div>
+</header>
+
+<div class="container">
+    <div class="products-grid" id="productsGrid">
+       <!-- Товар 1 -->
+<div class="product-card" data-name="червоне плаття">
+    <div class="product-image-container">
+        <img src="https://static2.issaplus.com/wa-data/public/shop/products/12/01/120112/images/232772/232772.600x900.jpg" alt="Червоне плаття">
+    </div>
+    <div class="product-info">
+        <h3 class="product-title">Червоне плаття</h3>
+        <p class="product-price">1200 грн</p>
+        <button class="buy-button">Купити</button>
+    </div>
+</div>
+
+        <!-- Товар 2 -->
+        <div class="product-card" data-name="літнє плаття">
+             <div class="product-image-container">
+        <img src="https://jk-style-fashion.com/image/cache/catalog/07.08/IMG_7871-626x941.JPG" alt="Літнє плаття">
+    </div>
+            <div class="product-info">
+                <h3 class="product-title">Літнє плаття в квіточку</h3>
+                <p class="product-price">950 грн</p>
+  <button class="buy-button">Купити</button>
+            </div>
+        </div>
+
+        <!-- Товар 3 -->
+        <div class="product-card" data-name="чорне худі">
+            <div class="product-image" style="background-color: #d3d3d3;">Худі</div>
+            <div class="product-info">
+                <h3 class="product-title">Стильне чорне худі</h3>
+                <p class="product-price">1500 грн</p>
+            </div>
+        </div>
+
+        <!-- Товар 4 -->
+        <div class="product-card" data-name="сині джинси">
+            <div class="product-image" style="background-color: #add8e6;">Джинси</div>
+            <div class="product-info">
+                <h3 class="product-title">Джинси Wide Leg</h3>
+                <p class="product-price">1800 грн</p>
+            </div>
+        </div>
+
+        <!-- Товар 5 -->
+        <div class="product-card" data-name="біла футболка">
+            <div class="product-image" style="background-color: #f0f0f0;">Футболка</div>
+            <div class="product-info">
+                <h3 class="product-title">Базова біла футболка</h3>
+                <p class="product-price">450 грн</p>
+            </div>
+        </div>
+
+        <!-- Повідомлення про відсутність результатів -->
+        <div class="no-results" id="noResults">Нічого не знайдено :(</div>
+    </div>
+</div>
+
+<script>
+    // JS Функція для пошуку
+    function filterProducts() {
+        // Отримуємо текст з поля пошуку і переводимо в нижній регістр
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        
+        // Отримуємо всі картки товарів
+        let cards = document.getElementsByClassName('product-card');
+        let found = false;
+
+        for (let i = 0; i < cards.length; i++) {
+            // Отримуємо назву товару з атрибута data-name
+            let name = cards[i].getAttribute('data-name');
+
+            // Якщо назва містить текст із пошуку
+            if (name.includes(input)) {
+                cards[i].style.display = "block";
+                found = true;
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+
+        // Показ повідомлення, якщо нічого не знайдено
+        let noResults = document.getElementById('noResults');
+        if (found) {
+            noResults.style.display = "none";
+        } else {
+            noResults.style.display = "block";
+        }
+    }
+</script>
+
+</body>
+</html>
