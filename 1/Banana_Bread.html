@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Banana Bread</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(to right, #fff3d4, #ffe0b2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Falling bananas */
+.banana {
+    position: fixed;
+    top: -50px;
+    font-size: 30px;
+    animation: fall linear infinite;
+    z-index: 0;
+    opacity: 0.8;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    background: white;
+    width: 430px;
+    padding: 25px;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+h1 {
+    color: #8b5a2b;
+}
+
+p {
+    color: #555;
+    font-size: 18px;
+}
+
+img {
+    width: 100%;
+    border-radius: 20px;
+    margin-top: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+}
+
+button {
+    margin-top: 18px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    background: #f4b400;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #d99800;
+    transform: scale(1.05);
+}
+
+#recipeSteps {
+    display: none;
+    margin-top: 20px;
+    text-align: left;
+    animation: fadeIn 0.5s ease;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Falling bananas -->
+<div class="banana" style="left:5%; animation-duration:8s;">🍌</div>
+<div class="banana" style="left:15%; animation-duration:10s;">🍌</div>
+<div class="banana" style="left:25%; animation-duration:7s;">🍌</div>
+<div class="banana" style="left:40%; animation-duration:9s;">🍌</div>
+<div class="banana" style="left:55%; animation-duration:11s;">🍌</div>
+<div class="banana" style="left:70%; animation-duration:8s;">🍌</div>
+<div class="banana" style="left:85%; animation-duration:12s;">🍌</div>
+<div class="banana" style="left:95%; animation-duration:9s;">🍌</div>
+
+<div class="container">
+
+    <h1>🍌 Banana Bread</h1>
+
+    <p>How to cook banana bread</p>
+
+    <img 
+    src="https://noviydoctor.com/wp-content/uploads/2023/05/bananovyi-keks_siteweb.jpg"
+    alt="Banana Bread">
+
+    <button onclick="toggleRecipe()">
+        Show Recipe
+    </button>
+
+    <div id="recipeSteps">
+
+        <h3>Recipe Steps:</h3>
+
+        <ol>
+            <li>Preheat the oven to 180°C.</li>
+            <li>Mash 3 ripe bananas.</li>
+            <li>Add eggs, sugar, and butter.</li>
+            <li>Add flour and baking powder.</li>
+            <li>Mix the batter well.</li>
+            <li>Pour into a baking pan.</li>
+            <li>Bake for 50–60 minutes.</li>
+            <li>Let it cool and enjoy!</li>
+        </ol>
+
+    </div>
+
+</div>
+
+<script>
+function toggleRecipe() {
+
+    const recipe = document.getElementById("recipeSteps");
+
+    if (recipe.style.display === "none" || recipe.style.display === "") {
+        recipe.style.display = "block";
+    } else {
+        recipe.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>
