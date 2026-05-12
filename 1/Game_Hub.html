@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 Game Hub FIXED PRO</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    text-align:center;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+}
+
+h1{margin:10px;}
+
+.menu button{
+    padding:10px 12px;
+    margin:4px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+#stats{
+    font-size:18px;
+    margin:10px;
+}
+
+#gameArea{
+    position:relative;
+    width:100%;
+    height:65vh;
+    background:rgba(255,255,255,0.05);
+    overflow:hidden;
+}
+
+/* OBJECT */
+.obj{
+    position:absolute;
+    width:80px;
+    height:80px;
+    border-radius:15px;
+    cursor:pointer;
+}
+
+.hidden{display:none;}
+
+/* XO */
+#board{
+    display:grid;
+    grid-template-columns:repeat(3,80px);
+    grid-template-rows:repeat(3,80px);
+    gap:5px;
+    justify-content:center;
+    align-content:center;
+    height:100%;
+}
+
+.cell{
+    width:80px;
+    height:80px;
+    background:rgba(255,255,255,0.2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+    cursor:pointer;
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎮 GAME HUB FIXED</h1>
+
+<div id="stats">
+⏱ <span id="time">10</span> |
+🏆 <span id="score">0</span> |
+❤️ <span id="hp">3</span>
+</div>
+
+<div class="menu">
+<button onclick="startGame('click')">🖱 Click</button>
+<button onclick="startGame('speed')">⚡ Speed</button>
+<button onclick="startGame('catch')">📦 Catch</button>
+<button onclick="startGame('reaction')">⚡ Reaction</button>
+<button onclick="startGame('memory')">🧠 Memory</button>
+<button onclick="startGame('xo')">❌⭕ XO</button>
+</div>
+
+<div id="gameArea">
+
+<div id="obj" class="obj hidden"></div>
+
+<div id="board" class="hidden"></div>
+
+</div>
+
+<script>
+
+let game="none";
+let score=0;
+let hp=3;
+let time=10;
+
+let timer;
+let moveTimer;
+
+let speedActive=false;
+let mem=false;
+
+const obj=document.getElementById("obj");
+const board=document.getElementById("board");
+const area=document.getElementById("gameArea");
+
+function update(){
+document.getElementById("score").textContent=score;
+document.getElementById("hp").textContent=hp;
+document.getElementById("time").textContent=time;
+}
+
+function rand(){
+obj.style.left=Math.random()*(area.clientWidth-80)+"px";
+obj.style.top=Math.random()*(area.clientHeight-80)+"px";
+}
+
+function center(){
+obj.style.left=(area.clientWidth/2-40)+"px";
+obj.style.top=(area.clientHeight/2-40)+"px";
+}
+
+function reset(){
+clearInterval(timer);
+clearInterval(moveTimer);
+
+score=0;
+hp=3;
+time=10;
+
+update();
+}
+
+function end(){
+
+clearInterval(timer);
+clearInterval(moveTimer);
+
+alert("🎮 Game Over! Score: "+score);
+
+game="none";
+
+obj.classList.add("hidden");
+board.classList.add("hidden");
+
+if(typeof gameBoard!=="undefined"){
+gameBoard=["","","","","","","","",""];
+}
+
+update();
+}
+
+function loop(){
+timer=setInterval(()=>{
+time--;
+update();
+if(time<=0 || hp<=0) end();
+},1000);
+}
+
+//////////////// START //////////////////
+
+function startGame(type){
+
+game=type;
+reset();
+
+obj.classList.add("hidden");
+board.classList.add("hidden");
+
+loop();
+
+if(type==="click") clickGame();
+if(type==="speed") speedGame();
+if(type==="catch") catchGame();
+if(type==="reaction") reactionGame();
+if(type==="memory") memoryGame();
+if(type==="xo") xoGame();
+}
+
+//////////////// CLICK //////////////////
+
+function clickGame(){
+obj.classList.remove("hidden");
+obj.style.background="red";
+rand();
+}
+
+//////////////// SPEED //////////////////
+
+function speedGame(){
+
+obj.classList.remove("hidden");
+obj.style.background="lime";
+obj.style.width="120px";
+obj.style.height="120px";
+
+speedActive=true;
+score=0;
+time=5;
+
+update();
+
+center();
+
+setTimeout(()=>{
+speedActive=false;
+obj.classList.add("hidden");
+alert("⚡ Speed: "+score);
+game="none";
+},5000);
+}
+
+//////////////// CATCH //////////////////
+
+function catchGame(){
+obj.classList.remove("hidden");
+obj.style.background="blue";
+rand();
+
+moveTimer=setInterval(()=>rand(),600);
+}
+
+//////////////// REACTION //////////////////
+
+function reactionGame(){
+obj.classList.remove("hidden");
+obj.style.background="red";
+rand();
+
+setTimeout(()=>{
+if(game==="reaction") obj.style.background="green";
+},1000);
+}
+
+//////////////// MEMORY //////////////////
+
+function memoryGame(){
+obj.classList.remove("hidden");
+obj.style.background="yellow";
+rand();
+
+mem=true;
+
+setTimeout(()=>{
+obj.style.background="red";
+mem=false;
+},900);
+}
+
+//////////////// XO //////////////////
+
+let cells=[];
+let gameBoard=[];
+let turn="X";
+
+function xoGame(){
+
+board.classList.remove("hidden");
+obj.classList.add("hidden");
+
+board.innerHTML="";
+cells=[];
+gameBoard=["","","","","","","","",""];
+turn="X";
+
+for(let i=0;i<9;i++){
+let c=document.createElement("div");
+c.className="cell";
+
+c.onclick=()=>move(i,c);
+
+board.appendChild(c);
+cells.push(c);
+}
+}
+
+function move(i,c){
+
+if(gameBoard[i]!=="" || turn!=="X") return;
+
+gameBoard[i]="X";
+c.textContent="X";
+
+if(checkWin("X")){
+score+=3;
+update();
+alert("Ти виграв!");
+end();
+return;
+}
+
+turn="O";
+setTimeout(botMove,400);
+}
+
+function botMove(){
+
+let empty=[];
+for(let i=0;i<9;i++){
+if(gameBoard[i]==="") empty.push(i);
+}
+
+if(empty.length===0) return;
+
+let r=empty[Math.floor(Math.random()*empty.length)];
+
+gameBoard[r]="O";
+cells[r].textContent="O";
+
+if(checkWin("O")){
+hp--;
+update();
+alert("Бот виграв!");
+end();
+return;
+}
+
+turn="X";
+}
+
+function checkWin(p){
+const w=[
+[0,1,2],[3,4,5],[6,7,8],
+[0,3,6],[1,4,7],[2,5,8],
+[0,4,8],[2,4,6]
+];
+
+return w.some(x=>
+gameBoard[x[0]]===p &&
+gameBoard[x[1]]===p &&
+gameBoard[x[2]]===p
+);
+}
+
+//////////////// CLICK SYSTEM //////////////////
+
+obj.onclick=function(){
+
+if(game==="click"){
+score++;
+rand();
+}
+
+if(game==="speed" && speedActive){
+score++;
+}
+
+if(game==="catch"){
+score++;
+rand();
+}
+
+if(game==="reaction"){
+if(obj.style.background==="green") score++;
+else hp--;
+
+reactionGame();
+}
+
+if(game==="memory"){
+if(!mem) score++;
+rand();
+}
+
+update();
+};
+І
+update();
+
+</script>
+
+</body>
+</html>
