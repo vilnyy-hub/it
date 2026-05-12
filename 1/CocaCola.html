@@ -1,21 +1,139 @@
-
-
-
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
-<p>тукан PRO NAVI🧑🏿🤗$_$ </p>
+<meta charset="UTF-8">
+<title>РІЗНОКОЛЬОРОВИЙ ТУКАН</title>
+
+<style>
+/* ГОЛОВНИЙ РІЗНОКОЛЬОРОВИЙ ФОН */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    min-height: 100vh;
+    /* Анімований градієнт */
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
+    color: white;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ПРОЗОРА ПАНЕЛЬ ДЛЯ КОНТЕНТУ */
+.main-box {
+    background: rgba(0, 0, 0, 0.4); /* Напівпрозорий чорний, щоб бачити фон */
+    backdrop-filter: blur(5px);      /* Ефект розмиття фону під текстом */
+    margin: 20px auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* СТИЛЬ ГРИ */
+#game-zone {
+    background: rgba(255, 255, 255, 0.1);
+    height: 200px;
+    border-radius: 20px;
+    position: relative;
+    margin: 20px 0;
+    overflow: hidden;
+    border: 2px dashed white;
+}
+
+#bird {
+    position: absolute;
+    font-size: 50px;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.1s;
+}
+
+/* КНОПКИ */
+button {
+    background: white;
+    color: #e73c7e;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 10px;
+}
+
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px white;
+}
+
+img {
+    width: 200px;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+</style>
 </head>
 <body>
-<img src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMWcKsCAZFumx66DkjsX9MPhy4Z9549LHZcQ&s"
-style="border-radius: 20px; width: 300px; height: auto;">
-<h1>tukan🥹🍜🥟</h1>
-<p>це сайт початкового програміста</p>
 
- <p style="color: pink; font-size: 20px; text-align: left;">hello🐔🦭🐧🐥
+    <div class="main-box">
+        <h1>TUKAN PRO NAVI 🦜</h1>
+        
+        <div id="game-zone">
+            <div id="bird" onclick="hit()">🦜</div>
+            <p style="margin-top: 10px;">Рахунок: <span id="score-val">0</span></p>
+        </div>
 
-<img src= https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqKDCbGOYxTXLmgjqL3Vvp2PAqZpyjZCeFow&s
-style="border-radius: 20px; width: 300px; height: auto;">
-<img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2F%D0%BC%D1%96%D0%B9+%D0%BF%D0%B5%D1%80%D1%88%D0%B8%D0%B9+%D1%81%D0%B0%D0%B9%D1%82&label=&icon=battery-charging&color=%23520dc2&message=&style=social&tz=UTC">
-<body>
-<html>
+        <button onclick="startGame()">ПОЧАТИ ГРУ</button>
+        
+        <p>це сайт початкового програміста</p>
+        <p style="color: yellow; font-size: 20px;">hello🐔🦭🐧🐥</p>
+        
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqKDCbGOYxTXLmgjqL3Vvp2PAqZpyjZCeFow&s">
+        <br>
+        <button onclick="alert('Ти легенда!')">Натисни мене</button>
+    </div>
+
+<script>
+let score = 0;
+let gameActive = false;
+
+function startGame() {
+    gameActive = true;
+    score = 0;
+    document.getElementById('score-val').innerText = score;
+    moveBird();
+    setInterval(() => {
+        if(gameActive) moveBird();
+    }, 1000);
+}
+
+function moveBird() {
+    const zone = document.getElementById('game-zone');
+    const bird = document.getElementById('bird');
+    
+    const x = Math.random() * (zone.clientWidth - 60);
+    const y = Math.random() * (zone.clientHeight - 80);
+    
+    bird.style.left = x + 'px';
+    bird.style.top = y + 'px';
+}
+
+function hit() {
+    if(!gameActive) return;
+    score++;
+    document.getElementById('score-val').innerText = score;
+    moveBird();
+}
+</script>
+
+</body>
+</html>
