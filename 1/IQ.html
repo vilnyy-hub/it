@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Гра: СКІЛЬКІ В ТЕБЕ АЙКЮ </title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+}
+
+input {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 80%;
+    margin-top: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #00ffcc;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2> СКІЛЬКІ В ТЕБЕ АЙКЮ(1–67)</h2>
+    <p>Якщо не вгадаєш — ти програв 😈</p>
+
+    <input type="number" id="num" placeholder="Введи число 1-67">
+
+    <br>
+    <button onclick="check()">Перевірити</button>
+
+    <p id="result"></p>
+</div>
+
+<script>
+let secret = Math.floor(Math.random() * 10) + 1;
+
+function check() {
+    let guess = Number(document.getElementById("num").value);
+    let result = document.getElementById("result");
+
+    if (guess === secret) {
+        result.innerHTML = "🎉 Ти СІГМА! Правильне число: " + secret;
+        result.style.color = "#00ffcc";
+    } else {
+        result.innerHTML = "😈 Ти ПРОДОВБАВ! Правильне число було: " + secret;
+        result.style.color = "red";
+    }
+
+    // нова гра після спроби
+    secret = Math.floor(Math.random() * 10) + 1;
+}
+</script>
+
+</body>
+</html>
