@@ -1,74 +1,332 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>🌺ALLABOUTKPOP🩷</title>
 
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500&display=swap');
+
 body{
     margin:0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #ffc0cb, #ff69b4, #ffb6c1);
-    color:#222;
+    background:#f8f5f2;
+    color:#111;
+    font-family:'Montserrat', sans-serif;
 }
 
-p, h1, h2{
-    padding: 5px 20px;
+/* HEADER */
+
+.hero{
+    text-align:center;
+    padding:70px 20px 40px;
+    border-bottom:1px solid #ddd;
+    background:white;
 }
 
-h1{
-    color:#ff1493;
-    text-shadow: 1px 1px 2px white;
+.hero p{
+    letter-spacing:4px;
+    font-size:13px;
+    text-transform:uppercase;
+    color:#777;
 }
+
+.hero h1{
+    font-family:'Cormorant Garamond', serif;
+    font-size:85px;
+    font-weight:700;
+    margin:10px 0;
+    letter-spacing:2px;
+}
+
+.subtitle{
+    font-size:15px;
+    color:#777;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+/* MAIN LAYOUT */
+
+.container{
+    width:90%;
+    max-width:1100px;
+    margin:auto;
+}
+
+/* ARTICLE */
+
+.article{
+    background:white;
+    margin:50px auto;
+    padding:60px;
+    box-shadow:0 5px 25px rgba(0,0,0,0.05);
+}
+
+/* TITLES */
+
+h2{
+    font-family:'Cormorant Garamond', serif;
+    font-size:55px;
+    font-weight:600;
+    margin-bottom:30px;
+    line-height:1.1;
+}
+
+.section-title{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:3px;
+    color:#999;
+    margin-top:45px;
+    margin-bottom:10px;
+}
+
+/* TEXT */
+
+p{
+    font-size:19px;
+    line-height:2;
+    font-weight:300;
+    margin-bottom:28px;
+}
+
+/* IMAGE */
 
 img{
-    width: 90%;
+    width:100%;
+    max-width:700px;
     display:block;
-    margin: 10px auto;
-    border-radius: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin:50px auto;
+    filter:contrast(105%) brightness(102%);
 }
 
+/* VIDEO */
+
 iframe{
-    display:block;
-    margin: 20px auto;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width:100%;
+    height:500px;
+    border:none;
+    margin:40px 0;
+}
+
+/* QUOTE STYLE */
+
+.highlight{
+    font-family:'Cormorant Garamond', serif;
+    font-size:38px;
+    line-height:1.4;
+    text-align:center;
+    margin:60px 0;
+    padding:20px;
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:40px;
+    color:#777;
+    font-size:13px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.hero h1{
+    font-size:48px;
+}
+
+.article{
+    padding:30px;
 }
 
 h2{
-    color:#c2185b;
+    font-size:38px;
 }
-</style>
 
+p{
+    font-size:17px;
+    line-height:1.8;
+}
+
+iframe{
+    height:230px;
+}
+
+.highlight{
+    font-size:28px;
+}
+
+}
+
+</style>
 </head>
 
 <body>
 
-<p>🌺ALLABOUTKPOP🩷</p>
+<div class="hero">
 
-<h1>🌺ALLABOUTKPOP🩷заголовок🫶🏻</h1>
+<p>fashion • k-pop • korea</p>
 
-<p>усім привіт на цьому сайті🌺 ви зможете дізнатися тупо все про кейпоп а тобто😍🩷улюблену музику усіх дітей підлітків та дорослих також цей сайт буде виділяти певну 🌸частину на Корею а тобто як на їхні традиції їхню кухню🫶🏻 та навіть про хангиль і звісно тут будуть посилання на відео👑 прямого ефіру концерту🎥 вашої улубленої групи🩷 також якщо вам сподобається це все читати😍 то можете написати гарний відгук✨ любиш кейпоп та Корею то цей сайт саме для тебе😘</p>
+<h1>🌺ALLABOUTKPOP🩷</h1>
+
+<div class="subtitle">
+заголовок 🫶🏻
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="article">
+
+<h2>Про сайт</h2>
+
+<p>
+усім привіт на цьому сайті🌺 ви зможете дізнатися тупо все про кейпоп а тобто😍🩷улюблену музику усіх дітей підлітків та дорослих
+</p>
+
+<p>
+також цей сайт буде виділяти певну 🌸частину на Корею а тобто як на їхні традиції їхню кухню🫶🏻 та навіть про хангиль
+</p>
+
+<p>
+і звісно тут будуть посилання на відео👑 прямого ефіру концерту🎥 вашої улубленої групи🩷
+</p>
+
+<p>
+також якщо вам сподобається це все читати😍 то можете написати гарний відгук✨ любиш кейпоп та Корею то цей сайт саме для тебе😘
+</p>
 
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1uN0EfBLq8LuTDzez5awKF_TNsZ5qYjVzqw&s">
 
+<div class="highlight">
+“K-pop у 2026 — це нова ера легенд, камбеків та глобального вайбу.”
+</div>
+
+</div>
+
+<div class="article">
+
 <h2>🎤 BLACKPINK VIDEO</h2>
 
-<iframe width="560" height="315"
+<iframe
 src="https://www.youtube.com/embed/IHNzOHi8sJs"
 title="BLACKPINK"
-frameborder="0"
 allowfullscreen>
 </iframe>
 
+</div>
+
+<div class="article">
+
+<h2>K-POP НОВИНИ 2026</h2>
+
+<div class="section-title">Камбеки та релізи</div>
+
 <p>
-с🎶 Камбеки та релізи Квітень буквально переповнений камбеками 😵‍💫 — багато гуртів повертаються одночасно, тому фанати не встигають дихати Серед тих, хто вже камбекнув або релізнув щось нове: NEXZ випустили новий трек “Mmchk” 🔥 TXT, KISS OF LIFE, &TEAM, CORTIS теж у квітневому лайнапі 💿 нові релізи від різних артистів буквально щотижня 💥 💡 Взагалі 2026 — це супер активний рік для K-pop, релізів просто тонна 📀 👑 Великі камбеки легенд BTS вже повернулися як повний гурт після армії 🥹💜 і навіть готують тур 🌍 Очікуються або вже підтверджені активності: BLACKPINK EXO BIGBANG 👉 це називають “велике повернення ери легенд” 😳 🌸 Дівчачі гурти домінують NewJeans готують камбек і вже працюють над новою музикою в Європі 👀 aespa: анонсували альбом “Lemonade” 🍋 великий світовий тур 🌍✨ 💅 кажуть, що 2026 = рік girl groups, і це реально відчувається 🆕 Дебюти та нові гурти У 2026 дебютить купа нових груп (серйозно, десятки 😭): наприклад: AFuture, And2ble, Tunexx, NCT нові юніти також великі агенції готують нові бойз-групи і герл-групи 👀 ✨ нове покоління вже наступає, і конкуренція буде жорстка 🚀 Різні цікаві факти Деякі новачки типу CORTIS вже б’ють рекорди продажів 😳 У квітні реально “перенасичення” камбеків — буквально кожен тиждень щось нове 💥 2026 називають одним із найбільших років в історії K-pop 🌏🔥 💖 Загальний вайб 2026 зараз виглядає як: легенди повертаються 👑 нові гурти дебютять 🚀 фанати не сплять 😭 камбеки кожні 5 хвилин 💿
+с🎶 Камбеки та релізи Квітень буквально переповнений камбеками 😵‍💫 — багато гуртів повертаються одночасно, тому фанати не встигають дихати
 </p>
 
-<h1>СУЧАСНА КОРЕЯ І ЦІКАВІ ФАКТИ ПРО НЕЇ💋</h1>
+<p>
+Серед тих, хто вже камбекнув або релізнув щось нове: NEXZ випустили новий трек “Mmchk” 🔥 TXT, KISS OF LIFE, &TEAM, CORTIS теж у квітневому лайнапі 💿 нові релізи від різних артистів буквально щотижня 💥
+</p>
 
-<p>💻 Технології південна Корея — одна з найтехнологічніших країн світу: 📱 Тут створюють смартфони (Samsung, LG) 🚄 Дуже швидкі потяги (KTX) 🤖 Розвивають роботів та штучний інтелект 🎶 Культура (K-pop & K-drama) 🎤 K-pop (BTS, BLACKPINK) популярний у всьому світі 🎬 Корейські серіали (дорами) дивляться мільйони людей 💄 Корейська косметика відома своїм якісним доглядом 🍜 Їжа 🍜 Рамен (локшина) 🥢 Кімчі (гостра капуста) 🍗 Корейське смажене курча 🎓 Освіта і життя 📚 Дуже сильна освіта і конкуренція 🏫 Учні часто навчаються до пізнього вечора 💼 Країна має потужну економіку 🌸 Цікаві факти 🌐 Інтернет один із найшвидших у світі 🏯 Поєднання старовинних храмів і сучасних хмарочосів 🎮 Дуже популярні кіберспорт і відеоігри</p>
+<p>
+💡 Взагалі 2026 — це супер активний рік для K-pop, релізів просто тонна 📀
+</p>
+
+<div class="section-title">Великі камбеки легенд</div>
+
+<p>
+👑 Великі камбеки легенд BTS вже повернулися як повний гурт після армії 🥹💜 і навіть готують тур 🌍
+</p>
+
+<p>
+Очікуються або вже підтверджені активності: BLACKPINK EXO BIGBANG 👉 це називають “велике повернення ери легенд” 😳
+</p>
+
+<div class="section-title">Girl Groups</div>
+
+<p>
+🌸 Дівчачі гурти домінують NewJeans готують камбек і вже працюють над новою музикою в Європі 👀 aespa: анонсували альбом “Lemonade” 🍋 великий світовий тур 🌍✨
+</p>
+
+<p>
+💅 кажуть, що 2026 = рік girl groups, і це реально відчувається
+</p>
+
+<div class="section-title">Нове покоління</div>
+
+<p>
+🆕 Дебюти та нові гурти У 2026 дебютить купа нових груп (серйозно, десятки 😭): наприклад: AFuture, And2ble, Tunexx, NCT нові юніти
+</p>
+
+<p>
+також великі агенції готують нові бойз-групи і герл-групи 👀 ✨ нове покоління вже наступає, і конкуренція буде жорстка 🚀
+</p>
+
+<div class="highlight">
+“2026 називають одним із найбільших років в історії K-pop 🌏🔥”
+</div>
+
+<p>
+💖 Загальний вайб 2026 зараз виглядає як: легенди повертаються 👑 нові гурти дебютять 🚀 фанати не сплять 😭 камбеки кожні 5 хвилин 💿
+</p>
+
+</div>
+
+<div class="article">
+
+<h2>СУЧАСНА КОРЕЯ І ЦІКАВІ ФАКТИ ПРО НЕЇ💋</h2>
+
+<div class="section-title">Технології</div>
+
+<p>
+💻 Технології південна Корея — одна з найтехнологічніших країн світу: 📱 Тут створюють смартфони (Samsung, LG) 🚄 Дуже швидкі потяги (KTX) 🤖 Розвивають роботів та штучний інтелект
+</p>
+
+<div class="section-title">Культура</div>
+
+<p>
+🎶 Культура (K-pop & K-drama) 🎤 K-pop (BTS, BLACKPINK) популярний у всьому світі 🎬 Корейські серіали (дорами) дивляться мільйони людей 💄 Корейська косметика відома своїм якісним доглядом
+</p>
+
+<div class="section-title">Їжа</div>
+
+<p>
+🍜 Їжа 🍜 Рамен (локшина) 🥢 Кімчі (гостра капуста) 🍗 Корейське смажене курча
+</p>
+
+<div class="section-title">Освіта і життя</div>
+
+<p>
+🎓 Освіта і життя 📚 Дуже сильна освіта і конкуренція 🏫 Учні часто навчаються до пізнього вечора 💼 Країна має потужну економіку
+</p>
+
+<div class="section-title">Цікаві факти</div>
+
+<p>
+🌸 Цікаві факти 🌐 Інтернет один із найшвидших у світі 🏯 Поєднання старовинних храмів і сучасних хмарочосів 🎮 Дуже популярні кіберспорт і відеоігри
+</p>
+
+</div>
+
+</div>
+
+<footer>
+ALLABOUTKPOP • SEOUL • FASHION • K-POP • CULTURE
+</footer>
 
 </body>
 </html>
+
