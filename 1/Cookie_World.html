@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie World 🍪</title>
+    <style>
+        /* --- CSS СТИЛІ --- */
+        
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-color: #F5F5DC; 
+            background-image:  repeating-radial-gradient(circle at center, #F5F5DC, #F5F5DC 20px, #e6ccb2 22px, #e6ccb2 24px, #F5F5DC 26px);
+            background-size: 150px 150px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #5d4037;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        #star-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-box {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .main-img {
+            border-radius: 70px;
+            width: 250px;
+            height: auto;
+            border: 5px solid #8b4513;
+            transition: transform 0.3s;
+        }
+
+        .main-img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        h1 { margin: 10px 0; color: #8b4513; }
+
+        .recipes-grid {
+            background: #fff;
+            border: 6px solid #5d4037;
+            border-radius: 25px;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 90%;
+            margin-top: 40px;
+        }
+
+        .recipe-card {
+            border: 2px dashed #d2b48c;
+            padding: 15px;
+            border-radius: 15px;
+            background: #fffdfa;
+        }
+
+        .recipe-card h4 { color: #8b4513; margin-top: 0; }
+
+        .star {
+            position: absolute;
+            color: #3e2723;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .hit-counter {
+            margin-top: 40px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* ОНОВЛЕНИЙ СТИЛЬ ДЛЯ ПІДПИСУ */
+        .footer-text {
+            margin-top: 30px;
+            font-size: 28px; /* Зроблено значно більшим */
+            font-weight: bold; /* Жирний шрифт */
+            color: #8b4513; /* Темно-коричневий колір */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1); /* Легка тінь для об'єму */
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="star-container"></div>
+
+    <div class="content">
+        <div class="header-box">
+            <p style="font-size: 24px;">Cookie🍪</p>
+            <img src="https://s3.amazonaws.com/static.realcaliforniamilk.com/media/recipes_3/tres-leches-cinnamon-rolls.png" 
+                 class="main-img" alt="Cookie">
+            <h1>Cookie❤</h1>
+            <h3>YEEY</h3>
+            <p>Цікаві ідеї *_* (рецепти)🤫</p>
+        </div>
+
+        <div class="recipes-grid">
+            <div class="recipe-card">
+                <h4>1. Шоколадне "Cookies"</h4>
+                <p>Багато шоколаду, дрібка солі та м'яка середина.</p>
+            </div>
+            <div class="recipe-card">
+                <h4>2. Вівсяне з горіхами</h4>
+                <p>Хрустке, корисне та дуже ситне печиво.</p>
+            </div>
+            <div class="recipe-card">
+                <h4>3. Імбирні чоловічки</h4>
+                <p>Пряний смак кориці та імбиру для настрою.</p>
+            </div>
+            <div class="recipe-card">
+                <h4>4. Кокосове макаруни</h4>
+                <p>Ніжне печиво лише з трьох інгредієнтів.</p>
+            </div>
+            <div class="recipe-card">
+                <h4>5. Мигдальне печиво</h4>
+                <p>Легке, без борошна, з ароматом мигдалю.</p>
+            </div>
+            <div class="recipe-card">
+                <h4>6. Лимонне з цукром</h4>
+                <p>Освіжаюче печиво з кислинкою цедри.</p>
+            </div>
+        </div>
+
+        <div class="hit-counter">
+            <img src="https://hitscounter.dev/api/hit?url=file%3A%2F%2F%2FC%3A%2FUsers%2FStudent%2520carrot%2FDocuments%2F%25D0%2597%25D0%25B0%25D0%25BF%25D0%25B0%25D0%25BB%25D1%258C%25D0%25BD%25D1%2596%25D1%2596%25D1%2596%25D1%2596%25D1%2596%2F%25D0%25AE%25D0%25BB%25D1%258F%2520%25D0%259A%25D0%2590%25D0%25BF%25D0%25BA%25D0%25BE%25D0%25B2%25D1%2581%25D1%258C%25D0%25BA%25D0%25B0.html&label=&icon=star-fill&color=%23ffe69c&message=&style=plastic&tz=UTC">
+        </div>
+
+        <!-- Твій підпис великими літерами -->
+        <p class="footer-text">САЙТ ЮЛІ КАПКОВСЬКОЇ</p>
+    </div>
+
+    <script>
+        function createStars() {
+            const container = document.getElementById('star-container');
+            const starCount = 60;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.innerHTML = '★';
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                star.style.left = x + '%';
+                star.style.top = y + '%';
+                const size = Math.random() * (16 - 8) + 8;
+                star.style.fontSize = size + 'px';
+                container.appendChild(star);
+            }
+        }
+        window.onload = createStars;
+    </script>
+
+</body>
+</html>
