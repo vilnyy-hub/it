@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puffer Fish ✨</title>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+        }
+
+        .big-stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .star-svg {
+            position: absolute;
+            fill: #ffeb3b;
+            filter: drop-shadow(0 0 10px #fff700);
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+            50% { transform: scale(1.3) rotate(15deg); opacity: 1; }
+        }
+
+        .header-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            margin: 20px auto;
+            border-radius: 40px;
+            max-width: 600px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .main-img {
+            border-radius: 30px;
+            width: 180px;
+            transition: 0.5s;
+            cursor: pointer;
+        }
+
+        .main-img:hover { transform: scale(1.1); }
+
+        .search-container {
+            margin: 20px auto;
+            max-width: 450px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-input {
+            width: 70%;
+            padding: 12px 20px;
+            border-radius: 25px 0 0 25px;
+            border: none;
+            outline: none;
+        }
+
+        .search-btn {
+            width: 30%;
+            padding: 12px;
+            border-radius: 0 25px 25px 0;
+            border: none;
+            background: #ffeb3b;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .pinterest-container {
+            column-count: 4;
+            column-gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) { .pinterest-container { column-count: 2; } }
+
+        .pin {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .pin:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.2); }
+        .pin img { width: 100%; display: block; }
+        .pin p { padding: 10px; font-weight: bold; }
+
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 2000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 80px 40px 40px;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 2px solid #ffeb3b;
+        }
+
+        .close-btn {
+            position: fixed;
+            top: 20px; right: 40px;
+            font-size: 50px; color: white; cursor: pointer;
+            z-index: 2100;
+        }
+
+        .counter-section {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="big-stars" id="starField"></div>
+
+    <div id="imageModal" class="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle" style="margin-top: 40px; color: #ffeb3b;"></h2>
+        <div class="modal-content" id="modalImages"></div>
+    </div>
+
+    <div class="header-card">
+        <h1>Puffer Fish 🐡✨</h1>
+        <img src="https://www.shutterstock.com/shutterstock/photos/2233588391/display_1500/stock-vector-cute-puffer-fish-angry-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-2233588391.jpg" 
+             class="main-img" alt="Puffer" onclick="showMorePhotos('Puffer Magic', 'pufferfish')">
+        <p>Візити: <b id="userCounter" style="color: #ffeb3b;">0</b></p>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Шукай будь-що...">
+            <button class="search-btn" onclick="performSearch()">Шукати</button>
+        </div>
+    </div>
+
+    <div class="pinterest-container" id="gallery"></div>
+
+    <div class="counter-section">
+        <p>Загальна кількість відвідувачів:</p>
+        <img src="https://hitscounter.dev/api/hit?url=puffer-fish-ultra-magic&label=&icon=brightness-alt-high&color=%23ffc107&style=plastic">
+    </div>
+
+    <script>
+        function handleUserCounter() {
+            let count = localStorage.getItem('puffer_v4_visits') || 0;
+            count++;
+            localStorage.setItem('puffer_v4_visits', count);
+            document.getElementById('userCounter').innerText = count;
+        }
+
+        function drawBigStars() {
+            const field = document.getElementById('starField');
+            for (let i = 0; i < 25; i++) {
+                const star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                star.setAttribute("viewBox", "0 0 572.467 572.467");
+                star.classList.add("star-svg");
+                star.style.width = (Math.random() * 25 + 10) + "px";
+                star.style.top = Math.random() * 95 + "%";
+                star.style.left = Math.random() * 95 + "%";
+                star.style.animationDelay = Math.random() * 3 + "s";
+                star.innerHTML = `<path d="M572.467,222.062l-206.331-15.011L286.134,20l-80.003,187.051L0,222.062l157.067,133.681l-50.534,201.725 L286.134,443.916l179.6,113.551l-50.534-201.725L572.467,222.062z"/>`;
+                field.appendChild(star);
+            }
+        }
+
+        const topics = [
+            { t: "Аніме (Покращено) 🌟", q: "anime", img: "https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=400" },
+            { t: "Космос 🌌", q: "galaxy", img: "https://images.unsplash.com/photo-1464802686167-b939a67e06a1?w=400" },
+            { t: "Котики 🐈", q: "cat", img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400" },
+            { t: "Океан 🌊", q: "ocean", img: "https://images.unsplash.com/photo-1502675135487-e971002a6adb?w=400" },
+            { t: "Кіберпанк 🤖", q: "cyberpunk", img: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=400" },
+            { t: "Дракони 🐉", q: "dragon", img: "https://images.unsplash.com/photo-1577493322601-3ae1f35c7505?w=400" },
+            { t: "Панди 🐼", q: "panda", img: "https://images.unsplash.com/photo-1564349683136-77e08bef1ed1?w=400" },
+            { t: "Лисички 🦊", q: "fox", img: "https://images.unsplash.com/photo-1504197885-609741792ce7?w=400" },
+            { t: "Природа 🌲", q: "forest", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400" },
+            { t: "Машини 🏎️", q: "sportscar", img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400" }
+        ];
+
+        const gallery = document.getElementById('gallery');
+        topics.forEach(item => {
+            const pin = document.createElement('div');
+            pin.className = 'pin';
+            pin.onclick = () => showMorePhotos(item.t, item.q);
+            pin.innerHTML = `<img src="${item.img}" alt="img"><p>${item.t}</p>`;
+            gallery.appendChild(pin);
+        });
+
+        function performSearch() {
+            const val = document.getElementById('searchInput').value;
+            if(val) showMorePhotos('Пошук: ' + val, val);
+        }
+
+        function showMorePhotos(title, query) {
+            const modal = document.getElementById('imageModal');
+            const modalImages = document.getElementById('modalImages');
+            document.getElementById('modalTitle').innerText = title;
+            modalImages.innerHTML = "";
+            modal.style.display = "block";
+            
+            for(let i = 0; i < 9; i++) {
+                const img = document.createElement('img');
+                // Використовуємо Source.Unsplash для Аніме та Пошуку - він надійніший
+                if(query === 'anime') {
+                    img.src = `https://source.unsplash.com/800x1000/?anime,art&sig=${i}`;
+                } else {
+                    img.src = `https://loremflickr.com/500/600/${query}?random=${i}`;
+                }
+                
+                // Якщо картинка не вантажиться, спробувати інший сервіс
+                img.onerror = function() {
+                    this.src = `https://picsum.photos/500/600?random=${i + 20}`;
+                };
+                
+                modalImages.appendChild(img);
+            }
+        }
+
+        function closeModal() { document.getElementById('imageModal').style.display = "none"; }
+        window.onclick = function(e) { if(e.target == document.getElementById('imageModal')) closeModal(); }
+
+        window.onload = () => { drawBigStars(); handleUserCounter(); };
+    </script>
+</body>
+</html>
