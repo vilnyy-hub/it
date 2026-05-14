@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paws & Care | Interactive Dog Tips</title>
     <style>
-        /* --- Existing Styling --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -27,92 +26,47 @@
             position: relative;
         }
 
-        /* --- Visitor Counter Style --- */
         .visitor-counter {
             background: rgba(255, 255, 255, 0.1);
-            padding: 5px 15px;
+            padding: 10px 20px;
             border-radius: 20px;
             display: inline-block;
             margin-top: 15px;
             font-size: 0.9rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .counter-number {
-            font-weight: bold;
-            color: #f1c40f; /* Yellow accent */
-        }
+        .counter-number { font-weight: bold; color: #f1c40f; }
+        .update-timer { display: block; font-size: 0.75rem; color: #bdc3c7; margin-top: 5px; font-style: italic; }
 
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        .main-container { display: flex; flex-direction: column; gap: 20px; }
+        .content-wrapper { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+        @media (max-width: 850px) { .content-wrapper { grid-template-columns: 1fr; } }
 
-        .content-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 20px;
-        }
-
-        @media (max-width: 850px) {
-            .content-wrapper { grid-template-columns: 1fr; }
-        }
-
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-        }
-
-        /* --- Mini-Game Styling --- */
-        .game-box {
-            background: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border: 2px dashed #3498db;
-            text-align: center;
-        }
-
-        .game-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            display: block;
-        }
-
-        .game-area {
-            background: #f9f9f9;
-            border-radius: 10px;
-            padding: 10px;
-            min-height: 150px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .food-item {
-            cursor: pointer;
-            font-size: 2rem;
-            transition: transform 0.2s;
-            display: inline-block;
-            margin: 5px;
-        }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
+        .game-box { background: #fff; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px dashed #3498db; text-align: center; }
+        .game-title { font-weight: bold; margin-bottom: 10px; color: #2c3e50; display: block; }
+        .game-area { background: #f9f9f9; border-radius: 10px; padding: 10px; min-height: 150px; position: relative; overflow: hidden; }
+        .food-item { cursor: pointer; font-size: 2rem; transition: transform 0.2s; display: inline-block; margin: 5px; }
         .food-item:hover { transform: scale(1.2); }
-
         #walk-dog { font-size: 2rem; position: absolute; left: 10px; top: 50%; transition: left 0.3s; }
         
         .dog-image { width: 100%; max-width: 300px; border-radius: 15px; display: block; margin: 15px auto; }
         .tip-box { border-left: 5px solid #3498db; background: #e8f4fd; padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; }
         .nutrition-box { border-left: 5px solid #27ae60; background: #eafaf1; padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 700px; position: relative; max-height: 85vh; overflow-y: auto; }
+        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
+        
         .btn-container { text-align: center; margin-top: 20px; }
         .btn { padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; transition: 0.3s; }
         .btn-blue { background: #3498db; color: white; }
         .btn-green { background: #27ae60; color: white; }
-        
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
-        .modal-content { background: white; margin: 10% auto; padding: 30px; border-radius: 15px; width: 80%; max-width: 600px; position: relative; }
-        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
+
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
     </style>
 </head>
 <body>
@@ -120,22 +74,20 @@
     <header>
         <h1>Dog Care & Play</h1>
         <p>Learn through interaction. Train, feed, and protect!</p>
-        
-        <!-- VISITOR COUNTER HTML -->
         <div class="visitor-counter">
-            👥 Відвідувачів на сайті: <span id="count" class="counter-number">1,240</span>
+            <div>👥 Views this period: <span id="count" class="counter-number">0</span></div>
+            <span class="update-timer" id="timer">Reset in: --:--:--</span>
         </div>
     </header>
 
     <div class="main-container">
-        
         <!-- Topic 1: Exercise -->
         <div class="content-wrapper">
             <div class="card">
                 <h2>Daily Exercise & Walking</h2>
                 <p>Dogs need 2-3 walks daily for mental and physical health.</p>
                 <div class="tip-box">
-                    <strong>Tip:</strong> Harnesses are safer than collars for neck protection.
+                    <strong>Muzzle Training:</strong> Some dogs have allergies or scavenge food from the ground. Training your dog to wear a muzzle is a vital safety skill!
                 </div>
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCA9GPKfLMAqi66o5q5SLkDyZEPpObcqaU2A&s" class="dog-image" alt="Dog walk">
                 <div class="btn-container">
@@ -162,30 +114,22 @@
         <div class="content-wrapper">
             <div class="card">
                 <h2>Healthy Nutrition & Diet</h2>
-                <p>Якісне харчування — це фундамент довголіття вашої собаки. Важливо не лише **що** ви даєте, а й **як** ви це робите.</p>
-                
-                <ul style="text-align: left; margin-bottom: 20px;">
-                    <li><strong>Режим годування:</strong> Дорослих собак варто годувати двічі на день.</li>
-                    <li><strong>Контроль порцій:</strong> Зайва вага шкодить серцю.</li>
-                </ul>
-
+                <p>Якісне харчування — це фундамент довголіття вашої собаки. Careful with allergies and ground scavenging!</p>
                 <div class="nutrition-box">
-                    <strong>Важливо:</strong> Те, що для нас є ласощами (як шоколад), може бути смертельним для собаки.
+                    <strong>Important:</strong> Watch out for food allergies. Not every "healthy" treat is safe for every individual dog.
                 </div>
-
                 <div class="btn-container">
                     <button class="btn btn-green" onclick="openModal('nutritionModal')">Nutrition Guide</button>
                 </div>
             </div>
 
             <div class="game-box" style="border-color: #27ae60;">
-                <span class="game-title">🎮 Гра: Безпечні ласощі</span>
-                <p style="font-size: 0.85rem;">Тисніть на їжу, щоб перевірити її безпечність!</p>
+                <span class="game-title">🎮 Game: Safe Treats</span>
                 <div class="game-area">
-                    <div class="food-item" onclick="feedDog(true, 'М’ясо — це білок! 🥩')">🥩</div>
-                    <div class="food-item" onclick="feedDog(false, 'ШОКОЛАД ТОКСИЧНИЙ! 🍫')">🍫</div>
-                    <div class="food-item" onclick="feedDog(true, 'Морква — це вітаміни! 🥕')">🥕</div>
-                    <div class="food-item" onclick="feedDog(false, 'ВИНОГРАД небезпечний! 🍇')">🍇</div>
+                    <div class="food-item" onclick="feedDog(true, 'Meat is protein! 🥩')">🥩</div>
+                    <div class="food-item" onclick="feedDog(false, 'TOXIC CHOCOLATE! 🍫')">🍫</div>
+                    <div class="food-item" onclick="feedDog(true, 'Carrots are vitamins! 🥕')">🥕</div>
+                    <div class="food-item" onclick="feedDog(false, 'Grapes are dangerous! 🍇')">🍇</div>
                     <div id="dog-reaction" style="font-size: 2.5rem; margin-top: 10px;">🐕</div>
                 </div>
                 <p id="feed-feedback" style="font-size: 0.8rem; margin-top: 5px; font-weight: bold;"></p>
@@ -193,69 +137,85 @@
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- NUTRITION MODAL WITH YOUR DATA -->
+    <div id="nutritionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('nutritionModal')">&times;</span>
+            <h2>Nutrition Guide & Feeding Norms</h2>
+            
+            <h3>1. Добова порція сухого корму (за вагою)</h3>
+            <table>
+                <tr><th>Вага собаки</th><th>Порція (г)</th></tr>
+                <tr><td>Малі (до 10 кг)</td><td>80–150 г</td></tr>
+                <tr><td>Середні (10–25 кг)</td><td>160–300 г</td></tr>
+                <tr><td>Великі (25–45 кг)</td><td>310–480 г</td></tr>
+                <tr><td>Гігантські (45+ кг)</td><td>500–650 г</td></tr>
+            </table>
+            <p><i>*Для дуже активних собак порцію можна збільшити на 20-30%.</i></p>
+
+            <h3>2. Пропорції натурального харчування</h3>
+            <ul>
+                <li><strong>60–70% — Білки:</strong> м'ясо (яловичина, індичка, курка) та субпродукти (серце, шлунок).</li>
+                <li><strong>15–25% — Овочі:</strong> морква, кабачок, буряк.</li>
+                <li><strong>10–15% — Каші:</strong> гречка, рис, вівсянка.</li>
+            </ul>
+
+            <h3>3. Щоденна норма м'яса</h3>
+            <p>Для середніх порід (10-25 кг) — <strong>100-200г</strong>; для великих — <strong>200-400г</strong> м'яса на день.</p>
+
+            <h3>4. Частота годування</h3>
+            <p>Цуценята: 3-4 рази. Дорослі: 2 рази (ранок/вечір). Малі собаки: часто, але маленькими порціями.</p>
+            
+            <div class="nutrition-box" style="background: #fff3cd; border-color: #ffc107;">
+                <strong>Safety Note:</strong> Якщо ваша собака схильна підбирати їжу з землі або має алергії, обов'язково привчайте її до намордника та команди "Leave it!".
+            </div>
+        </div>
+    </div>
+
     <div id="trainingModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('trainingModal')">&times;</span>
             <h2>Training & Safety</h2>
-            <p>Train the "Leave it" command early to avoid scavenging.</p>
-        </div>
-    </div>
-
-    <div id="nutritionModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('nutritionModal')">&times;</span>
-            <h2>Nutrition Guide</h2>
-            <p>Small breeds need high energy, large breeds need joint support.</p>
+            <p>Train the "Leave it" command early. Use positive reinforcement to make muzzle training a happy experience!</p>
         </div>
     </div>
 
     <script>
-        // --- VISITOR COUNTER LOGIC ---
-        function updateCounter() {
-            // Отримуємо значення з локального сховища браузера
-            let count = localStorage.getItem('visitCount');
-            
-            if (count === null) {
-                // Якщо зашли вперше, ставимо базове число (наприклад, 1240)
-                count = 1240;
-            } else {
-                // Інакше збільшуємо на 1
-                count = parseInt(count) + 1;
-            }
-            
-            // Зберігаємо нове число
-            localStorage.setItem('visitCount', count);
-            
-            // Виводимо на сторінку
-            document.getElementById('count').innerText = count.toLocaleString();
+        function initCounter() {
+            const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000; 
+            let now = new Date().getTime();
+            let visitData = JSON.parse(localStorage.getItem('dogCareStats_v2'));
+            if (!visitData || (now - visitData.startTime) > TWO_DAYS_MS) {
+                visitData = { count: 850, startTime: now };
+            } else { visitData.count += 1; }
+            localStorage.setItem('dogCareStats_v2', JSON.stringify(visitData));
+            document.getElementById('count').innerText = visitData.count.toLocaleString();
+            updateTimer(visitData.startTime, TWO_DAYS_MS);
+            setInterval(() => updateTimer(visitData.startTime, TWO_DAYS_MS), 1000);
+        }
+
+        function updateTimer(startTime, duration) {
+            let timeLeft = (startTime + duration) - new Date().getTime();
+            if (timeLeft <= 0) { location.reload(); return; }
+            let d = Math.floor(timeLeft / 86400000), h = Math.floor((timeLeft % 86400000) / 3600000),
+                m = Math.floor((timeLeft % 3600000) / 60000), s = Math.floor((timeLeft % 60000) / 1000);
+            document.getElementById('timer').innerText = `Reset in: ${d}d ${h}h ${m}m ${s}s`;
         }
         
-        // Запускаємо при завантаженні
-        updateCounter();
-
-        // Modal Logic
+        initCounter();
         function openModal(id) { document.getElementById(id).style.display = "block"; }
         function closeModal(id) { document.getElementById(id).style.display = "none"; }
         window.onclick = function(e) { if(e.target.className === 'modal') e.target.style.display = 'none'; }
 
-        // Nutrition Game
         function feedDog(isSafe, message) {
             const reaction = document.getElementById('dog-reaction');
             const feedback = document.getElementById('feed-feedback');
-            if(isSafe) {
-                reaction.innerText = "😋";
-                feedback.style.color = "#27ae60";
-                feedback.innerText = message;
-            } else {
-                reaction.innerText = "🤢";
-                feedback.style.color = "#e74c3c";
-                feedback.innerText = message;
-            }
+            reaction.innerText = isSafe ? "😋" : "🤢";
+            feedback.style.color = isSafe ? "#27ae60" : "#e74c3c";
+            feedback.innerText = message;
             setTimeout(() => { reaction.innerText = "🐕"; }, 1500);
         }
 
-        // Walk Game
         let dogPos = 10;
         const walkStatus = document.getElementById('walk-status');
         const groundItem = document.getElementById('ground-item');
@@ -268,10 +228,10 @@
             if (dogPos > 200) {
                 const currentItem = groundItem.innerText;
                 if(currentItem === '🍄' || currentItem === '🍫') {
-                    walkStatus.innerText = "Oops! Dog ate something bad! 🚑";
+                    walkStatus.innerText = "Bad food! 🚑";
                     walkStatus.style.color = "red";
                 } else {
-                    walkStatus.innerText = "Safe walk! Good job. 🐾";
+                    walkStatus.innerText = "Good walk! 🐾";
                     walkStatus.style.color = "green";
                 }
                 resetWalk();
@@ -280,13 +240,8 @@
 
         function waitAction() {
             const currentItem = groundItem.innerText;
-            if(currentItem === '🍄' || currentItem === '🍫') {
-                walkStatus.innerText = "Smart! You avoided the danger. ⭐";
-                walkStatus.style.color = "blue";
-            } else {
-                walkStatus.innerText = "You waited unnecessarily. 🦴";
-                walkStatus.style.color = "gray";
-            }
+            walkStatus.innerText = (currentItem === '🍄' || currentItem === '🍫') ? "Safe! ⭐" : "Waited. 🦴";
+            walkStatus.style.color = (currentItem === '🍄' || currentItem === '🍫') ? "blue" : "gray";
             resetWalk();
         }
 
