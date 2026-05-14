@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Fruit Arcade FIXED 🍉</title>
+    <style>
+        body { margin: 0; background: #000; color: #39ff14; font-family: 'Courier New', monospace; display: flex; height: 100vh; overflow: hidden; }
+        #side { width: 220px; background: #111; border-right: 2px solid #39ff14; display: flex; flex-direction: column; padding: 10px; gap: 8px; z-index: 10; }
+        button { background: #1a1a1a; color: #39ff14; border: 1px solid #39ff14; padding: 10px; cursor: pointer; font-weight: bold; border-radius: 4px; text-align: left; transition: 0.2s; }
+        button:hover { background: #39ff14; color: #000; box-shadow: 0 0 10px #39ff14; }
+        #game-box { flex-grow: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #111 0%, #000 100%); }
+        canvas { background: #000; border: 2px solid #222; box-shadow: 0 0 20px rgba(0,255,0,0.1); display: none; }
+        #ui { font-size: 28px; margin-bottom: 15px; text-shadow: 0 0 5px #39ff14; }
+        #touch-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+        .fruit { position: absolute; font-size: 50px; cursor: pointer; pointer-events: auto; user-select: none; transition: transform 0.1s; }
+        .grid { display: grid; grid-template-columns: repeat(4, 70px); gap: 10px; pointer-events: auto; }
+        .card { width: 70px; height: 70px; background: #222; border: 1px solid #39ff14; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div id="side">
+    <h2 style="text-align:center; color:#fff; border-bottom:1px solid #333; padding-bottom:10px;">FRUIT OS</h2>
+    <button onclick="run('snake')">1. Змійка 🐍</button>
+    <button onclick="run('slasher')">2. Ніндзя 🔪</button>
+    <button onclick="run('flappy')">3. Кавун 🍉</button>
+    <button onclick="run('catcher')">4. Кошик 🧺</button>
+    <button onclick="run('clicker')">5. Клікер 📈</button>
+    <button onclick="run('memory')">6. Пам'ять 🧠</button>
+    <button onclick="run('avoid')">7. Бомби 💣</button>
+    <button onclick="run('fast')">8. Спідран ⚡</button>
+    <div style="flex-grow:1"></div>
+    <button onclick="location.reload()" style="background:#400; border-color:red; color:white;">ОНОВИТИ ВСЕ 🔄</button>
+</div>
+
+<div id="game-box">
+    <div id="ui">SCORE: <span id="val">0</span></div>
+    <canvas id="c"></canvas>
+    <div id="touch-layer"></div>
+</div>
+
+<script>
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    const layer = document.getElementById('touch-layer');
+    const val = document.getElementById('val');
+    
+    let activeGame = "";
+    let score = 0;
+    let gameTimer = null;
+    let animationReq = null;
+
+    function run(gameName) {
+        // Повне очищення
+        activeGame = gameName;
+        if (gameTimer) clearTimeout(gameTimer);
+        if (animationReq) cancelAnimationFrame(animationReq);
+        layer.innerHTML = '';
+        canvas.style.display = "none";
+        score = 0;
+        val.innerText = "0";
+        window.onkeydown = null;
+        canvas.onmousemove = null;
+        canvas.onclick = null;
+
+        if (gameName === 'snake') initSnake();
+        if (gameName === 'slasher') initSlasher();
+        if (gameName === 'flappy') initFlappy();
+        if (gameName === 'catcher') initCatcher();
+        if (gameName === 'clicker') initClicker();
+        if (gameName === 'memory') initMemory();
+        if (gameName === 'avoid') initAvoid();
+        if (gameName === 'fast') initFast();
+    }
+
+    // 1. ЗМІЙКА
+    function initSnake() {
+        canvas.style.display = "block";
+        canvas.width = 400; canvas.height = 400;
+        let s = [{x:10, y:10}], f = {x:5, y:5}, d = {x:1, y:0}, last = 0;
+        window.onkeydown = e => {
+            if(e.key.includes('Arrow')) e.preventDefault();
+            const keys = {ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0}};
+            if(keys[e.key] && (keys[e.key].x !== -d.x || keys[e.key].y !== -d.y)) d = keys[e.key];
+        };
+        function loop(t) {
+            if (activeGame !== 'snake') return;
+            if (t - last > 100) {
+                last = t; let h = {x: s[0].x+d.x, y: s[0].y+d.y};
+                if(h.x<0||h.x>19||h.y<0||h.y>19||s.some(p=>p.x==h.x&&p.y==h.y)) return run('snake');
+                s.unshift(h);
+                if(h.x==f.x&&h.y==f.y) { score++; val.innerText=score; f={x:Math.floor(Math.random()*20), y:Math.floor(Math.random()*20)}; } else s.pop();
+                ctx.fillStyle="#000"; ctx.fillRect(0,0,400,400); ctx.font="20px Arial"; ctx.fillText("🍎", f.x*20, f.y*20+18);
+                ctx.fillStyle="#39ff14"; s.forEach(p=>ctx.fillRect(p.x*20, p.y*20, 19, 19));
+            }
+            animationReq = requestAnimationFrame(loop);
+        }
+        animationReq = requestAnimationFrame(loop);
+    }
+
+    // 2. НІНДЗЯ (БЕЗ ЛАГІВ)
+    function initSlasher() {
+        function spawn() {
+            if (activeGame !== 'slasher') return;
+            const el = document.createElement('div');
+            el.className = 'fruit'; el.innerHTML = '🍉';
+            el.style.left = (10 + Math.random()*80) + '%';
+            el.style.top = '100%';
+            layer.appendChild(el);
+            let y = 100, vy = -2.5;
+            function move() {
+                if (activeGame !== 'slasher') return;
+                vy += 0.05; y += vy; el.style.top = y + '%';
+                if(y < 110) requestAnimationFrame(move); else el.remove();
+            }
+            el.onmouseover = () => { score++; val.innerText=score; el.innerHTML='💥'; setTimeout(()=>el.remove(),100); };
+            requestAnimationFrame(move);
+            gameTimer = setTimeout(spawn, 800);
+        }
+        spawn();
+    }
+
+    // 3. FLAPPY
+    function initFlappy() {
+        canvas.style.display = "block";
+        canvas.width = 320; canvas.height = 480;
+        let py=200, pv=0, pipes=[];
+        canvas.onclick = () => pv = -6;
+        function loop() {
+            if (activeGame !== 'flappy') return;
+            pv+=0.3; py+=pv;
+            if(Math.random()<0.015) pipes.push({x:320, y:Math.random()*200+100});
+            ctx.fillStyle="#000"; ctx.fillRect(0,0,320,480); ctx.font="30px Arial"; ctx.fillText("🍉", 50, py);
+            pipes.forEach((p, i) => {
+                p.x-=3.5; ctx.fillStyle="#39ff14"; ctx.fillRect(p.x, 0, 45, p.y); ctx.fillRect(p.x, p.y+130, 45, 480);
+                if(p.x < 50 && p.x > 46) { score++; val.innerText=score; }
+                if(p.x<-50) pipes.splice(i,1);
+                if(50 > p.x && 50 < p.x+45 && (py-20 < p.y || py > p.y+130)) run('flappy');
+            });
+            if(py>480||py<0) run('flappy');
+            animationReq = requestAnimationFrame(loop);
+        }
+        animationReq = requestAnimationFrame(loop);
+    }
+
+    // 4. КОШИК
+    function initCatcher() {
+        canvas.style.display = "block";
+        canvas.width = 320; canvas.height = 400;
+        let bx = 140, items = [];
+        canvas.onmousemove = e => {
+            const rect = canvas.getBoundingClientRect();
+            bx = e.clientX - rect.left - 20;
+        };
+        function loop() {
+            if (activeGame !== 'catcher') return;
+            if(Math.random()<0.04) items.push({x:Math.random()*300, y:0});
+            ctx.fillStyle="#000"; ctx.fillRect(0,0,320,400); ctx.font="35px Arial"; ctx.fillText("🧺", bx, 380);
+            items.forEach((it, i) => {
+                it.y+=4; ctx.fillText("🍓", it.x, it.y);
+                if(it.y>350 && it.x > bx-15 && it.x < bx+45) { score++; val.innerText=score; items.splice(i,1); }
+                else if(it.y>400) items.splice(i,1);
+            });
+            animationReq = requestAnimationFrame(loop);
+        }
+        animationReq = requestAnimationFrame(loop);
+    }
+
+    // 5. КЛІКЕР
+    function initClicker() {
+        const b = document.createElement('div');
+        b.className = 'fruit'; b.innerHTML = '🍉';
+        b.style.cssText = 'position:relative; font-size:150px; pointer-events:auto;';
+        b.onclick = () => { score++; val.innerText = score; b.style.transform = 'scale(0.9)'; setTimeout(()=>b.style.transform='scale(1)',50); };
+        layer.appendChild(b);
+    }
+
+    // 6. ПАМ'ЯТЬ
+    function initMemory() {
+        const icons = ['🍉','🍉','🍓','🍓','🍍','🍍','🍒','🍒','🥝','🥝','🍋','🍋'].sort(()=>Math.random()-0.5);
+        const g = document.createElement('div'); g.className = 'grid'; layer.appendChild(g);
+        let open = [];
+        icons.forEach(icon => {
+            const c = document.createElement('div'); c.className = 'card';
+            c.onclick = () => {
+                if(open.length<2 && !c.innerText) {
+                    c.innerText = icon; open.push(c);
+                    if(open.length==2) {
+                        if(open[0].innerText==open[1].innerText) { score++; val.innerText=score; open=[]; }
+                        else setTimeout(()=>{ open.forEach(x=>x.innerText=''); open=[]; }, 500);
+                    }
+                }
+            };
+            g.appendChild(c);
+        });
+    }
+
+    // 7. БОМБИ
+    function initAvoid() {
+        function spawn() {
+            if (activeGame !== 'avoid') return;
+            const isB = Math.random() < 0.25;
+            const f = document.createElement('div'); f.className = 'fruit';
+            f.innerHTML = isB ? '💣' : '🍍';
+            f.style.left = (10 + Math.random()*80) + '%';
+            f.style.top = (10 + Math.random()*80) + '%';
+            layer.appendChild(f);
+            f.onclick = () => { if(isB) run('avoid'); else { score++; val.innerText=score; f.remove(); } };
+            setTimeout(() => { if(f.parentNode) f.remove(); }, 1200);
+            gameTimer = setTimeout(spawn, 600);
+        }
+        spawn();
+    }
+
+    // 8. СПІДРАН
+    function initFast() {
+        function spawn() {
+            if (activeGame !== 'fast') return;
+            layer.innerHTML = '';
+            const f = document.createElement('div'); f.className = 'fruit'; f.innerHTML = '🥝';
+            f.style.left = (10 + Math.random()*80) + '%'; f.style.top = (10 + Math.random()*80) + '%';
+            f.onclick = () => { score++; val.innerText=score; spawn(); };
+            layer.appendChild(f);
+            if (gameTimer) clearTimeout(gameTimer);
+            gameTimer = setTimeout(() => { if(activeGame==='fast') run('fast'); }, 1000 - Math.min(score*30, 600));
+        }
+        spawn();
+    }
+</script>
+</body>
+</html>
