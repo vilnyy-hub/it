@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Magic Life</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            /* Гарний темний градієнт */
+            background: linear-gradient(135deg, #000000 0%, #1a0b2e 100%);
+            color: white;
+            margin: 0;
+            padding: 50px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(186, 104, 200, 0.6);
+        }
+
+        .studio-info {
+            flex: 1;
+            min-width: 300px;
+            text-align: left;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .contacts {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .contacts p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            color: #fff;
+        }
+
+        .contacts strong {
+            color: #ba68c8;
+        }
+
+        img.main-photo {
+            border-radius: 20px;
+            width: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        img.main-photo:hover {
+            transform: scale(1.05);
+        }
+
+        .counter {
+            margin-top: 50px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Magic Life<br>dance studio</h1>
+
+    <div class="container">
+        <div class="studio-info">
+            <h2>Про нас</h2>
+            <p>
+                Ми створюємо магію руху та допомагаємо знайти свій стиль у танці. 
+                Приєднуйтесь до нашої дружньої родини!
+            </p>
+
+            <div class="contacts">
+                <p><strong>📞 Телефон:</strong> 0676736737</p>
+                <p><strong>📍 Адреса:</strong> вул. Стрийська 45, Fabrik</p>
+                <p><strong>🚪 Вхід:</strong> головний вхід, ліфт на 4 поверх</p>
+            </div>
+        </div>
+
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT64koHmJwIZnw-H-bvaMUWoYyFjgs2NYXag&s" 
+             alt="Dance Studio" 
+             class="main-photo">
+    </div>
+
+    <div class="counter">
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FMagic+Life+dance+studio.html&label=%D0%9A%D1%96%D0%BB%D1%8C%D0%BA%D1%96%D1%81%D1%82%D1%8C+%D0%BE%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D1%8C+%D1%81%D1%82%D0%BE%D1%80%D1%96%D0%BD%D0%BA%D0%B8&icon=arrow-clockwise&color=%23ffffff&message=&style=plastic&tz=UTC">
+    </div>
+
+</body>
+</html>
