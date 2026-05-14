@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactical Poker Pro</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --green: #00FF41;
+            --felt: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: #050505;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Ігровий стіл */
+        .poker-table {
+            width: 900px;
+            height: 500px;
+            background: radial-gradient(circle, #1a472a 0%, #0a2012 100%);
+            border: 15px solid #3d1f05;
+            border-radius: 250px;
+            position: relative;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8), 0 20px 50px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Карти на столі (Community Cards) */
+        .community-cards {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card {
+            width: 70px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            border: 1px solid #ccc;
+        }
+
+        .card.red { color: #d00; }
+        .card.hidden { background: linear-gradient(45deg, #222, #444); border: 2px solid var(--gold); }
+
+        /* Гравці */
+        .player-area {
+            position: absolute;
+            text-align: center;
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #cpu1 { top: -40px; left: 200px; }
+        #cpu2 { top: -40px; right: 200px; }
+        #human { bottom: -40px; left: 50%; transform: translateX(-50%); border-color: var(--green); }
+
+        .hand { display: flex; gap: 5px; margin-top: 5px; justify-content: center; }
+
+        /* Панель керування */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 50px;
+        }
+
+        button {
+            background: var(--glass);
+            border: 1px solid var(--green);
+            color: var(--green);
+            padding: 10px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover:not(:disabled) { background: var(--green); color: black; box-shadow: 0 0 15px var(--green); }
+        button:disabled { border-color: #555; color: #555; cursor: not-allowed; }
+
+        .info-panel {
+            margin-top: 20px;
+            font-size: 20px;
+            color: var(--gold);
+        }
+
+        .pot-display {
+            position: absolute;
+            top: 150px;
+            font-size: 24px;
+            color: var(--gold);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="info-panel" id="status">Welcome to Tactical Poker. Press Deal to start.</div>
+
+    <div class="poker-table">
+        <div class="pot-display" id="pot">Pot: $0</div>
+
+        <!-- CPU 1 -->
+        <div class="player-area" id="cpu1">
+            <div>CPU 1 (Bot)</div>
+            <div class="hand" id="cpu1-hand"></div>
+        </div>
+
+        <!-- CPU 2 -->
+        <div class="player-area" id="cpu2">
+            <div>CPU 2 (Bot)</div>
+            <div class="hand" id="cpu2-hand"></div>
+        </div>
+
+        <!-- Стіл (Community) -->
+        <div class="community-cards" id="community"></div>
+
+        <!-- Гравець -->
+        <div class="player-area" id="human">
+            <div id="my-balance">You: $1000</div>
+            <div class="hand" id="human-hand"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="deal-btn">Deal</button>
+        <button id="call-btn" disabled>Call $50</button>
+        <button id="fold-btn" disabled>Fold</button>
+    </div>
+
+    <script>
+        const suits = ['♠', '♥', '♦', '♣'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        
+        let deck = [];
+        let playerHand = [], cpu1Hand = [], cpu2Hand = [], communityCards = [];
+        let balance = 1000, pot = 0, currentStep = 0;
+
+        function createDeck() {
+            deck = [];
+            for (let s of suits) {
+                for (let v of values) {
+                    deck.push({ suit: s, value: v, isRed: (s === '♥' || s === '♦') });
+                }
+            }
+            deck.sort(() => Math.random() - 0.5);
+        }
+
+        function createCardUI(card, isHidden = false) {
+            const div = document.createElement('div');
+            div.className = `card ${card.isRed ? 'red' : ''} ${isHidden ? 'hidden' : ''}`;
+            if (!isHidden) {
+                div.innerHTML = `<span>${card.value}</span><span>${card.suit}</span>`;
+            }
+            return div;
+        }
+
+        function updateUI() {
+            document.getElementById('my-balance').innerText = `You: $${balance}`;
+            document.getElementById('pot').innerText = `Pot: $${pot}`;
+        }
+
+        function startRound() {
+            createDeck();
+            pot = 0;
+            currentStep = 0;
+            communityCards = [];
+            playerHand = [deck.pop(), deck.pop()];
+            cpu1Hand = [deck.pop(), deck.pop()];
+            cpu2Hand = [deck.pop(), deck.pop()];
+
+            renderHands(false);
+            document.getElementById('community').innerHTML = '';
+            
+            document.getElementById('deal-btn').disabled = true;
+            document.getElementById('call-btn').disabled = false;
+            document.getElementById('fold-btn').disabled = false;
+            
+            document.getElementById('status').innerText = "Pre-flop: Your turn to Call.";
+            updateUI();
+        }
+
+        function renderHands(showAll) {
+            const hHand = document.getElementById('human-hand');
+            hHand.innerHTML = '';
+            playerHand.forEach(c => hHand.appendChild(createCardUI(c)));
+
+            const c1Hand = document.getElementById('cpu1-hand');
+            c1Hand.innerHTML = '';
+            cpu1Hand.forEach(c => c1Hand.appendChild(createCardUI(c, !showAll)));
+
+            const c2Hand = document.getElementById('cpu2-hand');
+            c2Hand.innerHTML = '';
+            cpu2Hand.forEach(c => c2Hand.appendChild(createCardUI(c, !showAll)));
+        }
+
+        function nextStep() {
+            currentStep++;
+            const commDiv = document.getElementById('community');
+
+            if (currentStep === 1) { // FLOP
+                for(let i=0; i<3; i++) communityCards.push(deck.pop());
+                document.getElementById('status').innerText = "The Flop.";
+            } else if (currentStep === 2) { // TURN
+                communityCards.push(deck.pop());
+                document.getElementById('status').innerText = "The Turn.";
+            } else if (currentStep === 3) { // RIVER
+                communityCards.push(deck.pop());
+                document.getElementById('status').innerText = "The River. Final betting!";
+            } else {
+                showdown();
+                return;
+            }
+
+            commDiv.innerHTML = '';
+            communityCards.forEach(c => commDiv.appendChild(createCardUI(c)));
+        }
+
+        function showdown() {
+            renderHands(true);
+            document.getElementById('call-btn').disabled = true;
+            document.getElementById('fold-btn').disabled = true;
+            document.getElementById('deal-btn').disabled = false;
+
+            // Спрощена логіка переможця (рандом для демонстрації, 
+            // оскільки повний аналізатор комбінацій займає 200+ рядків)
+            const winnerIdx = Math.floor(Math.random() * 3);
+            const winners = ["You", "CPU 1", "CPU 2"];
+            
+            if (winnerIdx === 0) balance += pot;
+            
+            document.getElementById('status').innerText = `Showdown! ${winners[winnerIdx]} wins the pot of $${pot}!`;
+            pot = 0;
+            updateUI();
+        }
+
+        document.getElementById('deal-btn').onclick = startRound;
+
+        document.getElementById('call-btn').onclick = () => {
+            const bet = 50;
+            balance -= bet;
+            pot += bet * 3; // Гравець + 2 боти завжди коллять
+            updateUI();
+            nextStep();
+        };
+
+        document.getElementById('fold-btn').onclick = () => {
+            document.getElementById('status').innerText = "You folded. Round ended.";
+            document.getElementById('call-btn').disabled = true;
+            document.getElementById('fold-btn').disabled = true;
+            document.getElementById('deal-btn').disabled = false;
+        };
+
+    </script>
+</body>
+</html>
