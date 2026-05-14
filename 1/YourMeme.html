@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title> YourMeme </title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #1e293b,
+            #111827
+        );
+
+    color:white;
+    min-height:100vh;
+    padding:40px;
+}
+
+/* title */
+
+.title{
+    text-align:center;
+    font-size:4rem;
+    font-weight:800;
+
+    margin-bottom:15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #60a5fa,
+            #c084fc,
+            #f472b6
+        );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+    text-align:center;
+    color:#94a3b8;
+    margin-bottom:50px;
+    font-size:1.1rem;
+}
+
+/* grid */
+
+.container{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(270px,1fr));
+
+    gap:30px;
+}
+
+/* card */
+
+.meme{
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:24px;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    border:
+        1px solid rgba(255,255,255,0.1);
+
+    backdrop-filter:blur(12px);
+
+    transition:0.4s;
+
+    animation:float 5s ease-in-out infinite;
+}
+
+.meme:hover{
+    transform:
+        translateY(-10px)
+        scale(1.02);
+
+    box-shadow:
+        0 20px 50px rgba(96,165,250,.25);
+}
+
+/* image */
+
+.meme img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    display:block;
+    transition:0.4s;
+}
+
+.meme:hover img{
+    transform:scale(1.08);
+}
+
+/* badge */
+
+.badge{
+    position:absolute;
+    top:15px;
+    left:15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #3b82f6,
+            #8b5cf6
+        );
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:.75rem;
+    font-weight:700;
+
+    z-index:5;
+
+    box-shadow:
+        0 5px 20px rgba(59,130,246,.4);
+}
+
+/* caption */
+
+.caption{
+    padding:22px;
+    text-align:center;
+}
+
+.caption h2{
+    font-size:1.2rem;
+    margin-bottom:8px;
+}
+
+.caption p{
+    color:#94a3b8;
+    font-size:.95rem;
+}
+
+/* qr section */
+
+.qr-box{
+    margin-top:70px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    background:
+        rgba(255,255,255,0.05);
+
+    border:
+        1px solid rgba(255,255,255,0.1);
+
+    border-radius:30px;
+
+    padding:40px;
+}
+
+.qr-box h2{
+    margin-bottom:10px;
+    font-size:2rem;
+}
+
+.qr-box p{
+    color:#94a3b8;
+    margin-bottom:25px;
+}
+
+.qr-box img{
+    width:220px;
+    border-radius:20px;
+    background:white;
+    padding:10px;
+}
+
+/* animation */
+
+@keyframes float{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-6px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* mobile */
+
+@media(max-width:700px){
+
+    body{
+        padding:20px;
+    }
+
+    .title{
+        font-size:2.5rem;
+    }
+
+    .meme img{
+        height:230px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<h1 class="title">
+   YourMeme
+</h1>
+
+<p class="subtitle">
+    The Internet's Greatest Meme Collection 
+</p>
+
+<div class="container">
+
+    <!-- MEME 1 -->
+
+    <div class="meme">
+        <span class="badge">CLASSIC</span>
+
+        <img
+            loading="lazy"
+            src="https://i.imgflip.com/3oevdk.jpg"
+        >
+
+        <div class="caption">
+            <h2> Not Asking Again</h2>
+            <p>
+              ?
+        </div>
+    </div>
+
+    <!-- MEME 2 -->
+
+    <div class="meme">
+        <span class="badge">LEGEND</span>
+
+        <img
+            loading="lazy"
+            src="https://i.imgflip.com/39t1o.jpg"
+        >
+
+        <div class="caption">
+            <h2> Want Some? </h2>
+            <p>
+                Yeah
+            </p>
+        </div>
+    </div>
+
+    <!-- MEME 3 -->
+
+    <div class="meme">
+        <span class="badge">MOOD</span>
+
+        <img
+            loading="lazy"
+            src="https://i.imgflip.com/54hjww.jpg"
+        >
+
+        <div class="caption">
+            <h2> Trade Offer </h2>
+            Do you accept?
+            </p>
+        </div>
+    </div>
+
+    <!-- MEME 4 -->
+
+    <div class="meme">
+        <span class="badge">IQ 999</span>
+
+        <img
+            loading="lazy"
+            src="https://i.imgflip.com/2za3u1.jpg"
+        >
+
+        <div class="caption">
+            <h2> Is There a Diference </h2>
+            <p>
+                IDK
+            </p>
+        </div>
+    </div>
+
+    <!-- MEME 5 -->
+
+    <div class="meme">
+        <span class="badge">GAMER</span>
+
+        <img
+            loading="lazy"
+            src="https://i.imgflip.com/43a45p.png"
+        >
+
+        <div class="caption">
+            <h2> Doge </h2>
+            <p>
+                Big Boi
+            </p>
+        </div>
+    </div>
+
+    <!-- MEME 6 -->
+
+    <div class="meme">
+        <span class="badge">PAIN</span>
+
+        <img
+            loading="lazy"
+            src="https://i.imgflip.com/1ur9b0.jpg"
+        >
+
+        <div class="caption">
+            <h2> Oh No </h2>
+            </p>
+            Where are you looking?
+        </div>
+    </div>
+
+</div>
+
+<!-- QR CODE -->
+
+<div class="qr-box">
+
+    <h2>
+        Scan For More Memes!
+    </h2>
+
+    <p>
+        Open YOURMeme on YOUR phone instantly!
+    </p>
+
+    <!-- QR CODE -->
+
+    <img
+        src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://example.com"
+        alt="QR Code"
+    >
+
+</div>
+
+</body>
+</html>
