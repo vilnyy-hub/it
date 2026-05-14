@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>✨ Aroma Dream Game ✨</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    overflow-x:hidden;
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff9ad5,
+    #b084ff,
+    #7ecbff
+    );
+
+    background-size:400% 400%;
+
+    animation:bgMove 12s infinite;
+
+    color:white;
+}
+
+/* animated background */
+@keyframes bgMove{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+
+/* stars */
+.star{
+    position:fixed;
+
+    width:8px;
+    height:8px;
+
+    background:white;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    z-index:9999;
+
+    animation:twinkle 1s forwards;
+}
+
+@keyframes twinkle{
+
+from{
+opacity:1;
+transform:scale(1);
+}
+
+to{
+opacity:0;
+transform:scale(0);
+}
+
+}
+
+/* container */
+.container{
+    width:90%;
+    max-width:1300px;
+
+    margin:auto;
+
+    padding:30px;
+}
+
+/* hero */
+.hero{
+
+    text-align:center;
+
+    padding:50px;
+
+    border-radius:40px;
+
+    backdrop-filter:blur(15px);
+
+    background:rgba(255,255,255,0.12);
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.25);
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:350px;
+    height:350px;
+
+    background:
+    radial-gradient(
+    rgba(255,255,255,0.35),
+    transparent
+    );
+
+    top:-120px;
+    right:-120px;
+
+    border-radius:50%;
+}
+
+/* title */
+.hero h1{
+
+    font-size:70px;
+
+    margin-bottom:20px;
+
+    background:
+    linear-gradient(
+    45deg,
+    white,
+    #ffe0fa,
+    white
+    );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    animation:titleFloat 3s infinite;
+}
+
+@keyframes titleFloat{
+
+0%,100%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-10px);
+}
+
+}
+
+.hero p{
+    font-size:22px;
+
+    line-height:1.8;
+
+    margin-top:20px;
+}
+
+/* image */
+.main-img{
+    width:300px;
+    height:300px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:8px solid rgba(255,255,255,0.6);
+
+    margin-top:25px;
+
+    transition:0.5s;
+
+    box-shadow:
+    0 0 40px rgba(255,255,255,0.3);
+}
+
+.main-img:hover{
+
+    transform:
+    scale(1.08)
+    rotate(5deg);
+
+    box-shadow:
+    0 0 80px rgba(255,255,255,0.7);
+}
+
+/* button */
+.btn{
+
+    margin-top:35px;
+
+    padding:18px 40px;
+
+    border:none;
+
+    border-radius:50px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    45deg,
+    #ff5ec7,
+    #7f5dff,
+    #4facfe
+    );
+
+    background-size:300% 300%;
+
+    animation:btnAnim 6s infinite;
+
+    transition:0.4s;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,0.25);
+}
+
+@keyframes btnAnim{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+
+.btn:hover{
+
+    transform:
+    scale(1.08)
+    translateY(-5px);
+
+    box-shadow:
+    0 0 35px rgba(255,255,255,0.7);
+}
+
+/* result */
+#result{
+    margin-top:25px;
+
+    font-size:32px;
+
+    font-weight:bold;
+
+    min-height:50px;
+
+    transition:0.3s;
+}
+
+/* cards */
+.grid{
+
+    margin-top:50px;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:25px;
+}
+
+.card{
+
+    padding:30px;
+
+    border-radius:30px;
+
+    background:rgba(255,255,255,0.14);
+
+    backdrop-filter:blur(10px);
+
+    transition:0.5s;
+
+    text-align:center;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+    linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.3),
+    transparent
+    );
+
+    transform:translateX(-100%);
+}
+
+.card:hover::before{
+    transform:translateX(100%);
+    transition:1s;
+}
+
+.card:hover{
+
+    transform:
+    translateY(-10px)
+    scale(1.05);
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,0.25);
+}
+
+.card h2{
+    margin-bottom:15px;
+}
+
+/* perfume game */
+.perfume{
+
+    position:fixed;
+
+    width:100px;
+
+    cursor:pointer;
+
+    z-index:999;
+
+    transition:0.2s;
+
+    filter:
+    drop-shadow(0 0 20px rgba(255,255,255,0.8));
+
+    animation:perfumeFloat 2s infinite;
+}
+
+@keyframes perfumeFloat{
+
+0%,100%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-10px);
+}
+
+}
+
+.perfume:hover{
+
+    transform:
+    scale(1.2)
+    rotate(10deg);
+}
+
+/* game area */
+.game-area{
+
+    margin-top:60px;
+
+    padding:40px;
+
+    border-radius:35px;
+
+    background:rgba(255,255,255,0.12);
+
+    backdrop-filter:blur(10px);
+
+    text-align:center;
+}
+
+.score{
+
+    margin-top:25px;
+
+    font-size:40px;
+
+    font-weight:bold;
+}
+
+/* quote */
+.quote{
+
+    margin-top:60px;
+
+    text-align:center;
+
+    font-size:30px;
+
+    font-style:italic;
+}
+
+/* mobile */
+@media(max-width:700px){
+
+.hero h1{
+font-size:45px;
+}
+
+.main-img{
+width:200px;
+height:200px;
+}
+
+.perfume{
+width:75px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- PERFUME GAME -->
+<img
+src="https://cdn-icons-png.flaticon.com/512/3616/3616789.png"
+class="perfume"
+id="perfumeGame"
+onclick="catchPerfume()">
+
+<div class="container">
+
+<div class="hero">
+
+<h1>✨ Aroma Dream Game ✨</h1>
+
+<img
+src="https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=1000"
+class="main-img">
+
+<p>
+🌸 Сакура — ніжний аромат весни.<br><br>
+
+🍓 Полуниця — солодкий вайб літа.<br><br>
+
+☕ Coffee Mood — атмосфера кав'ярні.<br><br>
+
+🍋 Citrus Energy — море енергії.<br><br>
+
+🍫 Chocolate Dream — теплий затишок.<br><br>
+
+🪻 Lavender Relax — гармонія та релакс.<br><br>
+
+🍦 Vanilla Magic — тепло та комфорт.<br><br>
+
+🌊 Ocean Breeze — морська свіжість ✨
+</p>
+
+<button class="btn" onclick="getAroma()">
+🌸 Дізнатись свій аромат
+</button>
+
+<div id="result"></div>
+
+<div class="grid">
+
+<div class="card">
+<h2>🌸 Sakura</h2>
+<p>Ніжність японської весни.</p>
+</div>
+
+<div class="card">
+<h2>🍓 Strawberry</h2>
+<p>Солодкий літній аромат.</p>
+</div>
+
+<div class="card">
+<h2>☕ Coffee</h2>
+<p>Творчий затишний вайб.</p>
+</div>
+
+<div class="card">
+<h2>🍋 Citrus</h2>
+<p>Свіжість та енергія.</p>
+</div>
+
+<div class="card">
+<h2>🍫 Chocolate</h2>
+<p>Шоколадний затишок.</p>
+</div>
+
+<div class="card">
+<h2>🪻 Lavender</h2>
+<p>Релакс та спокій.</p>
+</div>
+
+</div>
+
+<!-- GAME -->
+
+<div class="game-area">
+
+<h2>🎮 Гра: Знайди парфум!</h2>
+
+<p>
+Шукай парфуми по всьому сайту ✨<br>
+Кожен клік дає +1 очко 💎
+</p>
+
+<div class="score">
+💎 Знайдено:
+<span id="score">0</span>
+</div>
+
+</div>
+
+<div class="quote">
+“Парфуми — це невидима магія людини.” ✨
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* RANDOMIZER */
+
+const aromas = [
+
+"🌸 Sakura Dream",
+"🍓 Strawberry Candy",
+"☕ Coffee Mood",
+"🍋 Citrus Energy",
+"🌊 Ocean Breeze",
+"🍦 Vanilla Magic",
+"🌹 Rose Night",
+"🍫 Chocolate Heaven",
+"🪻 Lavender Relax",
+"🌲 Forest Fresh",
+"🍍 Tropical Paradise",
+"🍑 Peach Sweetness",
+"🍏 Green Apple",
+"🥥 Coconut Dream"
+
+];
+
+function getAroma(){
+
+const result =
+document.getElementById("result");
+
+result.innerHTML =
+"🔮 Магія створює аромат...";
+
+setTimeout(()=>{
+
+const random =
+aromas[
+Math.floor(
+Math.random()*aromas.length
+)
+];
+
+result.innerHTML = random;
+
+const colors = [
+
+"#ff9ff3",
+"#74b9ff",
+"#55efc4",
+"#ffeaa7",
+"#ff7675",
+"#a29bfe"
+
+];
+
+result.style.color =
+colors[
+Math.floor(
+Math.random()*colors.length
+)
+];
+
+},1000);
+
+}
+
+/* PERFUME GAME */
+
+let score = 0;
+
+const perfume =
+document.getElementById("perfumeGame");
+
+function movePerfume(){
+
+const x =
+Math.random()*
+(window.innerWidth-120);
+
+const y =
+Math.random()*
+(window.innerHeight-120);
+
+perfume.style.left = x + "px";
+perfume.style.top = y + "px";
+
+}
+
+movePerfume();
+
+function catchPerfume(){
+
+score++;
+
+document.getElementById("score")
+.innerHTML = score;
+
+/* sparkle explosion */
+
+for(let i=0;i<25;i++){
+
+const star =
+document.createElement("div");
+
+star.className = "star";
+
+star.style.left =
+perfume.offsetLeft + "px";
+
+star.style.top =
+perfume.offsetTop + "px";
+
+document.body.appendChild(star);
+
+const x =
+(Math.random()-0.5)*400;
+
+const y =
+(Math.random()-0.5)*400;
+
+star.animate([
+
+{
+transform:"translate(0,0) scale(1)",
+opacity:1
+},
+
+{
+transform:`translate(${x}px,${y}px) scale(0)`,
+opacity:0
+}
+
+],{
+
+duration:1200
+
+});
+
+setTimeout(()=>{
+star.remove();
+},1200);
+
+}
+
+/* move perfume */
+
+movePerfume();
+
+/* speed */
+
+if(score > 5){
+
+perfume.style.transition =
+"0.15s";
+
+}
+
+if(score > 15){
+
+perfume.style.transition =
+"0.08s";
+
+}
+
+}
+
+/* MAGIC CURSOR */
+
+document.addEventListener("mousemove",(e)=>{
+
+const star =
+document.createElement("div");
+
+star.className = "star";
+
+star.style.left = e.clientX + "px";
+
+star.style.top = e.clientY + "px";
+
+document.body.appendChild(star);
+
+setTimeout(()=>{
+star.remove();
+},800);
+
+});
+
+</script>
+
+</body>
+</html>
