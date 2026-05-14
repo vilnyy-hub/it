@@ -9,6 +9,7 @@
             --sand-pink: #f4cfdf;
             --text-dark: #5d4037;
             --rain-blue: #add8e6;
+            --accent-pink: #f06292;
         }
 
         body {
@@ -21,33 +22,24 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-            animation: sway 5s ease-in-out forwards;
         }
 
-        @keyframes sway {
-            0% { transform: rotate(0deg); }
-            20% { transform: rotate(1deg); }
-            40% { transform: rotate(-1deg); }
-            60% { transform: rotate(0.5deg); }
-            80% { transform: rotate(-0.5deg); }
-            100% { transform: rotate(0deg); }
-        }
-
-        /* Стилі для дощу */
+        /* Стилі для великих крапель дощу */
         .rain-drop {
             position: fixed;
-            top: -10px;
-            width: 2px;
-            height: 10px;
+            top: -20px;
+            width: 4px; /* Збільшено */
+            height: 20px; /* Збільшено */
             background-color: var(--rain-blue);
-            opacity: 0.7;
+            border-radius: 2px;
+            opacity: 0.6;
             pointer-events: none;
             z-index: 1000;
             animation: fall linear forwards;
         }
 
         @keyframes fall {
-            to { transform: translateY(100vh); }
+            to { transform: translateY(110vh); }
         }
 
         header {
@@ -68,8 +60,8 @@
 
         .character-container {
             margin: 20px auto;
-            width: 300px;
-            height: 300px;
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
             overflow: hidden;
             border: 8px solid var(--sand-pink);
@@ -78,7 +70,7 @@
 
         @keyframes breathe {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            50% { transform: scale(1.05); }
         }
 
         .character-container img {
@@ -86,6 +78,37 @@
             height: 100%;
             object-fit: cover;
         }
+
+        /* Антистрес-зона */
+        .antistress-box {
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            border: 3px dashed var(--sand-pink);
+        }
+
+        #antistress-toy {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, var(--sand-pink), var(--sand-yellow));
+            margin: 20px auto;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            user-select: none;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .shape-1 { border-radius: 50%; }
+        .shape-2 { border-radius: 20%; transform: rotate(45deg); }
+        .shape-3 { border-radius: 50% 10% 50% 10%; }
+        .shape-4 { border-radius: 30% 60% 70% 40% / 50% 60% 30% 40%; }
 
         .buttons-grid {
             display: grid;
@@ -96,7 +119,7 @@
 
         button {
             background-color: var(--sand-pink);
-            border: 2px solid #f06292;
+            border: 2px solid var(--accent-pink);
             padding: 15px;
             border-radius: 15px;
             cursor: pointer;
@@ -107,24 +130,30 @@
         }
 
         button:hover {
-            background-color: #f06292;
+            background-color: var(--accent-pink);
             color: white;
             transform: translateY(-3px);
         }
 
         #ai-response {
             margin-top: 30px;
-            padding: 20px;
+            padding: 25px;
             background: white;
             border-radius: 20px;
-            min-height: 50px;
+            min-height: 60px;
             display: none;
-            border: 2px dashed var(--sand-pink);
-            line-height: 1.5;
+            border: 2px solid var(--sand-pink);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .unity-section {
-            margin-top: 40px;
+            margin-top: 60px;
             text-align: center;
         }
 
@@ -135,10 +164,7 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .footer-counter {
-            margin-top: 50px;
-            padding-bottom: 20px;
-        }
+        audio { margin-top: 20px; width: 100%; max-width: 300px; }
     </style>
 </head>
 <body>
@@ -149,12 +175,11 @@
 
     <div class="container">
         <p class="intro-text">
-            Якщо тобі треба заспокоїтися і поговорити з добрим спеціалістом, тобі до нас! 
-            Ми — <strong>"🎇Будь собою🥰"</strong> — завжди допоможемо.
+            Відчуй момент тут і зараз. Ми поруч, щоб підтримати тебе.
         </p>
 
         <div class="character-container">
-            <img src="https://st2.depositphotos.com/18722762/50790/v/450/depositphotos_507904706-stock-illustration-relax-yoga-crossed-legs-closed.jpg" alt="Дихаюча людина">
+            <img src="https://st2.depositphotos.com/18722762/50790/v/450/depositphotos_507904706-stock-illustration-relax-yoga-crossed-legs-closed.jpg" alt="Релакс">
         </div>
 
         <div class="buttons-grid">
@@ -166,26 +191,32 @@
 
         <div id="ai-response"></div>
 
+        <!-- Нова секція Антистрес -->
+        <div class="antistress-box">
+            <h3>Твій маленький стрес, який ти заспокоїш:</h3>
+            <p>Клікай на фігуру, щоб змінити її форму та розслабитися</p>
+            <div id="antistress-toy" class="shape-1" onclick="changeShape()">АНТИСТРЕС</div>
+        </div>
+
         <div class="unity-section">
             <h3>Ми всі єдині у цьому світі 🤝</h3>
             <img src="https://img.freepik.com/free-vector/people-holding-hands-together-unity-world-peace-concept_53876-64663.jpg" alt="Єдність">
         </div>
 
-        <div style="margin-top: 30px;">
-            <p style="font-size: 14px; font-weight: bold;">🎵 Спокійна музика для душі:</p>
+        <div style="margin-top: 40px;">
+            <p style="font-size: 14px; font-weight: bold;">🎵 Музика для гарного настрою:</p>
             <audio id="bg-music" controls loop>
                 <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
-                Ваш браузер не підтримує аудіо.
             </audio>
         </div>
     </div>
 
-    <div class="footer-counter">
-        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fsoliabeyourself.html&label=%D0%A2%D1%96%2C%D1%89%D0%BE+%D1%81%D1%82%D0%B0%D0%BB%D0%B8+%D1%82%D1%80%D0%BE%D1%88%D0%BA%D0%B8+%D1%81%D0%BF%D0%BE%D0%BA%D1%96%D0%B9%D0%BD%D1%96%D1%88%D0%B8%D0%BC%D0%B8&icon=bookmark-heart-fill&color=%23ff6bab&message=&style=plastic&tz=UTC">
+    <div style="padding: 20px;">
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fsoliabeyourself.html&label=%D0%A2%D1%96%2C%D1%89%D0%BE+%D1%81%D1%82%D0%B0%D0%BB%D0%B8+%D1%82%D1%80%D0%BE%D1%88%D0%BA%D0%B8+%D1%81%D0%BF%D0%BE%D0%BA%D1%96%D0%B9%D0%BD%D1%96%D1%88%D0%B8%D0%BC%D0%B8&icon=bookmark-heart-fill&color=%23ff6bab&style=plastic">
     </div>
 
     <script>
-        // Функція для створення дощу на перші 5 секунд
+        // Більші краплі дощу
         function createRain() {
             const rainDuration = 5000;
             const endTimestamp = Date.now() + rainDuration;
@@ -198,14 +229,27 @@
                 const drop = document.createElement('div');
                 drop.className = 'rain-drop';
                 drop.style.left = Math.random() * 100 + 'vw';
-                drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+                drop.style.animationDuration = (Math.random() * 1.5 + 0.8) + 's';
                 document.body.appendChild(drop);
 
-                setTimeout(() => drop.remove(), 2000);
-            }, 50);
+                setTimeout(() => drop.remove(), 2500);
+            }, 70);
         }
 
         window.onload = createRain;
+
+        // Зміна форми антистресу
+        let currentShape = 1;
+        function changeShape() {
+            const toy = document.getElementById('antistress-toy');
+            toy.classList.remove(`shape-${currentShape}`);
+            currentShape = currentShape >= 4 ? 1 : currentShape + 1;
+            toy.classList.add(`shape-${currentShape}`);
+            
+            // Випадковий колір при зміні
+            const colors = ['var(--sand-pink)', 'var(--sand-yellow)', '#ffd1dc', '#fff9c4'];
+            toy.style.background = colors[Math.floor(Math.random() * colors.length)];
+        }
 
         function respond(situation) {
             const box = document.getElementById('ai-response');
@@ -213,37 +257,45 @@
             
             const responses = {
                 stress: [
-                    "Я поруч. Давай зробимо глибокий вдих. Уяви, як тривога виходить із кожним видихом. Ти сильніший/а за свої думки.",
-                    "Все добре. Давай просто порахуємо до десяти. Це відчуття скоро мине, я з тобою.",
-                    "Зроби ковток води і подивись у вікно. Світ великий, і ти в безпеці. Все буде добре."
+                    "Я поруч. Давай зробимо глибокий вдих... і повільний видих. Ти сильніший/а за цей момент.",
+                    "Все гаразд. Давай просто порахуємо до десяти разом. Один... два... три... відчуваєш, як стає легше?",
+                    "Зроби ковток води і подивись у вікно. Світ великий, і ти в безпеці. Я з тобою.",
+                    "Уяви, що твоя тривога — це маленька хмарка, яка просто пропливає повз. Вона не залишиться назавжди.",
+                    "Ти робиш усе, що можеш, і цього достатньо. Дозволь собі просто бути."
                 ],
                 tired: [
-                    "Ти сьогодні зробив/ла достатньо. Твоє тіло просить відпочинку, і це нормально. Дозволь собі просто полежати.",
-                    "Відпочинок — це не лінь, це відновлення. Закрий очі на хвилинку і ні про що не думай.",
-                    "Світ почекає. Зараз найголовніше — твій спокій. Ти молодець, що піклуєшся про себе."
+                    "Ти сьогодні зробив/ла дуже багато. Твоє тіло просить відпочинку, і це — твоє право. Відпочинь.",
+                    "Відпочинок — це паливо для нових перемог. Закрий очі на хвилину, я постережу за твоїм спокоєм.",
+                    "Світ зачекає, поки ти відновлюєш сили. Ти молодець, що піклуєшся про себе.",
+                    "Уяви себе на березі теплого океану. Хвилі м'яко забирають твою втому. Спи або просто лежи.",
+                    "Твоя енергія обов'язково повернеться, а зараз — час для тиші та затишку."
                 ],
                 sad: [
-                    "Сумувати — це нормально. Я вислухаю тебе. Пам'ятай, що після дощу завжди з'являється сонце.",
-                    "Дозволь собі відчути цей сум, але не залишайся в ньому надовго. Ти сонечко, яке просто закрили хмари.",
-                    "Я обіймаю тебе ментально. Все налагодиться, крок за кроком. Ти не наодинці."
+                    "Сумувати — це нормально. Це частина нашого життя. Я тут, щоб просто побути з тобою поруч.",
+                    "Дозволь собі цей смуток, але пам'ятай: ти сонечко, яке зараз просто сховалося за хмаринку.",
+                    "Я обіймаю тебе ментально. Крок за кроком все стане зрозумілішим і легшим. Ти не один/одна.",
+                    "Напиши на папері все, що тебе засмучує, а потім просто викинь його. Стане трохи легше, обіцяю.",
+                    "Кожна сльоза робить серце м'якшим, а після найтемнішої ночі завжди приходить світанок."
                 ],
                 happy: [
-                    "Я так радію за тебе! Твоя енергія чудова. Давай збережемо цей момент у пам'яті!",
-                    "Це неймовірно! Твоє щастя надихає. Поділися цією усмішкою з кимось сьогодні!",
-                    "Чудові новини! Ти заслуговуєш на кожну секунду цієї радості. Нехай так буде завжди!"
+                    "Я так щиро радію за тебе! Твоя енергія просто неймовірна, вона заряджає все навколо!",
+                    "Це чудово! Запам'ятай це відчуття тепла всередині. Ти заслуговуєш на це щастя!",
+                    "Твоя усмішка — це найкраще, що сталося за сьогодні. Поділися цією радістю з кимось близьким!",
+                    "Неймовірні новини! Нехай цей успіх стане лише початком великої та світлої подорожі.",
+                    "Ти сяєш! Дякую, що ділишся цим світлом зі мною. Продовжуй у тому ж дусі!"
                 ]
             };
             
             const options = responses[situation];
             const randomMessage = options[Math.floor(Math.random() * options.length)];
-            
-            box.innerHTML = "<strong>AI Психолог:</strong> " + randomMessage;
+            box.innerHTML = "<strong>🤍 Порада для тебе:</strong> " + randomMessage;
         }
 
+        // Автозапуск музики після першого кліку
         document.body.addEventListener('click', function() {
             const music = document.getElementById('bg-music');
             if (music.paused) {
-                music.play().catch(e => console.log("Музика зачекає"));
+                music.play().catch(e => console.log("Музика завантажується..."));
             }
         }, { once: true });
     </script>
