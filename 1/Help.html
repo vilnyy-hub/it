@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Поради для людей </title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    overflow-x:hidden;
+}
+
+.container{
+    margin-top:80px;
+    padding:20px;
+}
+
+h1{
+    font-size:55px;
+    text-shadow:0 0 15px cyan;
+    animation:glow 2s infinite alternate;
+}
+
+p{
+    font-size:32px;
+    color:#60a5fa;
+    background:rgba(255,255,255,0.08);
+    display:inline-block;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+img.main-img{
+    width:250px;
+    border-radius:25px;
+    margin-top:25px;
+    transition:0.4s;
+    box-shadow:0 0 20px black;
+}
+
+img.main-img:hover{
+    transform:scale(1.08) rotate(2deg);
+}
+
+button{
+    margin-top:30px;
+    padding:15px 35px;
+    border:none;
+    border-radius:15px;
+    background:#06b6d4;
+    color:white;
+    font-size:22px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#0891b2;
+    transform:scale(1.1);
+}
+
+.counter{
+    margin-top:40px;
+}
+
+@keyframes glow{
+    from{
+        text-shadow:0 0 10px cyan;
+    }
+    to{
+        text-shadow:0 0 25px #38bdf8;
+    }
+}
+
+/* Рікрол екран */
+#rickroll{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:black;
+    z-index:999;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+}
+
+#rickroll iframe{
+    width:90%;
+    height:80%;
+    border-radius:20px;
+    border:none;
+}
+
+#rickroll h2{
+    color:white;
+    margin-bottom:20px;
+    font-size:40px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Поради для людей</h1>
+
+    <p>
+        Щоб отримати бесплатно айфон 18 про макс<br>
+        натисніть <b>Alt + F4</b> 
+    </p>
+
+    <br>
+
+    <img class="main-img"
+    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGwiMLcQAQXNwa62kJifYsGE0du-1BxFbSDg&s"
+    alt="дуже корисна картинка">
+
+    <br>
+
+    <button onclick="activateRickroll()">
+        НЕ НАТИСКАЙ 
+    </button>
+
+    <div class="counter">
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2F6767.html&label=wast&icon=moon-stars-fill&color=%230a58ca&message=&style=social&tz=UTC">
+    </div>
+</div>
+
+<!-- Rickroll -->
+<div id="rickroll">
+    <h2>Натисніть кнопочку</h2>
+
+    <iframe
+    src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+    allow="autoplay">
+    </iframe>
+</div>
+
+<script>
+function activateRickroll(){
+    document.getElementById("rickroll").style.display = "flex";
+}
+</script>
+
+<!-- 6767.html -->
+
+</body>
+</html>
+
+
+
