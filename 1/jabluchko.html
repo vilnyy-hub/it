@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shtrusdel Mood - Яблучко 4.5</title>
+    <title>Shtrusdel Mood 2.0 - Game Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
 
         :root {
             --primary-color: #ff4757;
+            --secondary-color: #2ed573;
             --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
 
@@ -20,18 +21,60 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
             color: #2f3542;
-            transition: background 0.5s ease;
-            overflow-x: hidden;
             padding: 20px;
+            overflow-x: hidden;
         }
 
+        /* Стилі гри */
+        #game-zone {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px dashed var(--primary-color);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            cursor: crosshair;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-apple {
+            position: absolute;
+            font-size: 30px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+            animation: popIn 0.3s ease-out;
+        }
+
+        .game-apple:active { transform: scale(1.5); }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2f3542;
+        }
+
+        /* Основний інтерфейс */
         .container {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(15px);
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 30px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
             max-width: 450px;
@@ -39,203 +82,246 @@
             margin-bottom: 20px;
         }
 
-        h1 { color: var(--primary-color); font-weight: 900; margin-bottom: 10px; }
+        h1 { color: var(--primary-color); font-weight: 900; margin: 0; font-size: 1.8rem; }
 
-        /* --- БЛОК НАСТРОЮ --- */
         .mood-box {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 30px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             width: 100%;
             max-width: 450px;
-            transition: all 0.3s ease;
         }
 
         .mood-buttons {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 12px;
+            gap: 10px;
             margin-top: 15px;
         }
 
         .btn-mood {
             border: 2px solid transparent;
-            padding: 12px 8px;
-            border-radius: 15px;
+            padding: 10px 5px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.85rem;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
             background: #f1f2f6;
         }
 
-        .btn-mood:hover { transform: scale(1.05); background: #dfe4ea; }
-        .btn-mood:active { transform: scale(0.95); }
+        .btn-mood.active {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+        }
 
         #mood-result {
-            margin-top: 25px;
+            margin-top: 20px;
             display: none;
             animation: bounceIn 0.6s ease;
         }
 
         @keyframes bounceIn {
             0% { opacity: 0; transform: translateY(20px); }
-            60% { transform: translateY(-5px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
         .mood-img {
-            width: 150px;
-            height: 150px;
+            width: 150px; height: 150px;
             object-fit: cover;
-            border-radius: 50%; /* Кругле яблучко */
-            border: 5px solid var(--primary-color);
-            margin-bottom: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            border: 4px solid var(--primary-color);
+            margin-bottom: 10px;
         }
 
-        /* --- ГРА --- */
-        #game-stats {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: white; padding: 12px 30px; border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-weight: 900;
-            display: none; z-index: 1000; border: 3px solid #2ed573;
+        .btn-start {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(46, 213, 115, 0.4);
         }
 
-        .game-apple {
-            position: absolute; font-size: 3rem; cursor: pointer; z-index: 100;
-            user-select: none;
-        }
-
-        .btn-shiny {
-            padding: 14px 28px; border: none; background: var(--primary-color);
-            color: white; border-radius: 50px; cursor: pointer; font-weight: 900;
-            text-transform: uppercase; margin: 5px; box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-        }
+        .btn-start:disabled { background: #ccc; box-shadow: none; }
     </style>
 </head>
 <body>
 
-    <div id="game-stats">🍏 ЗІБРАНО: <span id="score">0</span></div>
-
     <div class="container">
-        <h1>🍎 Shtrusdel</h1>
-        <p>Привіт, Юра! Відпочиваємо?</p>
-        <button class="btn-shiny" style="background: #2ed573; box-shadow: 0 4px 15px rgba(46, 213, 115, 0.3);" onclick="startGame()">Почати збір 🧺</button>
+        <h1>🍎 Shtrusdel Mood 2.0</h1>
+        <p style="margin: 5px 0;">Юра, збери яблука за 20 секунд!</p>
+        <img src="https://i.kymcdn.com/photos/images/original/003/119/865/cc6.jpeg">
+
+
+        <div class="stats">
+            <span>Час: <span id="timer">20</span>с</span>
+            <span>Рахунок: <span id="score">0</span></span>
+        </div>
+        
+        <button class="btn-start" id="start-btn" onclick="startGame()">ПОЧАТИ ГРУ</button>
+    </div>
+
+    <!-- Ігрова зона -->
+    <div id="game-zone">
+        <span id="game-msg">Натисніть "Почати", щоб ловити яблука!</span>
     </div>
 
     <div class="mood-box">
-        <h2 style="margin-top: 0; font-size: 1.2rem;">Яке ти сьогодні яблучко?</h2>
-        <div class="mood-buttons">
-            <button class="btn-mood" onclick="checkMood('sad')">😢 Сумний</button>
-            <button class="btn-mood" onclick="checkMood('romantic')">💖 Романтик</button>
-            <button class="btn-mood" onclick="checkMood('happy')">🤩 Радісний</button>
-            <button class="btn-mood" onclick="checkMood('angry')">🤬 Злий</button>
-            <button class="btn-mood" onclick="checkMood('hungry')">🤤 Голодний</button>
+        <div class="mood-buttons" id="btn-container">
+            <button class="btn-mood" onclick="toggleMood('sad')">😢 Сумний</button>
+            <button class="btn-mood" onclick="toggleMood('romantic')">💖 Романтик</button>
+            <button class="btn-mood" onclick="toggleMood('happy')">🤩 Радісний</button>
+            <button class="btn-mood" onclick="toggleMood('angry')">🤬 Злий</button>
+            <button class="btn-mood" onclick="toggleMood('hungry')">🤤 Голодний</button>
+            <button class="btn-mood" onclick="toggleMood('tired')">💤 Втомлений</button>
+            <button class="btn-mood" onclick="toggleMood('creative')">💡 Творчий</button>
         </div>
 
         <div id="mood-result">
             <img id="res-img" class="mood-img" src="" alt="apple">
-            <h3 id="res-name" style="margin: 5px 0; color: var(--primary-color);"></h3>
-            <p id="res-desc" style="font-size: 0.95rem; line-height: 1.4; color: #57606f; padding: 0 10px;"></p>
-            <button onclick="document.getElementById('mood-result').style.display='none'" style="background: none; border: none; color: #a4b0be; cursor: pointer; font-size: 0.8rem; text-decoration: underline;">Скинути</button>
+            <h3 id="res-name" style="margin: 5px 0;"></h3>
+            <p id="res-desc" style="font-size: 0.9rem; color: #57606f;"></p>
+            <button onclick="resetSelection()" style="background: none; border: none; color: #a4b0be; cursor: pointer; text-decoration: underline; font-size: 0.8rem;">Скинути вибір</button>
         </div>
     </div>
 
     <script>
-        const moodData = {
-            sad: {
-                name: "Симиренко",
-                desc: "Спокійне зелене яблучко. Трохи кисле, але дуже корисне. Саме час для затишного фільму.",
-                img: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=400",
-                color: "#2ed573"
-            },
-            romantic: {
-                name: "Рожева Леді",
-                desc: "Ніжне, солодке та рожеве. Сьогодні в повітрі літає любов!",
-                img: "https://images.unsplash.com/photo-1590005354167-6da97870c757?w=400",
-                color: "#ff81ff"
-            },
-            happy: {
-                name: "Голден",
-                desc: "Золотисте та солодке, як мед. Твоя енергія заряджає всіх навколо!",
-                img: "https://images.unsplash.com/photo-1560806887-1e4cd0b6bccb?w=400",
-                color: "#ffa502"
-            },
-            angry: {
-                name: "Гренні Сміт",
-                desc: "Міцне та супер-кисле! Краще спрямуй цю енергію в тренування або роботу.",
-                img: "https://images.unsplash.com/photo-1610397648930-475581727c6d?w=400",
-                color: "#ff4757"
-            },
-            hungry: {
-                name: "Фуджі",
-                desc: "Величезне, соковите та поживне. Час перекусити чимось смачненьким!",
-                img: "https://images.unsplash.com/photo-1576179635662-9d1983e97e1e?w=400",
-                color: "#eb4b4b"
-            }
-        };
-
-        function checkMood(mood) {
-            const resultDiv = document.getElementById('mood-result');
-            const data = moodData[mood];
-            
-            const imgEl = document.getElementById('res-img');
-            imgEl.src = data.img;
-            imgEl.style.borderColor = data.color;
-            
-            const nameEl = document.getElementById('res-name');
-            nameEl.innerText = `Сорт: ${data.name}`;
-            nameEl.style.color = data.color;
-            
-            document.getElementById('res-desc').innerText = data.desc;
-            
-            resultDiv.style.display = 'block';
-            
-            // Плавний скрол до результату
-            setTimeout(() => {
-                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
-        }
-
-        // --- ГРА ---
+        // --- ЛОГІКА ГРИ ---
         let score = 0;
+        let timeLeft = 20;
         let gameActive = false;
+        let gameTimer;
+        let appleInterval;
 
         function startGame() {
-            if(gameActive) return;
-            gameActive = true;
             score = 0;
+            timeLeft = 20;
+            gameActive = true;
             document.getElementById('score').innerText = score;
-            document.getElementById('game-stats').style.display = 'block';
+            document.getElementById('timer').innerText = timeLeft;
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('game-msg').style.display = 'none';
             
-            const gameInterval = setInterval(() => {
-                if(!gameActive) { clearInterval(gameInterval); return; }
-                createGameApple();
+            // Очищення зони
+            const zone = document.getElementById('game-zone');
+            zone.querySelectorAll('.game-apple').forEach(a => a.remove());
+
+            // Таймер зворотного відліку
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = timeLeft;
+                if (timeLeft <= 0) endGame();
             }, 1000);
 
-            setTimeout(() => {
-                gameActive = false;
-                alert(`Урожай зібрано! Твій результат: ${score} 🍎`);
-                document.getElementById('game-stats').style.display = 'none';
-            }, 15000); // 15 секунд для швидкого раунду
+            // Поява яблук
+            appleInterval = setInterval(spawnApple, 600);
         }
 
-        function createGameApple() {
+        function spawnApple() {
+            if (!gameActive) return;
+            const zone = document.getElementById('game-zone');
             const apple = document.createElement('div');
             apple.className = 'game-apple';
-            apple.innerText = Math.random() > 0.85 ? '💰' : '🍎';
-            apple.style.left = 50 + Math.random() * (window.innerWidth - 100) + 'px';
-            apple.style.top = 50 + Math.random() * (window.innerHeight - 100) + 'px';
-            apple.onclick = () => {
-                score += (apple.innerText === '💰' ? 5 : 1);
+            apple.innerText = '🍎';
+            
+            // Випадкова позиція
+            const x = Math.random() * (zone.offsetWidth - 40);
+            const y = Math.random() * (zone.offsetHeight - 40);
+            
+            apple.style.left = x + 'px';
+            apple.style.top = y + 'px';
+            
+            apple.onclick = (e) => {
+                e.stopPropagation();
+                score++;
                 document.getElementById('score').innerText = score;
-                apple.style.transform = 'scale(0)';
-                setTimeout(() => apple.remove(), 200);
+                apple.remove();
             };
-            document.body.appendChild(apple);
-            setTimeout(() => { if(apple.parentNode) apple.remove(); }, 1500);
+
+            zone.appendChild(apple);
+
+            // Яблуко зникає саме через 1.2 сек, якщо не клікнути
+            setTimeout(() => { if(apple) apple.remove(); }, 1200);
+        }
+
+        function endGame() {
+            gameActive = false;
+            clearInterval(gameTimer);
+            clearInterval(appleInterval);
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('game-msg').style.display = 'block';
+            document.getElementById('game-msg').innerText = `Гру закінчено! Твій результат: ${score}`;
+            alert(`Ти зібрала ${score} яблук! 🍎`);
+        }
+
+        // --- ЛОГІКА НАСТРОЮ (Твій попередній код) ---
+        let selectedMoods = [];
+        const baseMoods = {
+            sad: { name: "Симиренко", desc: "Класика для роздумів.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ71CKG7gx89U7g_IWzCoNtUlgsxGFIpCxYCg&s" },
+            romantic: { name: "Рожева Леді", desc: "Для ніжних моментів.", img: "https://tse4.mm.bing.net/th/id/OIP.deFBGT4I7hls0q9R7WP8agHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
+            happy: { name: "Голден Делішес", desc: "Сяє як сонце!", img: "https://tse4.mm.bing.net/th/id/OIP.gR1_YAAC8My6bsWVsWGRvgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
+            angry: { name: "Гренні Сміт", desc: "Кислий вибух енергії!", img: "https://tse4.mm.bing.net/th/id/OIP.JfSgOJ9grcQVkYW6RO5H2wAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
+            hungry: { name: "Фуджі", desc: "Ситне і солодке.", img: "https://tse3.mm.bing.net/th/id/OIP.1ah5N_FzqTu2oDKI_AHHnQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
+            tired: { name: "Гала", desc: "М'яке та ненав'язливе.", img: "https://tse3.mm.bing.net/th/id/OIP.pdzSDdjCyt8c8aW306T_hAHaEo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
+            creative: { name: "Канзі", desc: "Екзотичний смак для ідей.", img: "https://millionfacts.com.ua/wp-content/uploads/2025/03/TSikavi-fakty-pro-iabluka.jpg" }
+        };
+
+        const combinations = {
+            "happy+romantic": { name: "Афродіта", desc: "Найсолодший сорт у світі для щасливих закоханих." },
+            "sad+tired": { name: "Антонівка", desc: "Старий добрий сорт для спокою." },
+            "angry+hungry": { name: "Ред Чіф", desc: "Червоне і міцне, щоб вгамувати злий апетит." },
+            "creative+happy": { name: "Айдаред", desc: "Яскраве яблуко для шедеврів." }
+        };
+
+        function toggleMood(mood) {
+            if (selectedMoods.includes(mood)) {
+                selectedMoods = selectedMoods.filter(m => m !== mood);
+            } else {
+                if (selectedMoods.length >= 2) selectedMoods.shift();
+                selectedMoods.push(mood);
+            }
+            updateButtons();
+            if (selectedMoods.length > 0) showResult();
+            else document.getElementById('mood-result').style.display = 'none';
+        }
+
+        function updateButtons() {
+            document.querySelectorAll('.btn-mood').forEach(btn => {
+                const m = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                btn.classList.toggle('active', selectedMoods.includes(m));
+            });
+        }
+
+        function showResult() {
+            const resDiv = document.getElementById('mood-result');
+            const nameEl = document.getElementById('res-name');
+            const descEl = document.getElementById('res-desc');
+            const imgEl = document.getElementById('res-img');
+
+            if (selectedMoods.length === 1) {
+                const data = baseMoods[selectedMoods[0]];
+                nameEl.innerText = data.name;
+                descEl.innerText = data.desc;
+                imgEl.src = data.img;
+            } else {
+                const comboKey = selectedMoods.sort().join('+');
+                const data = combinations[comboKey] || { name: "Ренет Симиренка (Mix)", desc: "Унікальний гібрид твоїх емоцій!" };
+                nameEl.innerText = data.name;
+                descEl.innerText = data.desc;
+                imgEl.src = "https://images.unsplash.com/photo-1560806887-1e4cd0b6bccb?w=400";
+            }
+            resDiv.style.display = 'block';
+        }
+
+        function resetSelection() {
+            selectedMoods = [];
+            updateButtons();
+            document.getElementById('mood-result').style.display = 'none';
         }
     </script>
 </body>
