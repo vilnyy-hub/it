@@ -1,0 +1,359 @@
+!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Hardware Archive - Юра 6 Клас</title>
+    <style>
+        /* Windows 7 Aero Style */
+        body { 
+            background: #3b7bb1 url('https://wallpaperaccess.com/full/1154564.jpg') no-repeat center center fixed; 
+            background-size: cover;
+            font-family: "Segoe UI", Tahoma, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            padding: 20px; 
+            margin: 0; 
+        }
+
+        .window { 
+            width: 1000px; 
+            background: rgba(255, 255, 255, 0.7); 
+            border-radius: 10px; 
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.7);
+            backdrop-filter: blur(15px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title-bar { 
+            background: linear-gradient(to bottom, rgba(220, 240, 255, 0.8), rgba(130, 180, 230, 0.8));
+            color: #1e395b; 
+            padding: 10px 15px; 
+            font-weight: bold; 
+            display: flex; 
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            text-shadow: 0 0 10px #fff;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(240, 240, 240, 0.5);
+            padding: 5px 10px 0 10px;
+            gap: 5px;
+        }
+
+        .tab-button {
+            padding: 8px 20px;
+            border: 1px solid #a0a0a0;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            background: linear-gradient(to bottom, #fefefe, #e1e1e1);
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .tab-button.active {
+            background: #fff;
+            font-weight: bold;
+            height: 35px;
+            margin-top: -2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-container {
+            background: #fff; 
+            margin: 0 10px 10px 10px; 
+            border: 1px solid #a0a0a0;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            padding: 20px; 
+            max-height: 650px;
+            overflow-y: auto; 
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        h1 { text-align: center; color: #1e395b; font-size: 26px; margin-top: 0; }
+
+        .item-card { 
+            display: flex; 
+            gap: 25px; 
+            border-bottom: 2px solid #f0f0f0; 
+            padding: 20px 0; 
+            align-items: center; 
+        }
+
+        .item-card:last-child { border-bottom: none; }
+        
+        .item-pic { 
+            width: 250px; 
+            height: 160px; 
+            object-fit: contain; 
+            border: 1px solid #ccc; 
+            background: #f9f9f9;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .info-text { flex: 1; }
+        h2 { color: #2a579a; margin: 0 0 8px 0; font-size: 20px; }
+        p { color: #444; font-size: 14px; line-height: 1.5; margin: 0; text-align: justify; }
+        .specs { font-weight: bold; color: #2a8a2a; margin-top: 5px; display: block; font-family: "Courier New", monospace; }
+
+        .footer { 
+            text-align: center; 
+            font-size: 11px; 
+            padding: 8px; 
+            color: #fff;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .content-container::-webkit-scrollbar { width: 12px; }
+        .content-container::-webkit-scrollbar-track { background: #f1f1f1; }
+        .content-container::-webkit-scrollbar-thumb { 
+            background: linear-gradient(to right, #bcd, #89a); 
+            border-radius: 6px; 
+            border: 3px solid #f1f1f1; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="window">
+    <div class="title-bar">
+        <span>Hardware Explorer - Юра (6-й клас)</span>
+        <span>[_] [❐] [X]</span>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-button active" onclick="openTab('gpu')">Відеокарти (GPU)</button>
+        <button class="tab-button" onclick="openTab('cpu')">Процесори (CPU)</button>
+    </div>
+
+    <div class="content-container">
+        
+        <!-- ВКЛАДКА GPU -->
+        <div id="gpu" class="tab-content active">
+            <h1>Архів відеокарт (2010-2013)</h1>
+            
+            <!-- Вже існуючі -->
+            <div class="item-card">
+                <img src="https://tpucdn.com/gpu-specs/images-new/c/249-front-large.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Radeon HD 5670 (2010)</h2>
+                    <p>Енергоефективна карта на архітектурі TeraScale 2. Працювала без додаткового живлення та підтримувала DX11.</p>
+                    <span class="specs">VRAM: 512MB/1GB GDDR5 | TDP: < 75W</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROZThuWd0HiXtRMohKJMDZQ9BFyc3x4g3gDA&s" class="item-pic">
+                <div class="info-text">
+                    <h2>NVIDIA GeForce GTX 560 (2011)</h2>
+                    <p>Легендарна архітектура Fermi. "Робоча конячка" для ігор свого часу, як-от Battlefield 3.</p>
+                    <span class="specs">VRAM: 1GB GDDR5 | CUDA: 336</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://content1.rozetka.com.ua/goods/images/big/45515202.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>NVIDIA GeForce GTX 680 (2012)</h2>
+                    <p>Перша карта на архітектурі Kepler. Встановила нові стандарти продуктивності та запровадила GPU Boost.</p>
+                    <span class="specs">VRAM: 2GB GDDR5 | Bus: 256-bit</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://tpucdn.com/gpu-specs/images-new/c/296-front-large.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Radeon HD 7970 (2012)</h2>
+                    <p>Флагман GCN. Перша у світі відеокарта з підтримкою PCI Express 3.0 та 28-нм техпроцесом.</p>
+                    <span class="specs">VRAM: 3GB GDDR5 | GCN Architecture</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://tpucdn.com/gpu-specs/images-new/c/1701-front-large.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>NVIDIA GeForce GTX 780 (2013)</h2>
+                    <p>Потужний чіп GK110. Мала величезну кількість транзисторів і була мрією кожного геймера у 2013-му.</p>
+                    <span class="specs">CUDA Cores: 2304 | Memory: 3GB</span>
+                </div>
+            </div>
+
+            <!-- НОВІ ДОДАНІ GPU -->
+            <div class="item-card">
+                <img src="https://www.bhphotovideo.com/cdn-cgi/image/fit=scale-down,width=500,quality=95/https://www.bhphotovideo.com/images/images500x500/EVGA_015_p3_1480_kr_GEFORCE_GTX_480_GRAPHIC_1345133127_886748.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>NVIDIA GeForce GTX 480 (2010)</h2>
+                    <p>Перший флагман серії 400. Відома своєю величезною потужністю та дуже високим рівнем нагріву.</p>
+                    <span class="specs">VRAM: 1.5GB GDDR5 | Core: GF100</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpVgUbr4wQAPbYbuGYSLjyCXWw1k44DParkA&s" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Radeon HD 6870 (2010)</h2>
+                    <p>Популярна карта середнього класу серії "Northern Islands". Відрізнялася стабільністю та гарною ціною.</p>
+                    <span class="specs">VRAM: 1GB GDDR5 | Bus: 256-bit</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFakNkJ9YWqoWyv6lPq77brf2gj7zcrC-j8A&s" class="item-pic">
+                <div class="info-text">
+                    <h2>NVIDIA GeForce GTX 580 (2010)</h2>
+                    <p>Виправлена версія Fermi. Стала найшвидшою одночіповою картою на момент виходу, значно тихіша за GTX 480.</p>
+                    <span class="specs">VRAM: 1.5GB / 3GB | CUDA: 512</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://3dnews.ru/assets/external/illustrations/2012/04/25/628300/retail.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Radeon HD 7850 (2012)</h2>
+                    <p>Справжній хіт бюджетних збірок. Мала чудовий потенціал для розгону та тягнула більшість ігор на високих налаштуваннях.</p>
+                    <span class="specs">VRAM: 2GB GDDR5 | Pitcairn Pro</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd2fZpwSKE0qWL-zFprbfiJqxtpm6KNZ40jg&s" class="item-pic">
+                <div class="info-text">
+                    <h2>NVIDIA GeForce GTX 660 Ti (2012)</h2>
+                    <p>Спрощена версія 680-ї. Довгий час залишалася однією з найпопулярніших карт у Steam завдяки ідеальному балансу.</p>
+                    <span class="specs">VRAM: 2GB GDDR5 | Architecture: Kepler</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ВКЛАДКА CPU -->
+        <div id="cpu" class="tab-content">
+            <h1>Легендарні процесори (до 2013)</h1>
+
+            <!-- Вже існуючі -->
+            <div class="item-card">
+                <img src="https://images.prom.ua/2792671959_w1280_h640_2792671959.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Core i7-2600K (2011)</h2>
+                    <p>Легенда архітектури Sandy Bridge. Символ неймовірного розгону і стабільності на багато років.</p>
+                    <span class="specs">4 ядра / 8 потоків | 3.4 - 3.8 GHz | LGA 1155</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://ddr.pp.ua/image/cache/catalog/fx-8350-800x800.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD FX-8350 (2012)</h2>
+                    <p>Представник архітектури Piledriver. Перший масовий 8-ядерник від AMD. Обожнюваний за низьку ціну.</p>
+                    <span class="specs">8 ядер | 4.0 - 4.2 GHz | Socket AM3+</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://images.prom.ua/2179060462_w640_h640_2179060462.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Core i5-3570K (2012)</h2>
+                    <p>Архітектура Ivy Bridge. Золотий стандарт для геймерів тих років завдяки чудовій швидкості в іграх.</p>
+                    <span class="specs">4 ядра / 4 потоки | 3.4 - 3.8 GHz | 22 nm</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9pO1LDldmj9YC-42-cVE7V3qs97PH887O-w&s" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Phenom II X6 1100T (2010)</h2>
+                    <p>Топовий шестиядерник Thuban. Останній потужний представник "старої школи" AMD перед архітектурою FX.</p>
+                    <span class="specs">6 ядер | 3.3 - 3.7 GHz | AM3</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://images.prom.ua/1744864962_w640_h640_1744864962.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Core i7-4770K (2013)</h2>
+                    <p>Архітектура Haswell. Значний стрибок у потужності на такт та новий сокет LGA 1150.</p>
+                    <span class="specs">4 ядра / 8 потоків | 3.5 - 3.9 GHz | 84W TDP</span>
+                </div>
+            </div>
+
+            <!-- НОВІ ДОДАНІ CPU -->
+            <div class="item-card">
+                <img src="https://content.rozetka.com.ua/goods/images/big/359513627.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Core i7-980X (2010)</h2>
+                    <p>Перший у світі 6-ядерний десктопний процесор Intel. Належав до серії Extreme Edition і коштував $999.</p>
+                    <span class="specs">6 ядер / 12 потоків | Gulftown Core | LGA 1366</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://images.prom.ua/2052411140_w1280_h640_2052411140.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD FX-6300 (2012)</h2>
+                    <p>Найбільш "народний" процесор серії FX. Мав 6 ядер і був ідеальним вибором для бюджетних ігрових ПК.</p>
+                    <span class="specs">6 ядер | 3.5 - 4.1 GHz | Black Edition</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://korob.com.ua/360623-large_default/processor_intel_core_i3_2100_3m_cache_310_ghz-2000000009254.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Core i3-2100 (2011)</h2>
+                    <p>Хоча мав лише 2 ядра, завдяки Hyper-Threading та архітектурі Sandy Bridge, він обходив старі 4-ядерники в іграх.</p>
+                    <span class="specs">2 ядра / 4 потоки | 3.1 GHz | LGA 1155</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE7YnK_9GX3g1sE--7HZwj36jpWwevZ9Dv7A&s" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Athlon II X4 640 (2010)</h2>
+                    <p>Дуже популярний 4-ядерний процесор для тих, хто хотів багато ядер за мінімальні гроші.</p>
+                    <span class="specs">4 ядра | 3.0 GHz | Socket AM3</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://ireland.apollo.olxcdn.com/v1/files/g1cpxp1j2tff-UA/image" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD FX-9590 (2013)</h2>
+                    <p>Божевільний процесор, що вперше в історії досяг частоти 5 ГГц прямо з коробки. Мав величезне TDP 220W.</p>
+                    <span class="specs">8 ядер | 4.7 - 5.0 GHz | Потребує СВО</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Розробник: Юра (6-й клас) | Windows 7 Aero Legacy Edition | 2026
+    </div>
+</div>
+
+<script>
+    function openTab(tabName) {
+        var contents = document.getElementsByClassName("tab-content");
+        for (var i = 0; i < contents.length; i++) {
+            contents[i].classList.remove("active");
+        }
+        var buttons = document.getElementsByClassName("tab-button");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove("active");
+        }
+        document.getElementById(tabName).classList.add("active");
+        event.currentTarget.classList.add("active");
+    }
+</script>
+
+</body>
+</html>
