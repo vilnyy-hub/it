@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
@@ -81,7 +81,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        h1 { text-align: center; color: #1e395b; font-size: 26px; margin-top: 0; }
+        <h1> { text-align: center; color: #1e395b; font-size: 26px; margin-top: 0; }
 
         .item-card { 
             display: flex; 
@@ -92,7 +92,7 @@
         }
 
         .item-card:last-child { border-bottom: none; }
-        
+          
         .item-pic { 
             width: 250px; 
             height: 160px; 
@@ -103,7 +103,7 @@
         }
 
         .info-text { flex: 1; }
-        h2 { color: #2a579a; margin: 0 0 8px 0; font-size: 20px; }
+        <h2> { color: #2a579a; margin: 0 0 8px 0; font-size: 20px; }
         p { color: #444; font-size: 14px; line-height: 1.5; margin: 0; text-align: justify; }
         .specs { font-weight: bold; color: #2a8a2a; margin-top: 5px; display: block; font-family: "Courier New", monospace; }
 
@@ -133,8 +133,9 @@
     </div>
 
     <div class="tabs">
-        <button class="tab-button active" onclick="openTab('gpu')">Відеокарти (GPU)</button>
-        <button class="tab-button" onclick="openTab('cpu')">Процесори (CPU)</button>
+        <button class="tab-button active" onclick="openTab(event, 'gpu')">Відеокарти (GPU)</button>
+        <button class="tab-button" onclick="openTab(event, 'cpu')">Процесори (CPU)</button>
+        <button class="tab-button" onclick="openTab(event, 'sockets')">Процесорні сокети</button>
     </div>
 
     <div class="content-container">
@@ -143,13 +144,12 @@
         <div id="gpu" class="tab-content active">
             <h1>Архів відеокарт (2010-2013)</h1>
             
-            <!-- Вже існуючі -->
             <div class="item-card">
                 <img src="https://tpucdn.com/gpu-specs/images-new/c/249-front-large.jpg" class="item-pic">
                 <div class="info-text">
                     <h2>AMD Radeon HD 5670 (2010)</h2>
                     <p>Енергоефективна карта на архітектурі TeraScale 2. Працювала без додаткового живлення та підтримувала DX11.</p>
-                    <span class="specs">VRAM: 512MB/1GB GDDR5 | TDP: < 75W</span>
+                    <span class="specs">VRAM: 512MB/1GB GDDR5 | TDP: &lt; 75W</span>
                 </div>
             </div>
 
@@ -189,7 +189,6 @@
                 </div>
             </div>
 
-            <!-- НОВІ ДОДАНІ GPU -->
             <div class="item-card">
                 <img src="https://www.bhphotovideo.com/cdn-cgi/image/fit=scale-down,width=500,quality=95/https://www.bhphotovideo.com/images/images500x500/EVGA_015_p3_1480_kr_GEFORCE_GTX_480_GRAPHIC_1345133127_886748.jpg" class="item-pic">
                 <div class="info-text">
@@ -234,19 +233,65 @@
                     <span class="specs">VRAM: 2GB GDDR5 | Architecture: Kepler</span>
                 </div>
             </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHJWVCigT9sw4YkUVK3wraJj1KI_7kSGuRSw&s" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Radeon HD 6990 (2011)</h2>
+                    <p>Двохголовий монстр на архітектурі Cayman. Мала два графічні процесори на одній платі та спеціальний перемикач анлоку турбо-режиму.</p>
+                    <span class="specs">VRAM: 4GB (2x2GB) GDDR5 | TDP: 375W | Bus: 2x256-bit</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXtdLxujC-gSoaRhWdB7fg13B8neZ2gwK-aw&s" class="item-pic">
+                <div class="info-text">
+                    <h2>NVIDIA GeForce GTX 550 Ti (2011)</h2>
+                    <p>Улюблена відеокарта комп'ютерних клубів. Недорога, надійна та здатна запускати Dota 2 і CS:GO на хороших кадрах.</p>
+                    <span class="specs">VRAM: 1GB GDDR5 | CUDA Cores: 192 | Bus: 192-bit</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://content2.rozetka.com.ua/goods/images/big/45655445.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>NVIDIA GeForce GTX 650 Ti (2012)</h2>
+                    <p>Збалансований бюджетний варіант на архітектурі Kepler. Споживала обмаль енергії, але показувала солідну швидкість.</p>
+                    <span class="specs">VRAM: 1GB / 2GB GDDR5 | CUDA Cores: 768 | TDP: 110W</span>
+                </div>
+            </div>
+
+            <!-- ДОДАНА КАРТА AMD Radeon HD 6950 -->
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXSMTquTUg5kDsiCuDoWHShTJtSpPypDzfjQ&s" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Radeon HD 6950 (2010)</h2>
+                    <p>Потужна відеокарта на архітектурі Cayman. Стала легендарною серед оверклокерів завдяки унікальній можливості розблокування додаткових шейдерних блоків через прошивку BIOS від старшої моделі HD 6970.</p>
+                    <span class="specs">VRAM: 2GB GDDR5 | Bus: 256-bit | Шейдери: 1408 (до 1536)</span>
+                </div>
+            </div>
         </div>
 
         <!-- ВКЛАДКА CPU -->
         <div id="cpu" class="tab-content">
             <h1>Легендарні процесори (до 2013)</h1>
 
-            <!-- Вже існуючі -->
             <div class="item-card">
                 <img src="https://images.prom.ua/2792671959_w1280_h640_2792671959.jpg" class="item-pic">
                 <div class="info-text">
                     <h2>Intel Core i7-2600K (2011)</h2>
                     <p>Легенда архітектури Sandy Bridge. Символ неймовірного розгону і стабільності на багато років.</p>
                     <span class="specs">4 ядра / 8 потоків | 3.4 - 3.8 GHz | LGA 1155</span>
+                </div>
+            </div>
+
+            <!-- ДОДАНИЙ CPU Intel Core i5-760 -->
+            <div class="item-card">
+                <img src="https://pc.com.ua/home/catalog_products/item_4948/image/1.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Core i5-760 (2010)</h2>
+                    <p>Надпопулярний чотирьохядерний процесор першого покоління Core (архітектура Lynnfield). Не мав вбудованого графічного ядра та технології Hyper-Threading, але завоював ринок завдяки чудовому розгінному потенціалу за допомогою системної шини (BCLK).</p>
+                    <span class="specs">4 ядра / 4 потоки | 2.8 - 3.33 GHz | 8MB Cache | LGA 1156</span>
                 </div>
             </div>
 
@@ -286,7 +331,6 @@
                 </div>
             </div>
 
-            <!-- НОВІ ДОДАНІ CPU -->
             <div class="item-card">
                 <img src="https://content.rozetka.com.ua/goods/images/big/359513627.jpg" class="item-pic">
                 <div class="info-text">
@@ -331,6 +375,120 @@
                     <span class="specs">8 ядер | 4.7 - 5.0 GHz | Потребує СВО</span>
                 </div>
             </div>
+
+            <div class="item-card">
+                <img src="https://content2.rozetka.com.ua/goods/images/big/235370206.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Core i5-2500K (2011)</h2>
+                    <p>Абсолютний народний улюбленець. Без літери "i7", але завдяки розблокованому множнику гнався до 4.5 ГГц на звичайному повітрі і служив геймерам роками.</p>
+                    <span class="specs">4 ядра / 4 потоки | 3.3 - 3.7 GHz | Sandy Bridge | LGA 1155</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://www.roznica.com.ua/rf/th/800x600/69/213453.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Athlon II X2 250 (2009-2010)</h2>
+                    <p>Ультра-бюджетний 2-ядерний процесор на ядрі Regor. Стояв практически в кожному офісному ПК та домашній "друкарській машинці".</p>
+                    <span class="specs">2 ядра / 2 потоки | 3.0 GHz | Socket AM3 | 65W</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://content1.rozetka.com.ua/goods/images/big/444916516.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Xeon X5670 (2010)</h2>
+                    <p>Серверний процесор архітектури Westmere-EP. Через роки став легендою вторинного ринку, оскільки дешево встановлювався в плати LGA 1366 і круто розганявся.</p>
+                    <span class="specs">6 ядер / 12 потоків | 2.93 - 3.33 GHz | 12MB Cache | LGA 1366</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ВКЛАДКА SOCKETS -->
+        <div id="sockets" class="tab-content">
+            <h1>Процесорні сокети (Епоха 2010-2013)</h1>
+
+            <!-- ДОДАНИЙ СОКЕТ Intel LGA 1156 -->
+            <div class="item-card">
+                <img src="https://comp-security.net/wp-content/uploads/120618_1134_SocketLGA111.png" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel LGA 1156 (Socket H1)</h2>
+                    <p>Перший масовий сокет Intel із інтегрованим контролером PCI Express та оперативної пам'яті прямо в процесор. Розрахований на чіпи Nehalem та Westmere (наприклад, твій i5-760). Спричинив революцію у компонуванні материнських плат, прибравши необхідність у класичному північному мості.</p>
+                    <span class="specs">Контакти: 1156 | Пам'ять: DDR3 Dual-Channel | Рік: 2009 (актуальний у 2010)</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKy62cKJls4YUdx1lJvmddRingohrkgy2xwQ&s" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel LGA 1155 (Socket H2)</h2>
+                    <p>Один із найуспішніших сокетів Intel. Створений для процесорів архітектури Sandy Bridge та Ivy Bridge. Саме на ньому працювали твої i7-2600K, i5-3570K та i3-2100.</p>
+                    <span class="specs">Контакти: 1155 | Пам'ять: DDR3 Dual-Channel | Рік: 2011</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/AMD_AM3%2B_CPU_Socket-top_closed_PNr%C2%B00376.jpg" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Socket AM3+ (Socket 942)</h2>
+                    <p>Легендарний сокет чорного кольору, розроблений спеціально для багатоядерних монстрів серії AMD FX (Zambezi та Vishera). Підтримував шалений розгін частоти.</p>
+                    <span class="specs">Контакти: 942 | Пам'ять: DDR3 до 1866 MHz | Рік: 2011</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs2N6WampnTvLVR3DM3E0lAWYO7ChGrhX4Jw&s" class="item-pic">
+                <div class="info-text">
+                    <h2>AMD Socket AM3</h2>
+                    <p>Класичний білий сокет для процесорів Phenom II, Athlon II та Sempron. Мав чудову зворотну сумісність і дозволяв збирати супер-бюджетні та потужні системи.</p>
+                    <span class="specs">Контакти: 941 | Пам'ять: DDR2 / DDR3 | Рік: 2009</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD24plVSIlnb7BiVO89cywaqz-Z7f8TrYBzw&s" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel LGA 1150 (Socket H3)</h2>
+                    <p>Прийшов на зміну LGA 1155 у 2013 році разом із процесорами 4-го покоління Core (Haswell), такими як твій i7-4770K. Отримав підтримку нових інтерфейсів живлення та швидших шин.</p>
+                    <span class="specs">Contatcs: 1150 | Пам'ять: DDR3 / DDR3L | Рік: 2013</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGFGRkpVN3qVYx3HpcnhAOXYS9i35Rf1TFtw&s" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel LGA 1366 (Socket B)</h2>
+                    <p>Преміальна платформа для ентузіастів та екстремальних геймерів. Забезпечувала унікальний на тот час триканальний режим пам'яті. Створена для топових 6-ядерників типу i7-980X.</p>
+                    <span class="specs">Контакти: 1366 | Пам'ять: DDR3 Triple-Channel | Рік: 2008</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQP4q08gqkP-Bek2oexxlxaL767v_nEMaPOw&s" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel LGA 2011 (Socket R)</h2>
+                    <p>Екстремальний High-End сокет, який замінив LGA 1366. Створений для найпотужніших процесорів Core i7 Extreme та багатоядерних Intel Xeon E5. Першим приніс 4-канальний режим пам'яті.</p>
+                    <span class="specs">Контакти: 2011 | Пам'ять: DDR4 / DDR3 Quad-Channel | Рік: 2011</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://upload.wikimedia.org/wikipedia/ru/5/53/LGA775.JPG" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel LGA 775 (Socket T)</h2>
+                    <p>Справжній довгожитель. Хоч він з'явився раніше, у 2010 році він все ще залишався надпопулярним завдяки процесорам Core 2 Quad та можливості модифікації під серверні Xeon (мод 771 на 775).</p>
+                    <span class="specs">Контакти: 775 | Пам'ять: DDR2 / DDR3 | Рік: 2004 (актуальний до 2011)</span>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmzw2lME-Q0h8PJhO9lZJNZwvxnGjp0Uk_5A&s" class="item-pic">
+                <div class="info-text">
+                    <h2>Intel Socket G2 (rPGA988B)</h2>
+                    <p>Мобільний процесорний сокет для ноутбуків. Створений для заміни процесорів Core i3, i5, i7 другого та третього поколінь у портативних комп'ютерах. Дозволяв робити крутий апгрейд ноутбуків вдома.</p>
+                    <span class="specs">Контакти: 988 | Пам'ять: DDR3 Dual-Channel | Рік: 2011</span>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -341,7 +499,7 @@
 </div>
 
 <script>
-    function openTab(tabName) {
+    function openTab(evt, tabName) {
         var contents = document.getElementsByClassName("tab-content");
         for (var i = 0; i < contents.length; i++) {
             contents[i].classList.remove("active");
@@ -351,7 +509,7 @@
             buttons[i].classList.remove("active");
         }
         document.getElementById(tabName).classList.add("active");
-        event.currentTarget.classList.add("active");
+        evt.currentTarget.classList.add("active");
     }
 </script>
 
