@@ -12,7 +12,7 @@
             padding: 0;
             min-height: 100vh;
             background-color: #F5F5DC; 
-            background-image:  repeating-radial-gradient(circle at center, #F5F5DC, #F5F5DC 20px, #e6ccb2 22px, #e6ccb2 24px, #F5F5DC 26px);
+            background-image: repeating-radial-gradient(circle at center, #F5F5DC, #F5F5DC 20px, #e6ccb2 22px, #e6ccb2 24px, #F5F5DC 26px);
             background-size: 150px 150px;
             font-family: 'Comic Sans MS', cursive, sans-serif;
             color: #5d4037;
@@ -103,11 +103,119 @@
         /* ОНОВЛЕНИЙ СТИЛЬ ДЛЯ ПІДПИСУ */
         .footer-text {
             margin-top: 30px;
-            font-size: 28px; /* Зроблено значно більшим */
-            font-weight: bold; /* Жирний шрифт */
-            color: #8b4513; /* Темно-коричневий колір */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1); /* Легка тінь для об'єму */
+            font-size: 28px; 
+            font-weight: bold; 
+            color: #8b4513; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1); 
             letter-spacing: 1px;
+        }
+
+        /* СТИЛІ ДЛЯ ГАЛЕРЕЇ ПЕЧИВА */
+        .cookie-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 90%;
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 20px;
+            border-radius: 25px;
+            border: 4px solid #d2b48c;
+        }
+
+        .cookie-photo {
+            width: 100%;
+            height: 200px;
+            object-fit: cover; 
+            border-radius: 20px;
+            border: 3px solid #5d4037;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cookie-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        /* СТИЛЬ КНОПКИ ГРИ */
+        .play-game-btn {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 22px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #ff9233, #8b4513);
+            border: 4px solid #5d4037;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .play-game-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        /* СТИЛІ ЕКРАНУ МІНІ-ГРИ */
+        #game-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(245, 245, 220, 0.95);
+            z-index: 1000;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        #game-ui {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 1010;
+        }
+
+        #player-mouth {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            font-size: 65px; /* Трохи збільшив ротик для зручності */
+            transform: translateX(-50%);
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.05s linear;
+        }
+
+        .falling-cookie {
+            position: absolute;
+            font-size: 48px; /* Збільшив нові солодощі, щоб їх було краще видно */
+            user-select: none;
+            will-change: top;
+        }
+
+        .close-game-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #d9534f;
+            color: white;
+            border: 2px solid #5d4037;
+            border-radius: 50px;
+            padding: 5px 15px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1020;
         }
     </style>
 </head>
@@ -127,7 +235,7 @@
 
         <div class="recipes-grid">
             <div class="recipe-card">
-                <h4>1. Шоколадне "Cookies"</h4>
+                <h4>1.  Шоколадне "Cookies"</h4>
                 <p>Багато шоколаду, дрібка солі та м'яка середина.</p>
             </div>
             <div class="recipe-card">
@@ -153,14 +261,39 @@
         </div>
 
         <div class="hit-counter">
-            <img src="https://hitscounter.dev/api/hit?url=file%3A%2F%2F%2FC%3A%2FUsers%2FStudent%2520carrot%2FDocuments%2F%25D0%2597%25D0%25B0%25D0%25BF%25D0%25B0%25D0%25BB%25D1%258C%25D0%25BD%25D1%2596%25D1%2596%25D1%2596%25D1%2596%25D1%2596%2F%25D0%25AE%25D0%25BB%25D1%258F%2520%25D0%259A%25D0%2590%25D0%25BF%25D0%25BA%25D0%25BE%25D0%25B2%25D1%2581%25D1%258C%25D0%25BA%25D0%25B0.html&label=&icon=star-fill&color=%23ffe69c&message=&style=plastic&tz=UTC">
+            <img src="https://hitscounter.dev/api/hit?url=file%3A%2F%2F%2FC%3A%2FUsers%2FStudent%2520carrot%2FDocuments%2F%25D0%2597%25D0%25B0%25D0%25BF%25D0%25B0%25D0%25BB%25D1%258C%25D0%25BD%25D1%2596%25D1%2596%25D1%2596%25D1%2596%25D1%2596%25D1%2596%2F%25D0%25AE%25D0%25BB%25D1%258F%2520%25D0%259A%25D0%2590%25D0%25BF%25D0%25BA%25D0%25BE%25D0%25B2%25D1%2581%25D1%258C%25D0%25BA%25D0%25B0.html&label=&icon=star-fill&color=%23ffe69c&message=&style=plastic&tz=UTC">
         </div>
 
         <!-- Твій підпис великими літерами -->
         <p class="footer-text">САЙТ ЮЛІ КАПКОВСЬКОЇ</p>
+
+        <!-- ГАЛЕРЕЯ З 6 ФОТОГРАФІЯМИ ПЕЧИВА -->
+        <div class="cookie-gallery">
+            <img class="cookie-photo" src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500&auto=format&fit=crop" alt="Печиво з шоколадом">
+            <img class="cookie-photo" src="https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=500&auto=format&fit=crop" alt="Вівсяне печиво">
+            <img class="cookie-photo" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500&auto=format&fit=crop" alt="Асорті печива">
+            <img class="cookie-photo" src="https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=500&auto=format&fit=crop" alt="Різдвяне печиво">
+            <img class="cookie-photo" src="https://cdn.prod.website-files.com/65ba47acaa465c7bfee66273/6873ffbd1c35a5e755b89670_pexels-mariam-shahbazi-498252343-32421566%20(1).webp" alt="Фісташкове печиво">
+            <img class="cookie-photo" src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=500&auto=format&fit=crop" alt="Макаруни">
+        </div>
+
+        <!-- КНОПКА ДЛЯ ЗАПУСКУ ГРИ -->
+        <button class="play-game-btn" onclick="startGame()">Грати в гру 🍪</button>
     </div>
 
+    <!-- ВІКНО МІНІ-ГРИ -->
+    <div id="game-overlay">
+        <button class="close-game-btn" onclick="stopGame()">Вийти з гри</button>
+        <div id="game-ui">
+            <div id="game-score">Рахунок: 0</div>
+            <div id="game-lives">Життя: ❤️❤️❤️</div>
+        </div>
+        <div id="player-mouth">😮</div>
+    </div>
+
+    <!-- СКРИПТИ (JAVASCRIPT) -->
     <script>
+        // Скрипт створення зірочок на тлі
         function createStars() {
             const container = document.getElementById('star-container');
             const starCount = 60;
@@ -178,6 +311,132 @@
             }
         }
         window.onload = createStars;
+
+        // ЛОГІКА МІНІ-ГРИ
+        const overlay = document.getElementById('game-overlay');
+        const mouth = document.getElementById('player-mouth');
+        const scoreDisplay = document.getElementById('game-score');
+        const livesDisplay = document.getElementById('game-lives');
+
+        let score = 0;
+        let lives = 3;
+        let isPlaying = false;
+        let gameLoopInterval;
+        let spawnInterval;
+        let cookiesArray = [];
+        let mouthX = window.innerWidth / 2;
+
+        // ОНОВЛЕНИЙ СПИСОК: ТУТ ТІЛЬКИ МАКАРУНИ, ТОРТИКИ ТА ПАНАКОТА
+        const sweetTypes = ['🍰', '🎂', '🥮', '🍡', '🍮', '🧁', '🍩', '🍪'];
+
+        function moveMouth(e) {
+            if (!isPlaying) return;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            if (clientX >= 40 && clientX <= window.innerWidth - 40) {
+                mouthX = clientX;
+                mouth.style.left = mouthX + 'px';
+            }
+        }
+
+        window.addEventListener('mousemove', moveMouth);
+        window.addEventListener('touchmove', moveMouth, { passive: true });
+
+        function startGame() {
+            overlay.style.display = 'block';
+            isPlaying = true;
+            score = 0;
+            lives = 3;
+            cookiesArray = [];
+            scoreDisplay.innerText = "Рахунок: " + score;
+            livesDisplay.innerText = "Життя: ❤️❤️❤️";
+            mouth.innerText = "😮";
+            mouthX = window.innerWidth / 2;
+            mouth.style.left = mouthX + 'px';
+
+            // Примусово видаляємо старі елементи, щоб оновити гру
+            document.querySelectorAll('.falling-cookie').forEach(c => c.remove());
+
+            gameLoopInterval = setInterval(updateGame, 20);
+            spawnInterval = setInterval(spawnSweet, 600); // Солодощі падають ще активніше!
+        }
+
+        function spawnSweet() {
+            if (!isPlaying) return;
+            const sweet = document.createElement('div');
+            sweet.className = 'falling-cookie';
+            
+            // Випадковий вибір солодощів з нашого нового списку
+            sweet.innerText = sweetTypes[Math.floor(Math.random() * sweetTypes.length)];
+            sweet.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+            sweet.style.top = '-60px';
+            overlay.appendChild(sweet);
+            
+            cookiesArray.push({
+                element: sweet,
+                y: -60,
+                speed: Math.random() * 4 + 3 + (score * 0.15) 
+            });
+        }
+
+        function updateGame() {
+            if (!isPlaying) return;
+
+            const mouthRect = mouth.getBoundingClientRect();
+
+            for (let i = cookiesArray.length - 1; i >= 0; i--) {
+                let c = cookiesArray[i];
+                c.y += c.speed;
+                c.element.style.top = c.y + 'px';
+
+                const cookieRect = c.element.getBoundingClientRect();
+
+                // Перевірка на колізію (чи зловили ротом)
+                if (
+                    cookieRect.bottom >= mouthRect.top + 10 &&
+                    cookieRect.top <= mouthRect.bottom &&
+                    cookieRect.right >= mouthRect.left &&
+                    cookieRect.left <= mouthRect.right
+                ) {
+                    score++;
+                    scoreDisplay.innerText = "Рахунок: " + score;
+                    mouth.innerText = "😋"; 
+                    setTimeout(() => { if(isPlaying) mouth.innerText = "😮"; }, 250);
+                    
+                    c.element.remove();
+                    cookiesArray.splice(i, 1);
+                    continue;
+                }
+
+                // Якщо пролетіло повз
+                if (c.y > window.innerHeight) {
+                    lives--;
+                    if (lives === 2) livesDisplay.innerText = "Життя: ❤️❤️";
+                    else if (lives === 1) livesDisplay.innerText = "Життя: ❤️";
+                    else if (lives <= 0) {
+                        livesDisplay.innerText = "Життя: 💀";
+                        gameOver();
+                    }
+                    c.element.remove();
+                    cookiesArray.splice(i, 1);
+                }
+            }
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            clearInterval(gameLoopInterval);
+            clearInterval(spawnInterval);
+            alert("Гру закінчено! 🎂 Твій фінальний рахунок: " + score);
+            stopGame();
+        }
+
+        function stopGame() {
+            isPlaying = false;
+            clearInterval(gameLoopInterval);
+            clearInterval(spawnInterval);
+            document.querySelectorAll('.falling-cookie').forEach(c => c.remove());
+            overlay.style.display = 'none';
+        }
     </script>
 
 </body>
