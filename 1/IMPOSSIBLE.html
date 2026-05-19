@@ -2,185 +2,531 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<title>ХИТРИЙ УЛОВКА: IMPOSSIBLE 😈</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КІБЕР-АРКАДА: MEGA PACK EDITION</title>
 
 <style>
+:root {
+    --primary: #ff004c;
+    --accent: #00ffcc;
+    --yellow: #ffcc00;
+    --bg-1: #060a12;
+    --bg-2: #14051a;
+    --card-bg: rgba(255, 255, 255, 0.04);
+}
+
+body.light-theme {
+    --bg-1: #e0e5ec; --bg-2: #b8c6db; --card-bg: rgba(0, 0, 0, 0.05); color: #333;
+}
+body.light-theme h1, body.light-theme .card h2 { color: #111; text-shadow: none; }
+body.light-theme .game-zone { background: #fff; border-color: #aaa; }
+body.light-theme .subtitle, body.light-theme .shop-item p { color: #555; }
+body.light-theme .shop-item h3 { color: #222; }
+
+body.green-theme {
+    --primary: #00ff66; --accent: #33ff00; --bg-1: #020f05; --bg-2: #05240b;
+}
+
 body {
-    font-family: Arial;
-    margin: 0;
-    text-align: center;
-    background: linear-gradient(135deg, #141e30, #ff004c);
-    color: white;
-    overflow: hidden;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    margin: 0; padding: 20px; text-align: center;
+    background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+    color: white; min-height: 100vh; transition: all 0.5s;
 }
 
-h1 {
-    margin-top: 15px;
+.header-panel {
+    background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 12px;
+    max-width: 600px; margin: 0 auto 25px auto; border: 1px solid var(--accent);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+}
+.balance-display { font-size: 1.6rem; font-weight: bold; color: var(--yellow); text-shadow: 0 0 5px var(--yellow); }
+
+h1 { font-size: 2.3rem; text-transform: uppercase; margin: 0; text-shadow: 0 0 15px var(--primary); }
+.subtitle { font-size: 1rem; color: var(--accent); margin-bottom: 20px; }
+
+.arcade-container {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px; max-width: 1200px; margin: 0 auto 40px auto;
 }
 
-.screen {
-    padding: 20px;
+.card {
+    background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px; padding: 18px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px); display: flex; flex-direction: column; justify-content: space-between;
+}
+.card h2 { margin-top: 0; font-size: 1.15rem; color: var(--yellow); text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; }
+
+.game-zone {
+    background: #02050a; border: 1px dashed #333; border-radius: 12px;
+    margin: 12px 0; height: 160px; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 
-/* кнопки */
 button {
-    padding: 12px 18px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: bold;
-    margin: 5px;
-    transition: 0.2s;
+    padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer;
+    font-weight: bold; font-size: 0.85rem; text-transform: uppercase;
+    background: linear-gradient(45deg, var(--primary), #bc00dd); color: white;
+    box-shadow: 0 4px 12px rgba(255, 0, 76, 0.3); transition: all 0.2s;
 }
+button:hover { transform: scale(1.03); }
+button:disabled { background: #444 !important; box-shadow: none; cursor: not-allowed; }
 
-/* ХИТРА кнопка */
-#runBtn {
-    position: absolute;
-}
+.status-msg { font-weight: bold; font-size: 0.9rem; min-height: 20px; margin: 5px 0 0 0; }
 
-/* memory */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 80px);
-    gap: 10px;
-    justify-content: center;
-    margin-top: 10px;
-}
+/* Ігри: кастомізація */
+.click-btn { width: 80px; height: 80px; border-radius: 50%; font-size: 1.8rem; background: radial-gradient(var(--accent), #004433); box-shadow: 0 0 10px var(--accent); }
+#dino { position: absolute; left: 30px; bottom: 15px; font-size: 2rem; transition: bottom 0.12s ease-out; }
+#cactus { position: absolute; right: -30px; bottom: 15px; font-size: 1.6rem; }
+.piano-row { display: flex; gap: 8px; width: 90%; height: 120px; }
+.piano-key { flex: 1; background: #222; border-radius: 0 0 6px 6px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; font-weight: bold; color: white;}
+.piano-key.active { background: var(--accent); color: black; box-shadow: 0 0 15px var(--accent); }
+.react-box { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
+.target { width: 40px; height: 40px; background: radial-gradient(circle, red 30%, white 30%, white 60%, red 60%); border-radius: 50%; position: absolute; }
+.slot-container { display: flex; gap: 15px; font-size: 2.5rem; margin-bottom: 10px; }
+.mine-field { display: grid; grid-template-columns: repeat(2, 60px); gap: 10px; }
+.mine-btn { width: 60px; height: 60px; background: #222; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 8px; border: 1px solid #444; }
 
-.box {
-    width: 80px;
-    height: 80px;
-    background: white;
-    opacity: 0.8;
-    border-radius: 10px;
-    cursor: pointer;
-}
+/* Нові стилі */
+.light-signal { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; cursor: pointer; transition: background 0.1s; }
+.dice-box { font-size: 3.5rem; display: flex; gap: 25px; margin-bottom: 10px; }
+.bomb-timer { font-size: 2.5rem; font-weight: bold; color: #ff004c; font-family: monospace; }
 
-.hidden {
-    background: transparent;
-}
-
-/* fake shake */
-.shake {
-    animation: shake 0.2s infinite;
-}
-
-@keyframes shake {
-    0% { transform: translate(1px, 1px); }
-    50% { transform: translate(-1px, -2px); }
-    100% { transform: translate(1px, 2px); }
-}
+/* МАГАЗИН */
+.shop-card { max-width: 1200px; margin: 20px auto; background: rgba(0, 0, 0, 0.4); border: 2px solid var(--yellow); border-radius: 20px; padding: 20px; }
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+.shop-item { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+.shop-item h3 { margin: 0 0 5px 0; font-size: 1rem; }
+.shop-item p { margin: 0 0 10px 0; font-size: 0.8rem; color: #ccc; }
+.shop-item .price { color: var(--yellow); font-weight: bold; font-size: 0.95rem; }
 </style>
 </head>
-
 <body>
 
-<h1>😈 ХИТРИЙ УЛОВКА: IMPOSSIBLE MODE</h1>
-
-<p id="msg">Ти точно не пройдеш це 😏</p>
-
----
-
-# 🪤 1. НЕМожлива кнопка
-<div class="screen">
-<button id="runBtn" onmouseover="runAway()">СПРОБУЙ НАЖАТИ</button>
+<div class="header-panel">
+    <h1>🎰 КІБЕР-АРКАДА: MEGA РИЗИК 💸</h1>
+    <p class="subtitle">Змійку видалено. Додано нові ігри з високими ставками!</p>
+    <div class="balance-display">💰 Баланс: <span id="global-balance">30</span> 🪙</div>
+    <div id="user-status" style="margin-top: 5px; font-size: 0.85rem; color: #aaa;">Статус: Новачок 👤</div>
 </div>
 
----
+<div class="arcade-container">
 
-# 🧠 2. ПАМ’ЯТЬ (обман)
-<div class="screen">
-<p>Запам’ятай і натисни всі білі квадрати</p>
-<div class="grid" id="grid"></div>
-<button onclick="startMemory()">СТАРТ</button>
+    <!-- 1. КЛІКЕР -->
+    <div class="card">
+        <h2>🎮 1. Клікер Майнінгу</h2>
+        <div class="game-zone"><button class="click-btn" onclick="mineCoin()">🪙</button></div>
+        <div>
+            <p id="click-msg" class="status-msg" style="color: var(--accent);">Майни безпечно</p>
+            <p style="font-size: 0.75rem; color: #888; margin:0;">+1 🪙 за клік. Без ризику.</p>
+        </div>
+    </div>
+
+    <!-- 2. ДИНОЗАВРИК -->
+    <div class="card">
+        <h2>Rex. Динозаврик 2.0</h2>
+        <div class="game-zone" onclick="dinoJump()" style="cursor: pointer;">
+            <div id="dino">🦖</div>
+            <div id="cactus">🌵</div>
+        </div>
+        <div>
+            <button onclick="startDino()">Старт (Пробіл / Клік)</button>
+            <p id="dino-msg" class="status-msg">Коло: +12 🪙 | Програш: -10 🪙</p>
+        </div>
+    </div>
+
+    <!-- 3. НЕОНОВЕ ПІАНІНО -->
+    <div class="card">
+        <h2>🎹 3. Ритм-Піаніно</h2>
+        <div class="game-zone">
+            <div class="piano-row">
+                <div class="piano-key" onclick="pressKey(0)" id="key0">A</div>
+                <div class="piano-key" onclick="pressKey(1)" id="key1">S</div>
+                <div class="piano-key" onclick="pressKey(2)" id="key2">D</div>
+                <div class="piano-key" onclick="pressKey(3)" id="key3">F</div>
+            </div>
+        </div>
+        <div>
+            <button onclick="startPiano()">Грати</button>
+            <p id="piano-msg" class="status-msg">Влучання: +5 🪙 | Фальш: -10 🪙</p>
+        </div>
+    </div>
+
+    <!-- 4. ТЕСТ НА РЕАКЦІЮ -->
+    <div class="card">
+        <h2>🧠 4. Тест на Реакцію</h2>
+        <div class="game-zone"><div class="react-box" id="reactBox" onclick="clickReact()" style="background:#221010;">ТИСНИ СТАРТ</div></div>
+        <div>
+            <button onclick="startReact()">Старт</button>
+            <p id="react-msg" class="status-msg">Успіх: +15 🪙 | Помилка: -12 🪙</p>
+        </div>
+    </div>
+
+    <!-- 5. ЗЕЛЕНЕ / ЧЕРВОНЕ СВІТЛО (НОВА замість Змійки) -->
+    <div class="card">
+        <h2>🚦 5. Зелене / Червоне світло</h2>
+        <div class="game-zone">
+            <div class="light-signal" id="lightSignal" onclick="clickSignal()" style="background: #555;">ТИСНИ СТАРТ</div>
+        </div>
+        <div>
+            <button onclick="startSignalGame()">Запустити Світло</button>
+            <p id="signal-msg" class="status-msg">Зелене: +4 🪙 | Червоне: -15 🪙</p>
+        </div>
+    </div>
+
+    <!-- 6. КІБЕР-ДАРТС -->
+    <div class="card">
+        <h2>🎯 6. Динамічний Дартс</h2>
+        <div class="game-zone" id="dartsZone" onclick="missDart()" style="cursor: crosshair;">
+            <div class="target" id="target" onclick="hitTarget(event)"></div>
+        </div>
+        <div>
+            <p id="darts-msg" class="status-msg">Влучив: +8 🪙 | Повз: -6 🪙</p>
+        </div>
+    </div>
+
+    <!-- 7. КІБЕР-СЛОТ -->
+    <div class="card">
+        <h2>🎰 7. Слот-Машина Удачі</h2>
+        <div class="game-zone">
+            <div class="slot-container">
+                <span id="slot1">🍒</span><span id="slot2">🍒</span><span id="slot3">🍒</span>
+            </div>
+        </div>
+        <div>
+            <button onclick="spinSlots()">Крутити (Ставка: 15 🪙)</button>
+            <p id="slots-msg" class="status-msg">3 однакові: +100 🪙!</p>
+        </div>
+    </div>
+
+    <!-- 8. МІННЕ ПОЛЕ -->
+    <div class="card">
+        <h2>💣 8. Мінне Поле (1 з 4)</h2>
+        <div class="game-zone">
+            <div class="mine-field">
+                <div class="mine-btn" onclick="clickMineZone(0)" id="mb0">❓</div>
+                <div class="mine-btn" onclick="clickMineZone(1)" id="mb1">❓</div>
+                <div class="mine-btn" onclick="clickMineZone(2)" id="mb2">❓</div>
+                <div class="mine-btn" onclick="clickMineZone(3)" id="mb3">❓</div>
+            </div>
+        </div>
+        <div>
+            <button onclick="resetMines()">Оновити поле</button>
+            <p id="mines-msg" class="status-msg">Безпечно: +20 🪙 | Міна: -20 🪙</p>
+        </div>
+    </div>
+
+    <!-- 9. КІБЕР-ДУЕЛЬ (НОВА) -->
+    <div class="card">
+        <h2>⚔️ 9. Кібер-Дуель на Кубиках</h2>
+        <div class="game-zone">
+            <div class="dice-box">
+                <div>🤖<div id="ai-dice">?</div></div>
+                <div>👤<div id="player-dice">?</div></div>
+            </div>
+        </div>
+        <div>
+            <button onclick="rollDuel()">Кинути (Ставка: 10 🪙)</button>
+            <p id="duel-msg" class="status-msg">Перемога: +25 🪙 | Програш: -10 🪙</p>
+        </div>
+    </div>
+
+    <!-- 10. САПЕР-ТАЙМЕР (НОВА) -->
+    <div class="card">
+        <h2>💥 10. Сапер-Таймер Бомби</h2>
+        <div class="game-zone">
+            <div class="bomb-timer" id="bombDisplay">5.00s</div>
+        </div>
+        <div>
+            <button onclick="startBomb()">Завести</button>
+            <button onclick="stopBomb()" style="background: red;">СТОП</button>
+            <p id="bomb-msg" class="status-msg">Тисни СТОП між 0.01s та 0.50s! (+30 🪙 / -15 🪙)</p>
+        </div>
+    </div>
+
 </div>
 
----
-
-# 🎲 3. РУЛЕТКА УДАЧІ
-<div class="screen">
-<button onclick="roulette()">КРУТИТИ РУЛЕТКУ</button>
-<p id="luck"></p>
-</div>
-
----
-
-# 💀 4. ХИТРИЙ РЕЖИМ
-<div class="screen">
-<button onclick="fakeMode()">АКТИВУВАТИ СЕКРЕТ</button>
+<!-- 🏪 РОЗШИРЕНИЙ МАГАЗИН -->
+<div class="shop-card">
+    <h2>🏪 СУПЕРМАРКЕТ АПГРЕЙДІВ (8 ТОВАРІВ)</h2>
+    <div class="shop-grid">
+        <div class="shop-item">
+            <h3>🎨 Світла VIP-тема</h3>
+            <p>Змінює дизайн сайту на світлий</p>
+            <p class="price">50 🪙</p>
+            <button id="sm-1" onclick="buy(1, 50)">Купити</button>
+        </div>
+        <div class="shop-item">
+            <h3>🟢 Неонова Matrix-тема</h3>
+            <p>Флуоресцентний зелений хакерський колір</p>
+            <p class="price">80 🪙</p>
+            <button id="sm-2" onclick="buy(2, 80)">Купити</button>
+        </div>
+        <div class="shop-item">
+            <h3>👑 Status «Кібер-Барон»</h3>
+            <p>Престижний статус у профілі</p>
+            <p class="price">120 🪙</p>
+            <button id="sm-3" onclick="buy(3, 120)">Купити</button>
+        </div>
+        <div class="shop-item">
+            <h3>🎭 Аватар «Нейро-Принц»</h3>
+            <p>Змінює твою іконку в профілі</p>
+            <p class="price">160 🪙</p>
+            <button id="sm-4" onclick="buy(4, 160)">Купити</button>
+        </div>
+        <div class="shop-item">
+            <h3>🍀 Удача х2 (Множник)</h3>
+            <p>Усі виграші подвоюються!</p>
+            <p class="price">300 🪙</p>
+            <button id="sm-5" onclick="buy(5, 300)">Купити</button>
+        </div>
+        <div class="shop-item">
+            <h3>🛡️ Страховка від збитків</h3>
+            <p>Зменшує штрафи за програші вдвічі</p>
+            <p class="price">350 🪙</p>
+            <button id="sm-6" onclick="buy(6, 350)">Купити</button>
+        </div>
+        <div class="shop-item">
+            <h3>📈 Акції Кібер-Аркади</h3>
+            <p>Пасивний дохід: +5 коїнів кожні 20 сек</p>
+            <p class="price">500 🪙</p>
+            <button id="sm-7" onclick="buy(7, 500)">Купити</button>
+        </div>
+        <div class="shop-item">
+            <h3>🌌 Перепустка в Абсолют</h3>
+            <p>Статус: «💎 Безсмертний Бог Гри»</p>
+            <p class="price">800 🪙</p>
+            <button id="sm-8" onclick="buy(8, 800)">Купити</button>
+        </div>
+    </div>
 </div>
 
 <script>
+// --- ЕКОНОМІКА ТА БАЛАНС ---
+let coins = 30; 
+let mult = 1; 
+let insurance = false;
+let userAvatar = "👤";
+let userStatusName = "Новачок";
 
-// 🪤 КНОПКА, ЩО ТІКАЄ
-function runAway() {
-    let btn = document.getElementById("runBtn");
-
-    btn.style.left = Math.random() * window.innerWidth + "px";
-    btn.style.top = Math.random() * window.innerHeight + "px";
+function updateBalanceDisplay() {
+    document.getElementById("global-balance").innerText = coins;
+    document.getElementById("user-status").innerText = `Статус: ${userStatusName} ${userAvatar}`;
 }
 
-// 🧠 MEMORY GAME
-let correct = [];
+function addCoins(amount) {
+    coins += amount * mult;
+    updateBalanceDisplay();
+}
 
-function startMemory() {
-    let grid = document.getElementById("grid");
-    grid.innerHTML = "";
-    correct = [];
+function chargeCoins(amount) {
+    let loss = insurance ? Math.floor(amount / 2) : amount;
+    coins -= loss;
+    if (coins < 0) coins = 0;
+    updateBalanceDisplay();
+}
 
-    for (let i = 0; i < 9; i++) {
-        let box = document.createElement("div");
-        box.classList.add("box");
+// --- 1. КЛІКЕР ---
+function mineCoin() { addCoins(1); }
 
-        if (Math.random() > 0.6) {
-            box.dataset.correct = "1";
-            correct.push(box);
+// --- 2. ДИНОЗАВРИК ---
+let dinoJumping = false; let dinoLoop; let cactusSpeed = 5;
+function startDino() {
+    let cac = document.getElementById("cactus");
+    let msg = document.getElementById("dino-msg");
+    msg.innerText = "Грай!"; msg.style.color = "#fff";
+    let pos = -30; cactusSpeed = 5;
+    clearInterval(dinoLoop);
+    dinoLoop = setInterval(() => {
+        pos += cactusSpeed;
+        if(pos == 120 || pos == 220) cactusSpeed = Math.floor(Math.random() * 4) + 5;
+        if (pos > 330) {
+            pos = -30; addCoins(12);
+            msg.innerText = "🦖 Перестрибнув! +12 🪙"; msg.style.color = "var(--accent)";
         }
+        cac.style.right = pos + "px";
+        if (pos > 255 && pos < 295 && !dinoJumping) {
+            clearInterval(dinoLoop); chargeCoins(10);
+            msg.innerText = "💥 Збитий кактусом. -10 🪙"; msg.style.color = "var(--primary)";
+        }
+    }, 20);
+}
+function dinoJump() {
+    if (dinoJumping) return;
+    dinoJumping = true;
+    let d = document.getElementById("dino"); d.style.bottom = "80px";
+    setTimeout(() => { d.style.bottom = "15px"; dinoJumping = false; }, 320);
+}
+window.addEventListener("keydown", e => { if(e.code === "Space" || e.code === "ArrowUp") dinoJump(); });
 
-        box.onclick = function () {
-            if (box.dataset.correct) {
-                box.style.background = "lime";
-            } else {
-                box.style.background = "red";
-            }
-        };
-
-        grid.appendChild(box);
+// --- 3. ПІАНІНО ---
+let activeKey = -1;
+function startPiano() { nextPianoKey(); }
+function nextPianoKey() {
+    document.querySelectorAll(".piano-key").forEach(k => k.classList.remove("active"));
+    activeKey = Math.floor(Math.random() * 4);
+    document.getElementById("key" + activeKey).classList.add("active");
+}
+function pressKey(id) {
+    if (activeKey === -1) return;
+    let msg = document.getElementById("piano-msg");
+    if (id === activeKey) {
+        addCoins(5); msg.innerText = "🎵 Ритм! +5 🪙"; msg.style.color = "var(--accent)"; nextPianoKey();
+    } else {
+        chargeCoins(10); msg.innerText = "❌ Промах! -10 🪙"; msg.style.color = "var(--primary)";
+        document.querySelectorAll(".piano-key").forEach(k => k.classList.remove("active")); activeKey = -1;
     }
-
-    // все ховається через 1.5 сек
-    setTimeout(() => {
-        document.querySelectorAll(".box").forEach(b => {
-            b.classList.add("hidden");
-        });
-    }, 1500);
 }
 
-// 🎲 ROULETTE (обман)
-function roulette() {
-    let arr = [
-        "🎉 ТИ ПЕРЕМІГ... ні 😏",
-        "❌ програш",
-        "😈 майже",
-        "💀 спробуй ще",
-        "🔥 удача фейк"
-    ];
-
-    document.getElementById("luck").innerText =
-        arr[Math.floor(Math.random() * arr.length)];
+// --- 4. РЕАКЦІЯ ---
+let rState = "idle"; let rTimeout; let rStart;
+function startReact() {
+    let box = document.getElementById("reactBox");
+    box.style.background = "var(--primary)"; box.innerText = "ЧЕКАЙ ЗЕЛЕНОГО...";
+    rState = "waiting"; clearTimeout(rTimeout);
+    rTimeout = setTimeout(() => {
+        box.style.background = "var(--accent)"; box.innerText = "ТИСНИ!!!";
+        rState = "click"; rStart = Date.now();
+    }, Math.random() * 2000 + 1200);
+}
+function clickReact() {
+    let box = document.getElementById("reactBox"); let msg = document.getElementById("react-msg");
+    if (rState === "waiting") {
+        clearTimeout(rTimeout); chargeCoins(12);
+        box.style.background = "#221010"; box.innerText = "ПОСПІШИВ!";
+        msg.innerText = "❌ Занадто рано! Штраф -12 🪙"; rState = "idle";
+    } else if (rState === "click") {
+        let diff = Date.now() - rStart; addCoins(15);
+        box.style.background = "#221010"; box.innerText = "ГОТОВО";
+        msg.innerText = `⚡ ${diff}мс! Отримано +15 🪙`; msg.style.color = "var(--accent)"; rState = "idle";
+    }
 }
 
-// 💀 FAKE MODE
-function fakeMode() {
-    document.body.classList.add("shake");
-
-    setTimeout(() => {
-        document.body.classList.remove("shake");
-        alert("😈 система обману активована");
-    }, 2000);
+// --- 5. ЗЕЛЕНЕ / ЧЕРВОНЕ СВІТЛО ---
+let currentLight = "red"; let signalLoop;
+function startSignalGame() {
+    let sig = document.getElementById("lightSignal");
+    document.getElementById("signal-msg").innerText = "Гра триває...";
+    clearInterval(signalLoop);
+    
+    function changeLight() {
+        if (Math.random() > 0.4) {
+            currentLight = "green"; sig.style.background = "#00ff66"; sig.innerText = "РУХ СЕЙВ!"; sig.style.color = "#000";
+        } else {
+            currentLight = "red"; sig.style.background = "#ff004c"; sig.innerText = "ЗАМРИ!!!"; sig.style.color = "#fff";
+        }
+        signalLoop = setTimeout(changeLight, Math.random() * 1200 + 800);
+    }
+    changeLight();
+}
+function clickSignal() {
+    let msg = document.getElementById("signal-msg");
+    if (currentLight === "green") {
+        addCoins(4); msg.innerText = "🟢 Безпечний крок! +4 🪙"; msg.style.color = "var(--accent)";
+    } else {
+        chargeCoins(15); msg.innerText = "🚨 РУХ НА ЧЕРВОНЕ! Штраф -15 🪙"; msg.style.color = "var(--primary)";
+    }
 }
 
+// --- 6. ДАРТС ---
+let t = document.getElementById("target"); let tx = 0, ty = 0, tDx = 3, tDy = 2;
+function mTarget() {
+    tx += tDx; ty += tDy;
+    if (tx < 0 || tx > 270) tDx = -tDx; if (ty < 0 || ty > 110) tDy = -tDy;
+    t.style.left = tx + "px"; t.style.top = ty + "px"; requestAnimationFrame(mTarget);
+}
+requestAnimationFrame(mTarget);
+function hitTarget(e) { e.stopPropagation(); addCoins(8); document.getElementById("darts-msg").innerText = "🎯 Влучив! +8 🪙"; }
+function missDart() { chargeCoins(6); document.getElementById("darts-msg").innerText = "💨 Повз мішень! -6 🪙"; }
+
+// --- 7. КІБЕР-СЛОТ ---
+function spinSlots() {
+    if (coins < 15) { alert("Немає 15 коїнів!"); return; }
+    chargeCoins(15);
+    let items = ["🍒", "💎", "🍋", "7️⃣"];
+    let r1 = items[Math.floor(Math.random() * items.length)];
+    let r2 = items[Math.floor(Math.random() * items.length)];
+    let r3 = items[Math.floor(Math.random() * items.length)];
+    document.getElementById("slot1").innerText = r1; document.getElementById("slot2").innerText = r2; document.getElementById("slot3").innerText = r3;
+    let msg = document.getElementById("slots-msg");
+    if(r1 === r2 && r2 === r3) { addCoins(100); msg.innerText = "🎉 ДЖЕКПОТ! +100 🪙"; } 
+    else { msg.innerText = "❌ Спробуй ще!"; msg.style.color = "#888"; }
+}
+
+// --- 8. МІННЕ ПОЛЕ ---
+let mineIndex = 0;
+function resetMines() {
+    mineIndex = Math.floor(Math.random() * 4);
+    for(let i=0; i<4; i++) { let b = document.getElementById("mb" + i); b.innerText = "❓"; b.style.background = "#222"; }
+    document.getElementById("mines-msg").innerText = "Обирай клітинку!";
+}
+resetMines();
+function clickMineZone(idx) {
+    let btn = document.getElementById("mb" + idx); if(btn.innerText !== "❓") return;
+    if(idx === mineIndex) {
+        btn.innerText = "💣"; btn.style.background = "var(--primary)"; chargeCoins(20); document.getElementById("mines-msg").innerText = "💥 БУМ! -20 🪙";
+    } else {
+        btn.innerText = "💎"; btn.style.background = "var(--accent)"; addCoins(20); document.getElementById("mines-msg").innerText = "💎 Чисто! +20 🪙";
+    }
+}
+
+// --- 9. КІБЕР-ДУЕЛЬ ---
+function rollDuel() {
+    if (coins < 10) { alert("Немає 10 коїнів!"); return; }
+    chargeCoins(10);
+    let aiRoll = Math.floor(Math.random() * 6) + 1;
+    let playerRoll = Math.floor(Math.random() * 6) + 1;
+    document.getElementById("ai-dice").innerText = aiRoll;
+    document.getElementById("player-dice").innerText = playerRoll;
+    let msg = document.getElementById("duel-msg");
+    if (playerRoll > aiRoll) { addCoins(25); msg.innerText = "⚔️ Перемога у дуелі! +25 🪙"; msg.style.color = "var(--accent)"; }
+    else if (playerRoll < aiRoll) { msg.innerText = "💀 ШІ розбив тебе! Програш ставки."; msg.style.color = "var(--primary)"; }
+    else { addCoins(10); msg.innerText = "🤝 Нічия! Ставку повернуто."; msg.style.color = "var(--yellow)"; }
+}
+
+// --- 10. САПЕР-ТАЙМЕР ---
+let bombTimer; let bombTime = 5.00; let bombRunning = false;
+function startBomb() {
+    if(bombRunning) return;
+    bombRunning = true; bombTime = 5.00;
+    document.getElementById("bomb-msg").innerText = "Цокає...";
+    bombTimer = setInterval(() => {
+        bombTime -= 0.04;
+        if(bombTime <= 0) {
+            clearInterval(bombTimer); bombRunning = false; chargeCoins(15);
+            document.getElementById("bombDisplay").innerText = "0.00s";
+            document.getElementById("bomb-msg").innerText = "💥 ВИБУХ! Ти запізнився. -15 🪙";
+        } else {
+            document.getElementById("bombDisplay").innerText = bombTime.toFixed(2) + "s";
+        }
+    }, 40);
+}
+function stopBomb() {
+    if(!bombRunning) return;
+    clearInterval(bombTimer); bombRunning = false;
+    let msg = document.getElementById("bomb-msg");
+    if(bombTime > 0.00 && bombTime <= 0.50) {
+        addCoins(30); msg.innerText = `🎯 ЕПІЧНО! Знешкоджено на останніх секундах! +30 🪙`; msg.style.color = "var(--accent)";
+    } else {
+        chargeCoins(15); msg.innerText = `❌ Зарано! Безпечна зона була нижче 0.50s. -15 🪙`; msg.style.color = "var(--primary)";
+    }
+}
+
+// --- СИСТЕМА МАГАЗИНУ ---
+function buy(id, price) {
+    if (coins >= price) {
+        coins -= price; updateBalanceDisplay();
+        let btn = document.getElementById("sm-" + id); btn.innerText = "Активно"; btn.disabled = true;
+        if (id === 1) document.body.className = "light-theme";
+        if (id === 2) document.body.className = "green-theme";
+        if (id === 3) userStatusName = "Кібер-Барон";
+        if (id === 4) userAvatar = "🎭";
+        if (id === 5) mult = 2;
+        if (id === 6) insurance = true;
+        if (id === 7) setInterval(() => { addCoins(5); }, 20000);
+        if (id === 8) userStatusName = "💎 Безсмертний Бог Гри";
+        updateBalanceDisplay(); alert("🛍️ Покупка успішна!");
+    } else { alert("❌ Тобі не вистачає коїнів!"); }
+}
 </script>
-
 </body>
 </html>
