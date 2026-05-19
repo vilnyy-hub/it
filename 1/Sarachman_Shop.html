@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarachman Shop — Декоративна косметика</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            color: #4a4a4a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #880e4f;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #ad1457;
+            margin-bottom: 40px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer; /* Показуємо, що на картку можна натиснути */
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .product-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #d81b60;
+            display: block;
+        }
+
+        /* Стилі для модального вікна */
+        .modal {
+            display: none; /* Спочатку приховане */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 25px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #880e4f;
+        }
+
+        #modal-text {
+            line-height: 1.6;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sarachman.shop.ua</h1>
+    <p>магазин декоративної косметики</p>
+
+    <div class="gallery">
+        <!-- Додаємо атрибут data-info з описом для кожного товару -->
+        <div class="product-card" onclick="showInfo('це маска для губ яка зволожує наші губи через певний час.наносити її бажано тільки в ночі щоб маска зробила повний ефект.')">
+            <img src="https://cdn.optipic.io/site-739/upload/iblock/094/0945d14ea4486ef17fe04e0c9c704361.jpg">
+            <span class="price">нічна маска для губ</span>
+        </div>
+
+        <div class="product-card" onclick="showInfo('Ніжний крем для рук щоденного використання. Гіпоалергенна формула, що підходить для всіх типів шкіри.')">
+            <img src="https://kream.com.ua/wp-content/uploads/2024/11/Dyzajn-bez-nazvy-4-500x500.png">
+            <span class="price">крем для рук</span>
+        </div>
+
+        <div class="product-card" onclick="showInfo('Універсальна олійка для волосся яка робить наше волосся густішим і пришвидшує ріст волосся')">
+            <img src="https://content2.rozetka.com.ua/goods/images/big_tile/483494714.jpg">
+            <span class="price">олійка для волосся gisou</span>
+        </div>
+
+        <div class="product-card" onclick="showInfo('цей фіксатор макіяжу зволожує шкіру і робить макіяж стійкішим тримає його аж до 7 год .')">
+            <img src="https://lip.com.ua/files/products/s2368439-main-zoom_1.1000x1000.webp">
+            <span class="price">фіксатор макіяжу charlotte tiulberry</span>
+        </div>
+
+        <div class="product-card" onclick="showInfo('Ексклюзивна косметичка іспанського бренду Wouf. Стильний дизайн та висока якість.')">
+            <img src="https://img2.ans-media.com/i/840x1260/AA00-KIU04Z-MLC_F1.webp?v=1770368554">
+            <span class="price">косметичка wouf</span>
+        </div>
+    </div>
+
+    <!-- Структура модального вікна -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 style="color: #880e4f;">Опис товару</h2>
+            <p id="modal-text"></p>
+        </div>
+    </div>
+
+    <script>
+        function showInfo(text) {
+            document.getElementById('modal-text').innerText = text;
+            document.getElementById('myModal').style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none";
+        }
+
+        // Закриття вікна при кліку поза ним
+        window.onclick = function(event) {
+            let modal = document.getElementById('myModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
