@@ -85,6 +85,33 @@ button:hover {
     background: #ff69b4;
     transform: scale(1.1);
 }
+
+/* ===== СЕКРЕТ ===== */
+#secretPanel {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    color: white;
+    text-align: center;
+    padding-top: 60px;
+    z-index: 9999;
+}
+
+/* міні гра */
+#reactionBtn {
+    position: absolute;
+    padding: 20px;
+    font-size: 20px;
+    background: #00ffcc;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    display: none;
+}
 </style>
 </head>
 
@@ -94,7 +121,7 @@ button:hover {
 <div id="score">Score: 0</div>
 <div id="player">🍬 CATCH</div>
 
-<!-- ===== САЙТ ===== -->
+<!-- ===== ТВОЯ ПОЧАТКОВА СТОРІНКА (НЕ ЗМІНЕНО ТЕКСТ) ===== -->
 <h1>Welcome to eat катінька simulator😛🥰</h1>
 
 <p>Just try eating катінька🙂‍↕️🦟</p>
@@ -111,7 +138,8 @@ button:hover {
 катінька we are coming for you😋❤️🫦👀🤺💣📎🥚🚽🌚👼🏿
 </p>
 
-<img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fvika.html&label=&icon=battery-charging&color=%23c11515&message=&style=flat&tz=UTC">
+<!-- ===== СЕКРЕТНА КНОПКА ===== -->
+<button onclick="askPassword()">🔐 Секретний розділ</button>
 
 <script>
 let score = 0;
@@ -128,14 +156,15 @@ function createKatinka() {
     k.classList.add("katinka");
     k.innerHTML = "😋";
     k.style.left = Math.random() * window.innerWidth + "px";
+    k.style.top = "-50px";
     document.body.appendChild(k);
 
     let fall = setInterval(() => {
         let top = parseInt(k.style.top || 0);
         k.style.top = (top + 5) + "px";
 
-        let kRect = k.getBoundingClientRect();
         let pRect = player.getBoundingClientRect();
+        let kRect = k.getBoundingClientRect();
 
         if (
             kRect.bottom >= pRect.top &&
@@ -158,9 +187,70 @@ function createKatinka() {
 
 setInterval(createKatinka, 800);
 
+/* ===== СЕКРЕТ ===== */
+function askPassword() {
+    let pass = prompt("🔐 Введи пароль:");
+
+    if (pass === "3267") {
+        openSecretGame();
+    } else {
+        alert("❌ Неправильний пароль!");
+    }
+}
+
+/* відкриття секретної гри */
+function openSecretGame() {
+    let panel = document.createElement("div");
+    panel.id = "secretPanel";
+
+    panel.innerHTML = `
+        <h1>🔐 SECRET MINI GAME</h1>
+        <p>Натисни кнопку якнайшвидше!</p>
+
+        <button id="reactionBtn" onclick="hitBtn()">CLICK!</button>
+
+        <br><br>
+        <button onclick="startGame()">Start Game</button>
+        <button onclick="closeSecret()">Close</button>
+
+        <h2 id="result"></h2>
+    `;
+
+    document.body.appendChild(panel);
+    document.getElementById("secretPanel").style.display = "block";
+}
+
+function closeSecret() {
+    document.getElementById("secretPanel").remove();
+}
+
+/* ===== міні гра ===== */
+let startTime;
+
+function startGame() {
+    let btn = document.getElementById("reactionBtn");
+    btn.style.display = "none";
+    document.getElementById("result").innerText = "Чекай...";
+
+    setTimeout(() => {
+        btn.style.display = "block";
+        btn.style.left = Math.random() * 70 + "%";
+        btn.style.top = Math.random() * 60 + "%";
+        startTime = Date.now();
+    }, Math.random() * 3000 + 1000);
+}
+
+function hitBtn() {
+    let time = Date.now() - startTime;
+    document.getElementById("result").innerText =
+        "⚡ Реакція: " + time + " ms";
+
+    document.getElementById("reactionBtn").style.display = "none";
+}
+
 /* сайт */
 function eatKatinka() {
-    alert("😋 ТИ З'ЇВ КАТІНЬКУ! +100 COOL POINTS 🤑");
+    alert("😋 ТИ З'ЇВ КАТІНЬКУ!");
 }
 
 document.getElementById("katinka1").onclick = function () {
