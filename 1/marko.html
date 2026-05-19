@@ -1,146 +1,624 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌸 Мій ніжний сайт</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Arcade Game Hub 2026</title>
+    <style>
+        :root {
+            --neon-cyan: #00f2fe;
+            --neon-purple: #9b51e0;
+            --neon-green: #24e527;
+            --neon-pink: #ff2a74;
+            --neon-yellow: #ffe600;
+            --bg-dark: #08080c;
+            --card-bg: rgba(22, 22, 30, 0.7);
+        }
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    overflow: hidden;
-    background: linear-gradient(135deg, #ffd1dc, #ff9a9e);
-}
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+        }
 
-header {
-    background-color: #ff6f91;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 24px;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
 
-main {
-    padding: 40px;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-}
+        /* --- ЕКРАН БЛОКУВАННЯ --- */
+        #lockScreen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #1a103c 0%, #050508 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
 
-.card {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    display: inline-block;
-    animation: fadeIn 1.5s ease;
-}
+        .login-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 40px;
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(155, 81, 224, 0.2);
+            width: 340px;
+        }
 
-button {
-    padding: 12px 25px;
-    background-color: #ff6f91;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 10px;
-    font-size: 16px;
-    transition: 0.3s;
-}
+        .login-card h1 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-button:hover {
-    background-color: #ff3e6c;
-    transform: scale(1.1);
-}
+        .password-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #333;
+            padding: 14px;
+            border-radius: 12px;
+            color: white;
+            font-size: 22px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            letter-spacing: 4px;
+            transition: 0.3s;
+        }
 
-#counter {
-    margin-top: 15px;
-    font-size: 18px;
-    color: #333;
-}
+        .password-input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
 
-/* 🌸 САКУРА */
-.petal {
-    position: fixed;
-    top: -10px;
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle, #ffc0cb, #ff69b4);
-    border-radius: 60% 40% 60% 40%;
-    opacity: 0.8;
-    animation: fall linear infinite;
-    z-index: 1;
-}
+        /* --- КНОПКИ --- */
+        .btn {
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+        }
 
-@keyframes fall {
-    to {
-        transform: translateY(110vh) rotate(360deg);
-    }
-}
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
 
-/* ✨ Поява */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-</style>
+        #err {
+            color: var(--neon-pink);
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* --- ІГРОВИЙ ХАБ --- */
+        #gameHub {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px 20px;
+            align-self: flex-start;
+        }
+
+        .hub-title {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(0,242,254,0.3));
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 400px;
+            transition: 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.1);
+        }
+
+        .game-card h3 {
+            margin-top: 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: #f0f0f5;
+        }
+
+        .game-card input[type="number"] {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            font-size: 18px;
+            width: 100px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            background: #030305;
+            display: block;
+            border-radius: 12px;
+            border: 2px solid #1f1f2e;
+        }
+
+        /* --- РЕАКЦІЯ --- */
+        .reaction-area {
+            width: 100%;
+            height: 180px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            position: relative;
+            margin: 15px 0;
+            border: 1px dashed #333;
+        }
+
+        #reactionTarget {
+            width: 45px;
+            height: 45px;
+            background: var(--neon-pink);
+            position: absolute;
+            cursor: pointer;
+            display: none;
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        #reactionTime {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--neon-green);
+            margin: 5px 0;
+            min-height: 24px;
+        }
+
+        /* --- КЛІКЕР --- */
+        .score-display {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 15px 0;
+            background: linear-gradient(135deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .click-btn {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            font-size: 24px;
+            padding: 30px;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(56, 239, 125, 0.3);
+        }
+
+        /* --- ВГАДАЙ ЧИСЛО --- */
+        #guessHint {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            margin-top: 10px;
+            min-height: 22px;
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-    <h1>🌸 Мій ніжний сайт</h1>
-</header>
-
-<main>
-    <div class="card">
-        <p>Сакура падає прямо зараз 😍</p>
-
-        <button onclick="showMessage()">Натисни мене</button>
-
-        <div id="counter">Натиснули: 0 разів</div>
+    <!-- ЕКРАН ВХОДУ -->
+    <div id="lockScreen">
+        <div class="login-card">
+            <h1>🔐 ENTER PASSWORD</h1>
+            <input type="password" id="passInput" class="password-input" placeholder="••••" onkeydown="if(event.key === 'Enter') unlockHub()">
+            <button class="btn" onclick="unlockHub()">УВІЙТИ</button>
+            <div id="err"></div>
+        </div>
     </div>
-</main>
 
-<script>
-let count = 0;
+    <!-- ІГРОВИЙ ЦЕНТР -->
+    <div id="gameHub">
+        <h1 class="hub-title">🎮 Arcade Game Hub</h1>
+        
+        <div class="grid">
+            
+            <!-- ГРА 1: GEOMETRY DASH (NEON DASH) -->
+            <div class="game-card" style="grid-column: span 1;">
+                <h3>📐 Neon Dash (Space / Клік)</h3>
+                <canvas id="dashCanvas" width="280" height="180"></canvas>
+                <button class="btn" onclick="initDashGame()" style="background: var(--neon-yellow); color: black;">Грати знову</button>
+            </div>
 
-function showMessage() {
-    count++;
-    document.getElementById("counter").innerText = "Натиснули: " + count + " разів";
-}
+            <!-- ГРА 2: ЗМІЙКА -->
+            <div class="game-card">
+                <h3>🐍 Кібер-Змійка (Стрілочки)</h3>
+                <canvas id="snakeCanvas" width="220" height="180"></canvas>
+                <button class="btn" onclick="initSnakeGame()" style="background: var(--neon-purple);">Перезапустити</button>
+            </div>
 
-/* 🌸 САКУРА (оптимізована) */
-let petalsCount = 0;
-const maxPetals = 40;
+            <!-- ГРА 3: ТЕСТ РЕАКЦІЇ -->
+            <div class="game-card">
+                <h3>⚡ Швидка Реакція</h3>
+                <div class="reaction-area">
+                    <div id="reactionTarget" onclick="catchTarget()"></div>
+                </div>
+                <div id="reactionTime">Натисни старт!</div>
+                <button id="startReactBtn" class="btn" onclick="startReactionGame()">СТАРТ</button>
+            </div>
 
-function createPetal() {
-    if (petalsCount >= maxPetals) return;
+            <!-- ГРА 4: КЛІКЕР КРИСТАЛІВ -->
+            <div class="game-card">
+                <h3>💎 Майнер Кристалів</h3>
+                <div class="score-display" id="clickScore">0</div>
+                <button class="btn click-btn" onclick="addClick()">💎</button>
+            </div>
 
-    const petal = document.createElement("div");
-    petal.classList.add("petal");
+            <!-- ГРА 5: ТАЄМНЕ ЧИСЛО -->
+            <div class="game-card">
+                <h3>🤔 Загадка (1 - 100)</h3>
+                <p style="color: #aaa; margin: 0 0 10px 0;">Вгадай число від 1 до 100</p>
+                <div>
+                    <input type="number" id="userGuessInput" min="1" max="100">
+                    <button class="btn" onclick="verifyGuess()" style="width: auto; padding: 10px 20px; margin-left: 5px;">?</button>
+                </div>
+                <div id="guessHint">Спробуй вгадати!</div>
+            </div>
 
-    petal.style.left = Math.random() * 100 + "vw";
-    petal.style.animationDuration = (4 + Math.random() * 4) + "s";
-    petal.style.opacity = Math.random();
+        </div>
+    </div>
 
-    document.body.appendChild(petal);
-    petalsCount++;
+    <script>
+        // --- СИСТЕМА ДОСТУПУ ---
+        function unlockHub() {
+            const enteredPass = document.getElementById('passInput').value;
+            const errorText = document.getElementById('err');
+            
+            if (enteredPass === '2233') {
+                document.getElementById('lockScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('lockScreen').style.display = 'none';
+                    document.getElementById('gameHub').style.display = 'block';
+                    initSnakeGame();
+                    initDashGame();
+                }, 500);
+            } else {
+                errorText.innerText = '❌ Пароль неправильний!';
+                document.getElementById('passInput').value = '';
+            }
+        }
 
-    setTimeout(() => {
-        petal.remove();
-        petalsCount--;
-    }, 8000);
-}
+        // --- ЛОГІКА ГРИ 1: GEOMETRY DASH (NEON DASH) ---
+        const dashCanvas = document.getElementById("dashCanvas");
+        const dCtx = dashCanvas.getContext("2d");
+        
+        let player, obstacles, dashScore, isGameOver, dashTimer;
+        const gravity = 0.6;
 
-setInterval(createPetal, 250);
-</script>
+        function initDashGame() {
+            cancelAnimationFrame(dashTimer);
+            isGameOver = false;
+            dashScore = 0;
+            obstacles = [];
+            
+            player = {
+                x: 40,
+                y: 120,
+                width: 20,
+                height: 20,
+                ySpeed: 0,
+                jumpForce: -9,
+                isGrounded: false,
+                rotation: 0
+            };
+            
+            spawnObstacle();
+            renderDashGame();
+        }
 
+        function spawnObstacle() {
+            if (isGameOver) return;
+            // Створюємо випадкові шипи
+            obstacles.push({
+                x: dashCanvas.width,
+                y: 150,
+                width: 16,
+                height: 22,
+                speed: 3.5 + (dashScore * 0.1) // Швидкість росте з рахунком
+            });
+            // Випадковий час до наступного шипа
+            setTimeout(spawnObstacle, Math.random() * 1500 + 1000);
+        }
+
+        // Керування (Пробіл або Клік по канвасу)
+        window.addEventListener("keydown", (e) => {
+            if (e.key === " " || e.key === "Spacebar") {
+                e.preventDefault();
+                dashJump();
+            }
+        });
+        dashCanvas.addEventListener("mousedown", dashJump);
+
+        function dashJump() {
+            if (player.isGrounded && !isGameOver) {
+                player.ySpeed = player.jumpForce;
+                player.isGrounded = false;
+            }
+        }
+
+        function renderDashGame() {
+            if (isGameOver) return;
+
+            // Фон та лінія підлоги
+            dCtx.fillStyle = "#0c0c14";
+            dCtx.fillRect(0, 0, dashCanvas.width, dashCanvas.height);
+            
+            dCtx.strokeStyle = varColor('--neon-cyan');
+            dCtx.lineWidth = 3;
+            dCtx.beginPath();
+            dCtx.moveTo(0, 150);
+            dCtx.lineTo(dashCanvas.width, 150);
+            dCtx.stroke();
+
+            // Фізика гравця (Кубика)
+            player.ySpeed += gravity;
+            player.y += player.ySpeed;
+
+            if (player.y >= 150 - player.height) {
+                player.y = 150 - player.height;
+                player.ySpeed = 0;
+                player.isGrounded = true;
+            }
+
+            // Малюємо кубик з обертанням під час стрибка
+            if (!player.isGrounded) {
+                player.rotation += 0.08;
+            } else {
+                player.rotation = Math.round(player.rotation / (Math.PI / 2)) * (Math.PI / 2);
+            }
+
+            dCtx.save();
+            dCtx.translate(player.x + player.width/2, player.y + player.height/2);
+            dCtx.rotate(player.rotation);
+            dCtx.fillStyle = varColor('--neon-green');
+            dCtx.fillRect(-player.width/2, -player.height/2, player.width, player.height);
+            dCtx.strokeStyle = "#fff";
+            dCtx.lineWidth = 1;
+            dCtx.strokeRect(-player.width/2, -player.height/2, player.width, player.height);
+            dCtx.restore();
+
+            // Рух шипів
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.x -= obs.speed;
+
+                // Малюємо шип (трикутник)
+                dCtx.fillStyle = varColor('--neon-pink');
+                dCtx.beginPath();
+                dCtx.moveTo(obs.x, obs.y);
+                dCtx.lineTo(obs.x + obs.width / 2, obs.y - obs.height);
+                dCtx.lineTo(obs.x + obs.width, obs.y);
+                dCtx.closePath();
+                dCtx.fill();
+
+                // Перевірка на зіткнення (AABB vs Triangle спрощено)
+                if (obs.x < player.x + player.width && obs.x + obs.width > player.x &&
+                    obs.y - obs.height < player.y + player.height && obs.y > player.y) {
+                        isGameOver = true;
+                        dCtx.fillStyle = "rgba(255, 42, 116, 0.9)";
+                        dCtx.font = "bold 22px Segoe UI";
+                        dCtx.textAlign = "center";
+                        dCtx.fillText("КРАШ! Спробуй знову", dashCanvas.width / 2, dashCanvas.height / 2);
+                        return;
+                }
+
+                // Видалення шипів поза екраном та додавання рахунку
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                    dashScore++;
+                }
+            }
+
+            // Виведення рахунку
+            dCtx.fillStyle = "#fff";
+            dCtx.font = "14px Segoe UI";
+            dCtx.textAlign = "left";
+            dCtx.fillText(`Рахунок: ${dashScore}`, 15, 25);
+
+            dashTimer = requestAnimationFrame(renderDashGame);
+        }
+
+
+        // --- ЛОГІКА ГРИ 2: ЗМІЙКА ---
+        const canvas = document.getElementById("snakeCanvas");
+        const ctx = canvas.getContext("2d");
+        const boxSize = 15; 
+        let snake, food, currentDir, snakeTimer;
+
+        function initSnakeGame() {
+            clearInterval(snakeTimer);
+            snake = [{ x: 5 * boxSize, y: 5 * boxSize }];
+            generateFood();
+            currentDir = "RIGHT";
+            snakeTimer = setInterval(renderSnakeGame, 150);
+        }
+
+        function generateFood() {
+            food = {
+                x: Math.floor(Math.random() * 13) * boxSize,
+                y: Math.floor(Math.random() * 11) * boxSize
+            };
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft" && currentDir !== "RIGHT") currentDir = "LEFT";
+            else if (e.key === "ArrowUp" && currentDir !== "DOWN") currentDir = "UP";
+            else if (e.key === "ArrowRight" && currentDir !== "LEFT") currentDir = "RIGHT";
+            else if (e.key === "ArrowDown" && currentDir !== "UP") currentDir = "DOWN";
+        });
+
+        function renderSnakeGame() {
+            ctx.fillStyle = "#030305";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Їжа
+            ctx.fillStyle = varColor('--neon-pink');
+            ctx.fillRect(food.x, food.y, boxSize - 1, boxSize - 1);
+
+            // Змійка
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = i === 0 ? varColor('--neon-cyan') : "#ffffff";
+                ctx.fillRect(snake[i].x, snake[i].y, boxSize - 1, boxSize - 1);
+            }
+
+            let headX = snake[0].x;
+            let headY = snake[0].y;
+
+            if (currentDir === "LEFT") headX -= boxSize;
+            if (currentDir === "UP") headY -= boxSize;
+            if (currentDir === "RIGHT") headX += boxSize;
+            if (currentDir === "DOWN") headY += boxSize;
+
+            if (headX === food.x && headY === food.y) {
+                generateFood();
+            } else {
+                snake.pop();
+            }
+
+            const newHead = { x: headX, y: headY };
+
+            if (headX < 0 || headX >= canvas.width || headY < 0 || headY >= canvas.height || checkSelfCollision(newHead, snake)) {
+                clearInterval(snakeTimer);
+                ctx.fillStyle = "rgba(255, 42, 116, 0.8)";
+                ctx.font = "bold 18px Segoe UI";
+                ctx.textAlign = "center";
+                ctx.fillText("КІНЕЦЬ ГРИ", canvas.width / 2, canvas.height / 2);
+                return;
+            }
+            snake.unshift(newHead);
+        }
+
+        function checkSelfCollision(head, array) {
+            for (let i = 0; i < array.length; i++) {
+                if (head.x === array[i].x && head.y === array[i].y) return true;
+            }
+            return false;
+        }
+
+        function varColor(name) {
+            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        }
+
+
+        // --- ЛОГІКА ГРИ 3: ТЕСТ РЕАКЦІЇ ---
+        let reactionStart, reactionTimeout;
+        const target = document.getElementById('reactionTarget');
+        const timeDisplay = document.getElementById('reactionTime');
+        const startBtn = document.getElementById('startReactBtn');
+
+        function startReactionGame() {
+            startBtn.style.visibility = 'hidden';
+            timeDisplay.innerText = 'Приготуйся...';
+            timeDisplay.style.color = '#fff';
+            target.style.display = 'none';
+
+            const randomDelay = Math.random() * 3000 + 1500;
+
+            reactionTimeout = setTimeout(() => {
+                const maxX = 220;
+                const maxY = 120;
+                target.style.left = Math.floor(Math.random() * maxX) + 'px';
+                target.style.top = Math.floor(Math.random() * maxY) + 'px';
+                target.style.display = 'block';
+                reactionStart = Date.now();
+            }, randomDelay);
+        }
+
+        function catchTarget() {
+            const duration = (Date.now() - reactionStart) / 1000;
+            timeDisplay.innerText = `🔥 Час: ${duration} сек!`;
+            timeDisplay.style.color = duration < 0.3 ? varColor('--neon-green') : varColor('--neon-cyan');
+            target.style.display = 'none';
+            startBtn.style.visibility = 'visible';
+        }
+
+
+        // --- ЛОГІКА ГРИ 4: КЛІКЕР ---
+        let currentClicks = 0;
+        function addClick() {
+            currentClicks++;
+            document.getElementById('clickScore').innerText = currentClicks;
+        }
+
+
+        // --- ЛОГІКА ГРИ 5: ВГАДАЙ ЧИСЛО ---
+        let mysteryNumber = Math.floor(Math.random() * 100) + 1;
+
+        function verifyGuess() {
+            const userChoice = parseInt(document.getElementById('userGuessInput').value);
+            const hintField = document.getElementById('guessHint');
+
+            if (isNaN(userChoice) || userChoice < 1 || userChoice > 100) {
+                hintField.innerText = "Число від 1 до 100!";
+                hintField.style.color = varColor('--neon-pink');
+                return;
+            }
+
+            if (userChoice === mysteryNumber) {
+                hintField.innerText = "🎉 Перемога! Вгадано!";
+                hintField.style.color = varColor('--neon-green');
+                mysteryNumber = Math.floor(Math.random() * 100) + 1;
+            } else {
+                hintField.innerText = userChoice < mysteryNumber ? "Більше... ⬆️" : "Менше... ⬇️";
+                hintField.style.color = varColor('--neon-cyan');
+            }
+        }
+    </script>
 </body>
 </html>
