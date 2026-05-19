@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Arcade Game Hub 2026</title>
+    <title>Neon Arcade & Puzzle Hub 2026</title>
     <style>
         :root {
             --neon-cyan: #00f2fe;
@@ -11,13 +11,14 @@
             --neon-green: #24e527;
             --neon-pink: #ff2a74;
             --neon-yellow: #ffe600;
+            --neon-orange: #ff6a00;
             --bg-dark: #08080c;
-            --card-bg: rgba(22, 22, 30, 0.7);
+            --card-bg: rgba(22, 22, 30, 0.85);
         }
 
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             user-select: none;
         }
 
@@ -42,7 +43,7 @@
             justify-content: center;
             align-items: center;
             z-index: 999;
-            transition: opacity 0.5s ease, visibility 0.5s;
+            transition: opacity 0.5s ease;
         }
 
         .login-card {
@@ -52,17 +53,8 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(155, 81, 224, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
             width: 340px;
-        }
-
-        .login-card h1 {
-            font-size: 24px;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .password-input {
@@ -77,15 +69,8 @@
             margin-bottom: 20px;
             outline: none;
             letter-spacing: 4px;
-            transition: 0.3s;
         }
 
-        .password-input:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-        }
-
-        /* --- КНОПКИ --- */
         .btn {
             background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
             border: none;
@@ -96,159 +81,150 @@
             font-size: 16px;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.2);
+            transition: 0.3s;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px var(--neon-cyan);
-        }
-
-        #err {
-            color: var(--neon-pink);
-            margin-top: 15px;
-            font-weight: bold;
-            font-size: 14px;
-            min-height: 20px;
-        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px var(--neon-cyan); }
 
         /* --- ІГРОВИЙ ХАБ --- */
         #gameHub {
             display: none;
             width: 100%;
-            max-width: 1200px;
-            padding: 40px 20px;
-            align-self: flex-start;
+            max-width: 1000px;
+            padding: 20px;
         }
 
         .hub-title {
             text-align: center;
-            font-size: 42px;
-            margin-bottom: 40px;
+            font-size: 36px;
+            margin: 10px 0 20px 0;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 10px rgba(0,242,254,0.3));
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .game-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        /* Навігація між іграми */
+        .tabs {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 400px;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #333;
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #aaa;
+            cursor: pointer;
+            font-weight: 600;
             transition: 0.3s;
         }
 
-        .game-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 242, 254, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.1);
+        .tab-btn.active, .tab-btn:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 15px #fff;
+            border-color: #fff;
         }
 
-        .game-card h3 {
-            margin-top: 0;
-            font-size: 22px;
-            letter-spacing: 1px;
-            color: #f0f0f5;
-        }
-
-        .game-card input[type="number"] {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid #444;
-            padding: 10px;
-            border-radius: 8px;
-            color: white;
-            font-size: 18px;
-            width: 100px;
-            text-align: center;
-            outline: none;
-            margin-bottom: 10px;
-        }
-
-        canvas {
-            background: #030305;
-            display: block;
-            border-radius: 12px;
-            border: 2px solid #1f1f2e;
-        }
-
-        /* --- РЕАКЦІЯ --- */
-        .reaction-area {
-            width: 100%;
-            height: 180px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            position: relative;
-            margin: 15px 0;
-            border: 1px dashed #333;
-        }
-
-        #reactionTarget {
-            width: 45px;
-            height: 45px;
-            background: var(--neon-pink);
-            position: absolute;
-            cursor: pointer;
+        .game-content {
             display: none;
-            border-radius: 50%;
-            box-shadow: 0 0 15px var(--neon-pink);
-        }
-
-        #reactionTime {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--neon-green);
-            margin: 5px 0;
-            min-height: 24px;
-        }
-
-        /* --- КЛІКЕР --- */
-        .score-display {
-            font-size: 48px;
-            font-weight: 800;
-            margin: 15px 0;
-            background: linear-gradient(135deg, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .click-btn {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            font-size: 24px;
+            background: var(--card-bg);
+            border-radius: 24px;
             padding: 30px;
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 25px rgba(56, 239, 125, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            text-align: center;
         }
 
-        /* --- ВГАДАЙ ЧИСЛО --- */
-        #guessHint {
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--neon-cyan);
-            margin-top: 10px;
-            min-height: 22px;
+        .game-content.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
+        /* --- СТИЛІ ДЛЯ BLOCK BLAST --- */
+        .bb-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bb-board {
+            display: grid;
+            grid-template-columns: repeat(8, 35px);
+            grid-template-rows: repeat(8, 35px);
+            gap: 2px;
+            background: #111116;
+            padding: 6px;
+            border-radius: 12px;
+            border: 2px solid #222;
+        }
+
+        .bb-cell {
+            background: #1e1e24;
+            border-radius: 4px;
+            transition: background 0.1s;
+        }
+
+        .bb-cell.filled { box-shadow: inset 0 0 8px rgba(255,255,255,0.3); }
+
+        .bb-dock {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            min-height: 90px;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .bb-piece-preview {
+            display: grid;
+            gap: 1px;
+            padding: 5px;
+            background: rgba(255,255,255,0.02);
+            border: 1px dashed #444;
+            border-radius: 6px;
+            cursor: pointer;
+            align-content: center;
+            justify-content: center;
+        }
+
+        .bb-piece-preview:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 242, 254, 0.05);
+        }
+
+        .bb-preview-cell {
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+        }
+
+        .bb-preview-cell.active {
+            box-shadow: inset 0 0 3px rgba(255,255,255,0.5);
+        }
+
+        .bb-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--neon-yellow);
+        }
+
+        /* Загальні елементи інших ігор */
+        canvas { background: #030305; display: block; border-radius: 12px; border: 2px solid #1f1f2e; }
+        .reaction-area { width: 100%; height: 160px; background: rgba(0,0,0,0.3); border-radius: 12px; position: relative; margin: 15px 0; border: 1px dashed #333; }
+        #reactionTarget { width: 40px; height: 40px; background: var(--neon-pink); position: absolute; cursor: pointer; display: none; border-radius: 50%; box-shadow: 0 0 15px var(--neon-pink); }
+        .score-display { font-size: 44px; font-weight: 800; margin: 10px 0; }
+        .click-btn { background: linear-gradient(135deg, #11998e, #38ef7d); font-size: 24px; border-radius: 50%; width: 100px; height: 100px; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
@@ -256,369 +232,419 @@
     <!-- ЕКРАН ВХОДУ -->
     <div id="lockScreen">
         <div class="login-card">
-            <h1>🔐 ENTER PASSWORD</h1>
+            <h2>🔐 ENTER PASSWORD</h2>
             <input type="password" id="passInput" class="password-input" placeholder="••••" onkeydown="if(event.key === 'Enter') unlockHub()">
             <button class="btn" onclick="unlockHub()">УВІЙТИ</button>
-            <div id="err"></div>
+            <div id="err" style="color: var(--neon-pink); margin-top:10px;"></div>
         </div>
     </div>
 
     <!-- ІГРОВИЙ ЦЕНТР -->
     <div id="gameHub">
-        <h1 class="hub-title">🎮 Arcade Game Hub</h1>
+        <h1 class="hub-title">🎮 Arcade & Puzzle Hub</h1>
         
-        <div class="grid">
-            
-            <!-- ГРА 1: GEOMETRY DASH (NEON DASH) -->
-            <div class="game-card" style="grid-column: span 1;">
-                <h3>📐 Neon Dash (Space / Клік)</h3>
-                <canvas id="dashCanvas" width="280" height="180"></canvas>
-                <button class="btn" onclick="initDashGame()" style="background: var(--neon-yellow); color: black;">Грати знову</button>
-            </div>
-
-            <!-- ГРА 2: ЗМІЙКА -->
-            <div class="game-card">
-                <h3>🐍 Кібер-Змійка (Стрілочки)</h3>
-                <canvas id="snakeCanvas" width="220" height="180"></canvas>
-                <button class="btn" onclick="initSnakeGame()" style="background: var(--neon-purple);">Перезапустити</button>
-            </div>
-
-            <!-- ГРА 3: ТЕСТ РЕАКЦІЇ -->
-            <div class="game-card">
-                <h3>⚡ Швидка Реакція</h3>
-                <div class="reaction-area">
-                    <div id="reactionTarget" onclick="catchTarget()"></div>
-                </div>
-                <div id="reactionTime">Натисни старт!</div>
-                <button id="startReactBtn" class="btn" onclick="startReactionGame()">СТАРТ</button>
-            </div>
-
-            <!-- ГРА 4: КЛІКЕР КРИСТАЛІВ -->
-            <div class="game-card">
-                <h3>💎 Майнер Кристалів</h3>
-                <div class="score-display" id="clickScore">0</div>
-                <button class="btn click-btn" onclick="addClick()">💎</button>
-            </div>
-
-            <!-- ГРА 5: ТАЄМНЕ ЧИСЛО -->
-            <div class="game-card">
-                <h3>🤔 Загадка (1 - 100)</h3>
-                <p style="color: #aaa; margin: 0 0 10px 0;">Вгадай число від 1 до 100</p>
-                <div>
-                    <input type="number" id="userGuessInput" min="1" max="100">
-                    <button class="btn" onclick="verifyGuess()" style="width: auto; padding: 10px 20px; margin-left: 5px;">?</button>
-                </div>
-                <div id="guessHint">Спробуй вгадати!</div>
-            </div>
-
+        <!-- Вкладки меню -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('blockBlastTab')">🧱 Block Blast</button>
+            <button class="tab-btn" onclick="switchTab('neonDashTab')">📐 Neon Dash</button>
+            <button class="tab-btn" onclick="switchTab('snakeTab')">🐍 Змійка</button>
+            <button class="tab-btn" onclick="switchTab('reactionTab')">⚡ Реакція</button>
+            <button class="tab-btn" onclick="switchTab('clickerTab')">💎 Клікер</button>
+            <button class="tab-btn" onclick="switchTab('guessTab')">🤔 Число</button>
         </div>
+
+        <!-- ІГРА 1: BLOCK BLAST -->
+        <div id="blockBlastTab" class="game-content active">
+            <h3>🧱 Block Blast Puzzle</h3>
+            <p style="color:#aaa; margin:0 0 10px 0;">Обери фігуру знизу і клікни на поле, щоб поставити її!</p>
+            <div class="bb-container">
+                <div class="bb-score">Рахунок: <span id="bbScore">0</span></div>
+                <div id="bbBoard" class="bb-board"></div>
+                <div id="bbDock" class="bb-dock"></div>
+                <button class="btn" onclick="initBlockBlast()" style="max-width:200px; background:var(--neon-orange)">Очистити поле</button>
+            </div>
+        </div>
+
+        <!-- ІГРА 2: NEON DASH -->
+        <div id="neonDashTab" class="game-content">
+            <h3>📐 Neon Dash (Space / Клік)</h3>
+            <canvas id="dashCanvas" width="300" height="180"></canvas>
+            <button class="btn" onclick="initDashGame()" style="background: var(--neon-yellow); color: black; max-width:200px; margin-top:15px;">Старт / Рестарт</button>
+        </div>
+
+        <!-- ІГРА 3: ЗМІЙКА -->
+        <div id="snakeTab" class="game-content">
+            <h3>🐍 Кібер-Змійка (Стрілочки)</h3>
+            <canvas id="snakeCanvas" width="240" height="200"></canvas>
+            <button class="btn" onclick="initSnakeGame()" style="background: var(--neon-purple); max-width:200px; margin-top:15px;">Рестарт</button>
+        </div>
+
+        <!-- ІГРА 4: РЕАКЦІЯ -->
+        <div id="reactionTab" class="game-content">
+            <h3>⚡ Тест швидкісної реакції</h3>
+            <div class="reaction-area"><div id="reactionTarget" onclick="catchTarget()"></div></div>
+            <div id="reactionTime" style="font-weight:bold; margin-bottom:10px;">Натисни старт!</div>
+            <button id="startReactBtn" class="btn" onclick="startReactionGame()" style="max-width:200px;">СТАРТ</button>
+        </div>
+
+        <!-- ІГРА 5: КЛІКЕР -->
+        <div id="clickerTab" class="game-content">
+            <h3>💎 Майнер Кристалів</h3>
+            <div class="score-display" id="clickScore">0</div>
+            <button class="btn click-btn" onclick="addClick()">💎</button>
+        </div>
+
+        <!-- ІГРА 6: ВГАДАЙ ЧИСЛО -->
+        <div id="guessTab" class="game-content">
+            <h3>🤔 Загадка числа (1 - 100)</h3>
+            <div style="margin: 20px 0;">
+                <input type="number" id="userGuessInput" style="background:#000; border:1px solid #444; padding:10px; color:#fff; border-radius:8px; width:100px; text-align:center;">
+                <button class="btn" onclick="verifyGuess()" style="width: auto; padding: 10px 20px; margin-left: 5px;">?</button>
+            </div>
+            <div id="guessHint" style="font-weight:bold; color:var(--neon-cyan)">Спробуй вгадати!</div>
+        </div>
+
     </div>
 
     <script>
-        // --- СИСТЕМА ДОСТУПУ ---
-        function unlockHub() {
-            const enteredPass = document.getElementById('passInput').value;
-            const errorText = document.getElementById('err');
+        // --- СИСТЕМА ВКЛАДОК ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.game-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
             
-            if (enteredPass === '2233') {
+            // Спеціальні тригери для запуску при відкритті вкладок
+            if(tabId === 'neonDashTab') initDashGame();
+            if(tabId === 'snakeTab') initSnakeGame();
+            if(tabId === 'blockBlastTab' && blockBlastScore === 0) initBlockBlast();
+        }
+
+        // --- ДОСТУП ---
+        function unlockHub() {
+            if (document.getElementById('passInput').value === '2233') {
                 document.getElementById('lockScreen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('lockScreen').style.display = 'none';
                     document.getElementById('gameHub').style.display = 'block';
-                    initSnakeGame();
-                    initDashGame();
-                }, 500);
+                    initBlockBlast();
+                }, 400);
             } else {
-                errorText.innerText = '❌ Пароль неправильний!';
-                document.getElementById('passInput').value = '';
+                document.getElementById('err').innerText = '❌ Невірно!';
             }
         }
 
-        // --- ЛОГІКА ГРИ 1: GEOMETRY DASH (NEON DASH) ---
+        // --- ЛОГІКА ГРИ: BLOCK BLAST ---
+        let bbGrid = [];
+        let blockBlastScore = 0;
+        let selectedPieceIndex = null;
+        let dockPieces = [];
+
+        // База фігур (0 - порожньо, 1 - заповнено)
+        const PIECES_DATABASE = [
+            { cells: [[1,1],[1,1]], color: 'var(--neon-yellow)', r:2, c:2 }, // Квадрат 2х2
+            { cells: [[1],[1],[1]], color: 'var(--neon-cyan)', r:3, c:1 },   // Вертикальна лінія 3
+            { cells: [[1,1,1]], color: 'var(--neon-purple)', r:1, c:3 },     // Горизонтальна лінія 3
+            { cells: [[1,0],[1,1]], color: 'var(--neon-pink)', r:2, c:2 },     // Куточок L
+            { cells: [[1]], color: 'var(--neon-green)', r:1, c:1 },          // Одиночний блок
+            { cells: [[1,1],[0,1]], color: 'var(--neon-orange)', r:2, c:2 }   // Інший куточок
+        ];
+
+        function initBlockBlast() {
+            blockBlastScore = 0;
+            document.getElementById('bbScore').innerText = blockBlastScore;
+            selectedPieceIndex = null;
+            
+            // Будуємо сітку 8x8 в коді
+            bbGrid = Array(8).fill(null).map(() => Array(8).fill(0));
+            
+            // Рендеримо HTML дошку
+            const boardEl = document.getElementById('bbBoard');
+            boardEl.innerHTML = '';
+            for(let r=0; r<8; r++) {
+                for(let c=0; c<8; c++) {
+                    let cell = document.createElement('div');
+                    cell.className = 'bb-cell';
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    cell.onclick = () => handleBoardClick(r, c);
+                    boardEl.appendChild(cell);
+                }
+            }
+            generateNewDockPieces();
+        }
+
+        function renderBoard() {
+            const cells = document.querySelectorAll('.bb-cell');
+            cells.forEach(cell => {
+                let r = parseInt(cell.dataset.row);
+                let c = parseInt(cell.dataset.col);
+                if(bbGrid[r][c] !== 0) {
+                    cell.style.background = bbGrid[r][c];
+                    cell.classList.add('filled');
+                } else {
+                    cell.style.background = '#1e1e24';
+                    cell.classList.remove('filled');
+                }
+            });
+        }
+
+        function generateNewDockPieces() {
+            dockPieces = [];
+            const dockEl = document.getElementById('bbDock');
+            dockEl.innerHTML = '';
+
+            for(let i=0; i<3; i++) {
+                let randPiece = PIECES_DATABASE[Math.floor(Math.random() * PIECES_DATABASE.length)];
+                dockPieces.push(randPiece);
+
+                let preview = document.createElement('div');
+                preview.className = 'bb-piece-preview';
+                preview.id = `bb-piece-${i}`;
+                preview.style.gridTemplateRows = `repeat(${randPiece.r}, 16px)`;
+                preview.style.gridTemplateColumns = `repeat(${randPiece.c}, 16px)`;
+                preview.onclick = (e) => selectDockPiece(i, e);
+
+                for(let r=0; r<randPiece.r; r++) {
+                    for(let c=0; c<randPiece.c; c++) {
+                        let pCell = document.createElement('div');
+                        pCell.className = 'bb-preview-cell';
+                        if(randPiece.cells[r][c] === 1) {
+                            pCell.style.background = randPiece.color;
+                            pCell.classList.add('active');
+                        }
+                        preview.appendChild(pCell);
+                    }
+                }
+                dockEl.appendChild(preview);
+            }
+        }
+
+        function selectDockPiece(index, event) {
+            document.querySelectorAll('.bb-piece-preview').forEach(p => p.style.borderColor = '#444');
+            if(dockPieces[index] === null) return;
+            
+            selectedPieceIndex = index;
+            const clickedDock = document.getElementById(`bb-piece-${index}`);
+            if(clickedDock) clickedDock.style.borderColor = 'var(--neon-green)';
+        }
+
+        function handleBoardClick(r, c) {
+            if(selectedPieceIndex === null || dockPieces[selectedPieceIndex] === null) return;
+            
+            let piece = dockPieces[selectedPieceIndex];
+
+            // Перевіряємо, чи поміщається фігура
+            if(r + piece.r > 8 || c + piece.c > 8) return; // Вихід за межі поля
+
+            for(let pr=0; pr<piece.r; pr++) {
+                for(let pc=0; pc<piece.c; pc++) {
+                    if(piece.cells[pr][pc] === 1 && bbGrid[r + pr][c + pc] !== 0) {
+                        return; // Місце вже зайняте!
+                    }
+                }
+            }
+
+            // Ставимо фігуру
+            for(let pr=0; pr<piece.r; pr++) {
+                for(let pc=0; pc<piece.c; pc++) {
+                    if(piece.cells[pr][pc] === 1) {
+                        bbGrid[r + pr][c + pc] = piece.color;
+                        blockBlastScore += 10;
+                    }
+                }
+            }
+
+            // Видаляємо використану фігуру з доку
+            dockPieces[selectedPieceIndex] = null;
+            document.getElementById(`bb-piece-${selectedPieceIndex}`).innerHTML = '';
+            selectedPieceIndex = null;
+
+            checkLines();
+            renderBoard();
+
+            // Якщо всі 3 фігури виставлені — генеруємо нові
+            if(dockPieces.every(p => p === null)) {
+                generateNewDockPieces();
+            }
+        }
+
+        function checkLines() {
+            let rowsToRemove = [];
+            let colsToRemove = [];
+
+            // Перевірка рядків
+            for(let r=0; r<8; r++) {
+                if(bbGrid[r].every(cell => cell !== 0)) rowsToRemove.push(r);
+            }
+
+            // Перевірка стовпців
+            for(let c=0; c<8; c++) {
+                let isFull = true;
+                for(let r=0; r<8; r++) {
+                    if(bbGrid[r][c] === 0) { isFull = false; break; }
+                }
+                if(isFull) colsToRemove.push(c);
+            }
+
+            // Очищення ліній
+            rowsToRemove.forEach(r => {
+                for(let c=0; c<8; c++) bbGrid[r][c] = 0;
+                blockBlastScore += 100;
+            });
+
+            colsToRemove.forEach(c => {
+                for(let r=0; r<8; r++) bbGrid[r][c] = 0;
+                blockBlastScore += 100;
+            });
+
+            if(rowsToRemove.length > 0 || colsToRemove.length > 0) {
+                playSound(500, 'sine', 0.2);
+            }
+            document.getElementById('bbScore').innerText = blockBlastScore;
+        }
+
+
+        // --- СИНТЕЗАТОР ЗВУКІВ ---
+        let audioCtx = null;
+        function playSound(freq, type, duration) {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // --- ЛОГІКА ГРИ 2: NEON DASH ---
         const dashCanvas = document.getElementById("dashCanvas");
         const dCtx = dashCanvas.getContext("2d");
-        
-        let player, obstacles, dashScore, isGameOver, dashTimer;
-        const gravity = 0.6;
+        let player, obstacles, dashScore, isGameOver, dashTimer, gameMode, isHolding = false;
 
         function initDashGame() {
             cancelAnimationFrame(dashTimer);
-            isGameOver = false;
-            dashScore = 0;
-            obstacles = [];
-            
-            player = {
-                x: 40,
-                y: 120,
-                width: 20,
-                height: 20,
-                ySpeed: 0,
-                jumpForce: -9,
-                isGrounded: false,
-                rotation: 0
-            };
-            
-            spawnObstacle();
+            isGameOver = false; dashScore = 0; obstacles = []; gameMode = "CUBE";
+            player = { x: 40, y: 120, width: 18, height: 18, ySpeed: 0, jumpForce: -7.5, isGrounded: false, rotation: 0 };
             renderDashGame();
         }
 
-        function spawnObstacle() {
-            if (isGameOver) return;
-            // Створюємо випадкові шипи
-            obstacles.push({
-                x: dashCanvas.width,
-                y: 150,
-                width: 16,
-                height: 22,
-                speed: 3.5 + (dashScore * 0.1) // Швидкість росте з рахунком
-            });
-            // Випадковий час до наступного шипа
-            setTimeout(spawnObstacle, Math.random() * 1500 + 1000);
-        }
-
-        // Керування (Пробіл або Клік по канвасу)
         window.addEventListener("keydown", (e) => {
-            if (e.key === " " || e.key === "Spacebar") {
-                e.preventDefault();
-                dashJump();
+            if(e.key === " " || e.key === "Spacebar") {
+                e.preventDefault(); isHolding = true;
+                if(gameMode === "CUBE" && player.isGrounded && !isGameOver) { player.ySpeed = player.jumpForce; player.isGrounded = false; playSound(280, 'square', 0.1); }
             }
         });
-        dashCanvas.addEventListener("mousedown", dashJump);
-
-        function dashJump() {
-            if (player.isGrounded && !isGameOver) {
-                player.ySpeed = player.jumpForce;
-                player.isGrounded = false;
-            }
-        }
+        window.addEventListener("keyup", (e) => { if(e.key === " " || e.key === "Spacebar") isHolding = false; });
+        dashCanvas.addEventListener("mousedown", () => {
+            isHolding = true;
+            if(gameMode === "CUBE" && player.isGrounded && !isGameOver) { player.ySpeed = player.jumpForce; player.isGrounded = false; playSound(280, 'square', 0.1); }
+        });
+        window.addEventListener("mouseup", () => isHolding = false);
 
         function renderDashGame() {
-            if (isGameOver) return;
-
-            // Фон та лінія підлоги
-            dCtx.fillStyle = "#0c0c14";
+            if(isGameOver) return;
+            gameMode = (dashScore >= 5 && dashScore < 12) ? "SHIP" : "CUBE";
+            dCtx.fillStyle = gameMode === "SHIP" ? "#140c1a" : "#0c0c14";
             dCtx.fillRect(0, 0, dashCanvas.width, dashCanvas.height);
             
-            dCtx.strokeStyle = varColor('--neon-cyan');
-            dCtx.lineWidth = 3;
-            dCtx.beginPath();
-            dCtx.moveTo(0, 150);
-            dCtx.lineTo(dashCanvas.width, 150);
+            dCtx.strokeStyle = gameMode === "SHIP" ? varColor('--neon-purple') : varColor('--neon-cyan');
+            dCtx.lineWidth = 3; dCtx.beginPath(); dCtx.moveTo(0, 150); dCtx.lineTo(dashCanvas.width, 150);
+            if(gameMode === "SHIP") { dCtx.moveTo(0, 20); dCtx.lineTo(dashCanvas.width, 20); }
             dCtx.stroke();
 
-            // Фізика гравця (Кубика)
-            player.ySpeed += gravity;
-            player.y += player.ySpeed;
-
-            if (player.y >= 150 - player.height) {
-                player.y = 150 - player.height;
-                player.ySpeed = 0;
-                player.isGrounded = true;
+            if (Math.random() < 0.018 && (obstacles.length === 0 || obstacles[obstacles.length-1].x < dashCanvas.width - 130)) {
+                if(gameMode === "CUBE") obstacles.push({ x: dashCanvas.width, y: 150, width: 15, height: 18, type: "SPIKE" });
+                else obstacles.push({ x: dashCanvas.width, y: Math.random() > 0.5 ? 20 : 150, width: 18, height: 30, type: Math.random() > 0.5 ? "TOP" : "BOT" });
             }
 
-            // Малюємо кубик з обертанням під час стрибка
-            if (!player.isGrounded) {
-                player.rotation += 0.08;
+            if(gameMode === "CUBE") {
+                player.ySpeed += 0.45; player.y += player.ySpeed;
+                if(player.y >= 150 - player.height) { player.y = 150 - player.height; player.ySpeed = 0; player.isGrounded = true; }
+                if(!player.isGrounded) player.rotation += 0.1; else player.rotation = Math.round(player.rotation / (Math.PI/2)) * (Math.PI/2);
             } else {
-                player.rotation = Math.round(player.rotation / (Math.PI / 2)) * (Math.PI / 2);
+                player.ySpeed += isHolding ? -0.35 : 0.35;
+                if(player.ySpeed > 3.5) player.ySpeed = 3.5; if(player.ySpeed < -3.5) player.ySpeed = -3.5;
+                player.y += player.ySpeed; player.rotation = player.ySpeed * 0.08;
+                if(player.y <= 20 || player.y >= 150 - player.height) { gameOverDash(); return; }
             }
 
-            dCtx.save();
-            dCtx.translate(player.x + player.width/2, player.y + player.height/2);
-            dCtx.rotate(player.rotation);
-            dCtx.fillStyle = varColor('--neon-green');
+            dCtx.save(); dCtx.translate(player.x + player.width/2, player.y + player.height/2); dCtx.rotate(player.rotation);
+            dCtx.fillStyle = gameMode === "CUBE" ? varColor('--neon-green') : varColor('--neon-yellow');
             dCtx.fillRect(-player.width/2, -player.height/2, player.width, player.height);
-            dCtx.strokeStyle = "#fff";
-            dCtx.lineWidth = 1;
-            dCtx.strokeRect(-player.width/2, -player.height/2, player.width, player.height);
             dCtx.restore();
 
-            // Рух шипів
             for (let i = obstacles.length - 1; i >= 0; i--) {
-                let obs = obstacles[i];
-                obs.x -= obs.speed;
-
-                // Малюємо шип (трикутник)
+                let obs = obstacles[i]; obs.x -= 3.2;
                 dCtx.fillStyle = varColor('--neon-pink');
-                dCtx.beginPath();
-                dCtx.moveTo(obs.x, obs.y);
-                dCtx.lineTo(obs.x + obs.width / 2, obs.y - obs.height);
-                dCtx.lineTo(obs.x + obs.width, obs.y);
-                dCtx.closePath();
-                dCtx.fill();
+                if(obs.type === "SPIKE") { dCtx.beginPath(); dCtx.moveTo(obs.x, obs.y); dCtx.lineTo(obs.x+obs.width/2, obs.y-obs.height); dCtx.lineTo(obs.x+obs.width, obs.y); dCtx.fill(); }
+                else dCtx.fillRect(obs.x, obs.type === "TOP" ? obs.y : obs.y - obs.height, obs.width, obs.height);
 
-                // Перевірка на зіткнення (AABB vs Triangle спрощено)
-                if (obs.x < player.x + player.width && obs.x + obs.width > player.x &&
-                    obs.y - obs.height < player.y + player.height && obs.y > player.y) {
-                        isGameOver = true;
-                        dCtx.fillStyle = "rgba(255, 42, 116, 0.9)";
-                        dCtx.font = "bold 22px Segoe UI";
-                        dCtx.textAlign = "center";
-                        dCtx.fillText("КРАШ! Спробуй знову", dashCanvas.width / 2, dashCanvas.height / 2);
-                        return;
+                if(obs.x < player.x + player.width && obs.x + obs.width > player.x) {
+                    if((obs.type === "SPIKE" || obs.type === "BOT") && player.y + player.height > 150 - obs.height) { gameOverDash(); return; }
+                    if(obs.type === "TOP" && player.y < 20 + obs.height) { gameOverDash(); return; }
                 }
-
-                // Видалення шипів поза екраном та додавання рахунку
-                if (obs.x + obs.width < 0) {
-                    obstacles.splice(i, 1);
-                    dashScore++;
-                }
+                if(obs.x + obs.width < 0) { obstacles.splice(i, 1); dashScore++; }
             }
-
-            // Виведення рахунку
-            dCtx.fillStyle = "#fff";
-            dCtx.font = "14px Segoe UI";
-            dCtx.textAlign = "left";
-            dCtx.fillText(`Рахунок: ${dashScore}`, 15, 25);
-
+            dCtx.fillStyle = "#fff"; dCtx.font = "12px sans-serif"; dCtx.fillText(`Score: ${dashScore} [Mode: ${gameMode}]`, 10, 40);
             dashTimer = requestAnimationFrame(renderDashGame);
         }
+        function gameOverDash() { isGameOver = true; playSound(140, 'sawtooth', 0.4); dCtx.fillStyle = "var(--neon-pink)"; dCtx.fillText("💥 КРАШ! Рестарт", 100, 100); }
 
-
-        // --- ЛОГІКА ГРИ 2: ЗМІЙКА ---
-        const canvas = document.getElementById("snakeCanvas");
-        const ctx = canvas.getContext("2d");
-        const boxSize = 15; 
-        let snake, food, currentDir, snakeTimer;
-
-        function initSnakeGame() {
-            clearInterval(snakeTimer);
-            snake = [{ x: 5 * boxSize, y: 5 * boxSize }];
-            generateFood();
-            currentDir = "RIGHT";
-            snakeTimer = setInterval(renderSnakeGame, 150);
-        }
-
-        function generateFood() {
-            food = {
-                x: Math.floor(Math.random() * 13) * boxSize,
-                y: Math.floor(Math.random() * 11) * boxSize
-            };
-        }
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowLeft" && currentDir !== "RIGHT") currentDir = "LEFT";
-            else if (e.key === "ArrowUp" && currentDir !== "DOWN") currentDir = "UP";
-            else if (e.key === "ArrowRight" && currentDir !== "LEFT") currentDir = "RIGHT";
-            else if (e.key === "ArrowDown" && currentDir !== "UP") currentDir = "DOWN";
+        // --- ЛОГІКА ГРИ 3: ЗМІЙКА ---
+        const sCanvas = document.getElementById("snakeCanvas");
+        const sCtx = sCanvas.getContext("2d");
+        let snake, sFood, sDir, sTimer;
+        function initSnakeGame() { clearInterval(sTimer); snake = [{x:60, y:60}]; sDir="RIGHT"; generateSnakeFood(); sTimer = setInterval(renderSnake, 160); }
+        function generateSnakeFood() { sFood = { x: Math.floor(Math.random()*15)*15, y: Math.floor(Math.random()*12)*15 }; }
+        document.addEventListener("keydown", e => {
+            if(e.key === "ArrowLeft" && sDir !== "RIGHT") sDir = "LEFT";
+            if(e.key === "ArrowUp" && sDir !== "DOWN") sDir = "UP";
+            if(e.key === "ArrowRight" && sDir !== "LEFT") sDir = "RIGHT";
+            if(e.key === "ArrowDown" && sDir !== "UP") sDir = "DOWN";
         });
-
-        function renderSnakeGame() {
-            ctx.fillStyle = "#030305";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Їжа
-            ctx.fillStyle = varColor('--neon-pink');
-            ctx.fillRect(food.x, food.y, boxSize - 1, boxSize - 1);
-
-            // Змійка
-            for (let i = 0; i < snake.length; i++) {
-                ctx.fillStyle = i === 0 ? varColor('--neon-cyan') : "#ffffff";
-                ctx.fillRect(snake[i].x, snake[i].y, boxSize - 1, boxSize - 1);
-            }
-
-            let headX = snake[0].x;
-            let headY = snake[0].y;
-
-            if (currentDir === "LEFT") headX -= boxSize;
-            if (currentDir === "UP") headY -= boxSize;
-            if (currentDir === "RIGHT") headX += boxSize;
-            if (currentDir === "DOWN") headY += boxSize;
-
-            if (headX === food.x && headY === food.y) {
-                generateFood();
-            } else {
-                snake.pop();
-            }
-
-            const newHead = { x: headX, y: headY };
-
-            if (headX < 0 || headX >= canvas.width || headY < 0 || headY >= canvas.height || checkSelfCollision(newHead, snake)) {
-                clearInterval(snakeTimer);
-                ctx.fillStyle = "rgba(255, 42, 116, 0.8)";
-                ctx.font = "bold 18px Segoe UI";
-                ctx.textAlign = "center";
-                ctx.fillText("КІНЕЦЬ ГРИ", canvas.width / 2, canvas.height / 2);
-                return;
-            }
+        function renderSnake() {
+            sCtx.fillStyle = "#030305"; sCtx.fillRect(0,0,sCanvas.width,sCanvas.height);
+            sCtx.fillStyle = varColor('--neon-pink'); sCtx.fillRect(sFood.x, sFood.y, 14, 14);
+            for(let i=0; i<snake.length; i++) { sCtx.fillStyle = i===0 ? varColor('--neon-cyan') : '#fff'; sCtx.fillRect(snake[i].x, snake[i].y, 14, 14); }
+            let hX = snake[0].x, hY = snake[0].y;
+            if(sDir==="LEFT") hX -= 15; if(sDir==="UP") hY -= 15; if(sDir==="RIGHT") hX += 15; if(sDir==="DOWN") hY += 15;
+            if(hX === sFood.x && hY === sFood.y) { generateSnakeFood(); playSound(400, 'sine', 0.05); } else snake.pop();
+            let newHead = {x:hX, y:hY};
+            if(hX<0 || hX>=sCanvas.width || hY<0 || hY>=sCanvas.height || snake.some(s=>s.x===hX && s.y===hY)) { clearInterval(sTimer); return; }
             snake.unshift(newHead);
         }
 
-        function checkSelfCollision(head, array) {
-            for (let i = 0; i < array.length; i++) {
-                if (head.x === array[i].x && head.y === array[i].y) return true;
-            }
-            return false;
-        }
-
-        function varColor(name) {
-            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-        }
-
-
-        // --- ЛОГІКА ГРИ 3: ТЕСТ РЕАКЦІЇ ---
-        let reactionStart, reactionTimeout;
-        const target = document.getElementById('reactionTarget');
-        const timeDisplay = document.getElementById('reactionTime');
-        const startBtn = document.getElementById('startReactBtn');
-
+        // --- ІНШІ МІНІ ІГРИ (РЕАКЦІЯ, КЛІКЕР, ВГАДАЙКА) ---
+        let rStart, rTimeout;
         function startReactionGame() {
-            startBtn.style.visibility = 'hidden';
-            timeDisplay.innerText = 'Приготуйся...';
-            timeDisplay.style.color = '#fff';
-            target.style.display = 'none';
-
-            const randomDelay = Math.random() * 3000 + 1500;
-
-            reactionTimeout = setTimeout(() => {
-                const maxX = 220;
-                const maxY = 120;
-                target.style.left = Math.floor(Math.random() * maxX) + 'px';
-                target.style.top = Math.floor(Math.random() * maxY) + 'px';
-                target.style.display = 'block';
-                reactionStart = Date.now();
-            }, randomDelay);
+            document.getElementById('startReactBtn').style.visibility = 'hidden';
+            document.getElementById('reactionTime').innerText = 'Приготуйся...';
+            rTimeout = setTimeout(() => {
+                let t = document.getElementById('reactionTarget');
+                t.style.left = Math.random()*200+'px'; t.style.top = Math.random()*100+'px'; t.style.display = 'block'; rStart = Date.now();
+            }, Math.random()*2500+1500);
         }
-
         function catchTarget() {
-            const duration = (Date.now() - reactionStart) / 1000;
-            timeDisplay.innerText = `🔥 Час: ${duration} сек!`;
-            timeDisplay.style.color = duration < 0.3 ? varColor('--neon-green') : varColor('--neon-cyan');
-            target.style.display = 'none';
-            startBtn.style.visibility = 'visible';
+            let diff = (Date.now() - rStart)/1000;
+            document.getElementById('reactionTime').innerText = `🔥 Час: ${diff} сек!`;
+            document.getElementById('reactionTarget').style.display = 'none';
+            document.getElementById('startReactBtn').style.visibility = 'visible';
         }
 
+        let cScore = 0;
+        function addClick() { cScore++; document.getElementById('clickScore').innerText = cScore; playSound(600, 'sine', 0.02); }
 
-        // --- ЛОГІКА ГРИ 4: КЛІКЕР ---
-        let currentClicks = 0;
-        function addClick() {
-            currentClicks++;
-            document.getElementById('clickScore').innerText = currentClicks;
-        }
-
-
-        // --- ЛОГІКА ГРИ 5: ВГАДАЙ ЧИСЛО ---
-        let mysteryNumber = Math.floor(Math.random() * 100) + 1;
-
+        let secretNum = Math.floor(Math.random()*100)+1;
         function verifyGuess() {
-            const userChoice = parseInt(document.getElementById('userGuessInput').value);
-            const hintField = document.getElementById('guessHint');
-
-            if (isNaN(userChoice) || userChoice < 1 || userChoice > 100) {
-                hintField.innerText = "Число від 1 до 100!";
-                hintField.style.color = varColor('--neon-pink');
-                return;
-            }
-
-            if (userChoice === mysteryNumber) {
-                hintField.innerText = "🎉 Перемога! Вгадано!";
-                hintField.style.color = varColor('--neon-green');
-                mysteryNumber = Math.floor(Math.random() * 100) + 1;
-            } else {
-                hintField.innerText = userChoice < mysteryNumber ? "Більше... ⬆️" : "Менше... ⬇️";
-                hintField.style.color = varColor('--neon-cyan');
-            }
+            let val = parseInt(document.getElementById('userGuessInput').value);
+            let hint = document.getElementById('guessHint');
+            if(val === secretNum) { hint.innerText = "🎉 Вгадано!"; secretNum = Math.floor(Math.random()*100)+1; }
+            else hint.innerText = val < secretNum ? "Більше... ⬆️" : "Менше... ⬇️";
         }
+
+        function varColor(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
     </script>
 </body>
 </html>
