@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> 🦖A bit about dinosaurs🦖 </title>
+<style>	body{font-family:Impact,sans-sarif;
+	text-align:center;}
+</Style>
+</head>
+<body>
+<h1> 🦖A bit about dinosaurs🦖 </h1>
+<img src="https://bpb-eu-w2.wpmucdn.com/blogs.bristol.ac.uk/dist/0/498/files/2019/03/Baryonyx-JW-17aajys.png"
+style="border-radius:20px; width:400px; hight:250">
+<p style="color:coral;font-size:30px;text-atign:left;"> Dinosaurs are very unique creatures </p>
+
+<img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FDinosaur.html&label=online&icon=tornado&color=%2359359a&message=&style=for-the-badge&tz=UTC">
+
+</body>
+</html>
+<!-- https://vilnyy-hub.github.io/it/1/Dinosaur.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<title>🦖 Jurassic Dinosaurs World 🦖</title>
+
+<style>
+body{
+    font-family: Impact, sans-serif;
+    text-align: center;
+    margin: 0;
+    background: linear-gradient(135deg, #c2f0ff, #ffe6b3);
+}
+
+/* Заголовок */
+h1{
+    font-size: 45px;
+    color: #2c3e50;
+    text-shadow: 2px 2px white;
+    margin-top: 20px;
+}
+
+/* Контейнер */
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Картки динозаврів */
+.card{
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    width: 280px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s;
+}
+
+.card:hover{
+    transform: scale(1.05);
+}
+
+.card img{
+    width: 100%;
+    border-radius: 15px;
+}
+
+/* текст */
+p{
+    color: coral;
+    font-size: 18px;
+}
+
+/* кнопка */
+button{
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background: #ffcc70;
+    cursor: pointer;
+}
+
+button:hover{
+    background: #ffb347;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🦖 Jurassic Dinosaurs World 🦖</h1>
+
+
+<div class="container">
+
+    <div class="card">
+        <img src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnKnlYlZ82aYfCdH6VUs-dMrNnbCNBiBLpkg&s
+        <p>T-Rex 🦖 — King of the dinosaurs and also he is so big that his jaw is one and a half meter long! </p>
+    </div>
+
+    <div class="card">
+        <img src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvIscElhppL16s_7EcBG_cEysaPriYF0y4PE1vkUuftg&s>
+        <p>Velociraptor 🦖 — very fast and smart killer</p>
+    </div>
+
+    <div class="card">
+        <img src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8Q6eXWZgGoLxJtyKhOxm8HQyawNqRM-k4nQ&s>
+        <p>Indominus Rex 💀 — genetic monster.He didn't exist but he was in the first jurassic world movie.If you are interested you can watch that movie. </p>
+    </div>
+
+</div>
+<button onclick="randomDino()">🎲 Show random dinosaur</button>
+
+<h2 id="randomText">Press the button to see a dinosaur!</h2>
+
+<script>
+const dinos = [
+    "🦖 T-Rex —King of the dinosaurs and also he is so big that his jaw is one and a half meter long!",
+    "🦕 Brachiosaurus — Giant herbivorous sauropod!",
+    "⚡ Velociraptor — Super fast and smart!",
+    "💀 Indominus Rex — The most dangerous!",
+    "🌋 Spinosaurus — The biggest carnivorous dinosaur on Earth!"
+];
+
+function randomDino(){
+    let random = Math.floor(Math.random() * dinos.length);
+    document.getElementById("randomText").innerText = dinos[random];
+}
+</script>
+
+</body>
+</html>
