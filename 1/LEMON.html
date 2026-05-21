@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -39,33 +40,47 @@
             to { transform: translateY(120vh) rotate(360deg); }
         }
 
-        /* --- Меню --- */
-        #menu {
-            position: relative; z-index: 10;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            height: 100vh;
+        /* --- Екрани реєстрації та перевірки --- */
+        .screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 50; background: var(--bg-pastel);
+            transition: all 0.8s ease;
         }
 
         .container {
             background: var(--card-bg);
-            padding: 50px;
-            border-radius: 50px;
+            padding: 40px 50px;
+            border-radius: 40px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.03);
             border: 1px solid rgba(0,0,0,0.02);
             text-align: center;
+            max-width: 400px; width: 85%;
         }
 
         h1 {
-            font-size: 36px; margin: 0; color: #fbc02d;
+            font-size: 32px; margin: 0 0 10px 0; color: #fbc02d;
             font-weight: 300; text-transform: lowercase;
             letter-spacing: 4px;
         }
 
-        p { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
+        h2 {
+            font-size: 22px; font-weight: 400; margin-bottom: 20px;
+            color: var(--text-main);
+        }
 
+        p { color: var(--text-muted); font-size: 14px; margin-bottom: 25px; }
+
+        input {
+            width: 80%; padding: 12px 20px; margin: 10px 0;
+            border: 2px solid #fff59d; border-radius: 20px;
+            font-size: 16px; outline: none; background: #fffde7;
+            color: var(--text-main); text-align: center;
+        }
+
+        /* --- Кнопки --- */
         .btn {
-            width: 260px; padding: 18px; margin: 10px;
+            width: 260px; padding: 18px; margin: 10px auto;
             border: none; border-radius: 30px;
             font-size: 16px; font-weight: 600;
             cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -76,8 +91,47 @@
         .b-lemon { background-color: var(--lemon-soft); }
         .b-lime { background-color: var(--lime-soft); }
         .b-peach { background-color: var(--peach-soft); }
-        
         .btn:hover { transform: translateY(-7px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+
+        /* --- Ефект Сну --- */
+        #sleep-screen {
+            display: none; background: #1a1921; color: #fffde7; z-index: 60;
+        }
+        .sleep-cloud { font-size: 80px; animation: float 3s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* --- Лимоновий ТікТок --- */
+        #tiktok-screen {
+            display: none; background: #000000; color: white; z-index: 70;
+            flex-direction: column; justify-content: space-between; padding: 20px 0;
+        }
+        .tt-header { font-size: 18px; font-weight: bold; letter-spacing: 1px; color: #fff59d; }
+        .tt-video-area {
+            height: 60%; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; position: relative;
+        }
+        .tt-disc {
+            font-size: 100px; animation: spin 4s linear infinite; margin-bottom: 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Справжній кастомний плеєр */
+        .audio-player {
+            background: rgba(255,255,255,0.2); padding: 10px 20px; 
+            border-radius: 20px; font-size: 14px; color: #fff59d;
+            backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            user-select: none;
+        }
+
+        /* --- Екран з історією / Вітанням (Без відео) --- */
+        #story-screen { display: none; z-index: 80; }
+
+        /* --- Головне Меню (після всього) --- */
+        #menu { display: none; position: relative; z-index: 10; height: 100vh; }
 
         /* --- Гра --- */
         #game-screen {
@@ -105,25 +159,98 @@
 </head>
 <body>
 
+    <!-- ЕЛЕМЕНТ АУДІО: Справжня затишна лимонова мелодія -->
+    <audio id="lemon-song" src="https://assets.mixkit.co/music/preview/mixkit-sun-and-games-591.mp3" loop></audio>
+
     <div id="bg-rain"></div>
 
-    <div id="menu">
+    <!-- КРОК 1: Створення Акаунту -->
+    <div id="auth-screen" class="screen">
         <div class="container">
             <h1>lemon hub</h1>
-            <p>soft & aesthetic games</p>
-            <button class="btn b-lemon" onclick="start('shooter')">🎯 ніжний тир</button>
-            <button class="btn b-lime" onclick="start('jumper')">🟩 м'який стрибок</button>
-            <button class="btn b-peach" onclick="start('catcher')">🧺 теплий кошик</button>
+            <h2>створи свій акаунт 🍋</h2>
+            <input type="text" id="username" placeholder="твоє ім'я" required autocomplete="off"><br>
+            <input type="number" id="userage" placeholder="скільки тобі років?" required><br>
+            <button class="btn b-lemon" onclick="saveAccount()">продовжити ✨</button>
         </div>
     </div>
 
+    <!-- КРОК 2: Перевірка на робота -->
+    <div id="robot-screen" class="screen" style="display: none;">
+        <div class="container">
+            <h2>чи ти робот? 🤖</h2>
+            <p>розв'яжи маленький приклад, щоб підтвердити:</p>
+            <h1 style="font-size: 40px; color: var(--text-main); margin-bottom: 20px;">1 + 5 = ?</h1>
+            <input type="number" id="captcha-ans" placeholder="твоя відповідь"><br>
+            <button class="btn b-lime" onclick="checkRobot()">перевірити 🟩</button>
+        </div>
+    </div>
+
+    <!-- КРОК 3: Занурення у сон -->
+    <div id="sleep-screen" class="screen">
+        <div class="text-center" style="text-align: center;">
+            <div class="sleep-cloud">☁️✨😴</div>
+            <h2 style="color: #fff59d; font-weight: 300; margin-top: 20px;">все пройшов... заходимо у сон...</h2>
+        </div>
+    </div>
+
+    <!-- КРОК 4: Лимоновий ТікТок -->
+    <div id="tiktok-screen" class="screen">
+        <div class="tt-header">🎵 lemon tok</div>
+        <div class="tt-video-area">
+            <div id="lemon-disc" class="tt-disc">🍋</div>
+            <h2 style="color: white; margin-bottom: 5px;">@lemon_hub_official</h2>
+            <p style="color: #fff59d;">зараз грає пісня: <br><b style="font-size: 18px;">it's raining lemons 🍋🌧️</b></p>
+            
+            <!-- Інтерактивний плеєр: можна ставити на паузу кліком -->
+            <div class="audio-player" onclick="toggleMusic()">
+                <span id="player-icon">⏸️</span> <span id="player-status">Зараз грає...</span>
+            </div>
+        </div>
+        <button class="btn b-peach" style="width: 200px; margin-bottom: 30px;" onclick="goToStory()">далі ➔</button>
+    </div>
+
+    <!-- КРОК 5: Вітання сайту та історія (БЕЗ ВІДЕО) -->
+    <div id="story-screen" class="screen">
+        <div class="container" style="max-width: 550px;">
+            <h1 id="welcome-title">вітаємо!</h1>
+            <p style="font-size: 16px; line-height: 1.6; margin-top: 15px;">
+                Ласкаво просимо до нашого затишного лимонного всесвіту! 🍋✨<br>
+                Тут ти можеш відпочити від буденності, насолодитися пастельною атмосферою та випробувати свої сили у милих мінііграх.
+            </p>
+            <p style="color: var(--text-main); font-weight: 600; margin-bottom: 30px;">
+                Збирай лимони, лови зірки та весело проводь час! 🧺🌸
+            </p>
+
+            <button class="btn b-lemon" onclick="showMainMenu()">до ігор! 🎮✨</button>
+        </div>
+    </div>
+
+    <!-- ГОЛОВНЕ МЕНЮ -->
+    <div id="menu">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+            <div class="container">
+                <div id="user-badge" style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;"></div>
+                <h1>lemon hub</h1>
+                <p>soft & aesthetic games</p>
+                <button class="btn b-lemon" onclick="start('shooter')">🎯 ніжний тир</button>
+                <button class="btn b-lime" onclick="start('jumper')">🟩 м'який стрибок</button>
+                <button class="btn b-peach" onclick="start('catcher')">🧺 теплий кошик</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ІГРОВИЙ ЕКРАН -->
     <div id="game-screen">
         <div id="ui">рахунок: <span id="score">0</span></div>
         <canvas id="gameCanvas"></canvas>
-        <button class="btn-exit" onclick="location.reload()">назад</button>
+        <button class="btn-exit" onclick="backToMenu()">назад</button>
     </div>
 
     <script>
+        let account = { name: "", age: 0 };
+        const song = document.getElementById('lemon-song');
+
         // Дощ із пастельних фруктів
         const rain = document.getElementById('bg-rain');
         const icons = ['🍋', '✨', '☁️', '🍦', '🌸', '🍋‍🟩'];
@@ -140,6 +267,73 @@
         }
         setInterval(createDrop, 500);
 
+        function saveAccount() {
+            const nameInput = document.getElementById('username').value.trim();
+            const ageInput = document.getElementById('userage').value;
+
+            if(nameInput === "" || ageInput === "") {
+                alert("Будь ласка, заповни всі поля! 🍋");
+                return;
+            }
+
+            account.name = nameInput;
+            account.age = ageInput;
+
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('robot-screen').style.display = 'flex';
+        }
+
+        function checkRobot() {
+            const ans = document.getElementById('captcha-ans').value;
+            if(parseInt(ans) === 6) {
+                // Вмикаємо музику після кліку
+                song.play().catch(e => console.log("Музика чекає взаємодії"));
+
+                document.getElementById('robot-screen').style.display = 'none';
+                document.getElementById('sleep-screen').style.display = 'flex';
+                
+                setTimeout(() => {
+                    document.getElementById('sleep-screen').style.display = 'none';
+                    document.getElementById('tiktok-screen').style.display = 'flex';
+                }, 2500);
+            } else {
+                alert("Ой, спробуй ще раз порахувати! 1 + 5 = ? 🌸");
+            }
+        }
+
+        // Керування плеєром ТікТоку
+        function toggleMusic() {
+            const disc = document.getElementById('lemon-disc');
+            const icon = document.getElementById('player-icon');
+            const status = document.getElementById('player-status');
+
+            if (song.paused) {
+                song.play();
+                disc.style.animationPlayState = 'running';
+                icon.innerText = '⏸️';
+                status.innerText = 'Зараз грає...';
+            } else {
+                song.pause();
+                disc.style.animationPlayState = 'paused';
+                icon.innerText = '▶️';
+                status.innerText = 'На паузі';
+            }
+        }
+
+        function goToStory() {
+            document.getElementById('tiktok-screen').style.display = 'none';
+            document.getElementById('story-screen').style.display = 'flex';
+            document.getElementById('welcome-title').innerText = `привіт, ${account.name.toLowerCase()}! 🍋`;
+        }
+
+        // Показуємо меню після вітання
+        function showMainMenu() {
+            document.getElementById('story-screen').style.display = 'none';
+            document.getElementById('menu').style.display = 'block';
+            document.getElementById('user-badge').innerText = `акаунт: ${account.name} (${account.age} р.)`;
+        }
+
+        // --- ТВОЯ ОРИГІНАЛЬНА ІГРОВА ЛОГІКА ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         let score = 0, active = false;
@@ -150,6 +344,8 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             active = true;
+            score = 0;
+            update();
             if(mode === 'shooter') runShooter();
             if(mode === 'jumper') runJumper();
             if(mode === 'catcher') runCatcher();
@@ -157,14 +353,14 @@
 
         function runShooter() {
             let tgts = [];
-            setInterval(() => { if(active) tgts.push({x: Math.random()*(canvas.width-100)+50, y: Math.random()*(canvas.height-200)+100})}, 1000);
+            let interval = setInterval(() => { if(active) tgts.push({x: Math.random()*(canvas.width-100)+50, y: Math.random()*(canvas.height-200)+100})}, 1000);
             canvas.onclick = (e) => {
                 tgts.forEach((t, i) => {
                     if(Math.hypot(e.clientX-t.x, e.clientY-t.y) < 50) { tgts.splice(i,1); score++; update(); }
                 });
             };
             function loop() {
-                if(!active) return;
+                if(!active) { clearInterval(interval); return; }
                 ctx.clearRect(0,0,canvas.width, canvas.height);
                 ctx.font = "45px Arial";
                 tgts.forEach(t => ctx.fillText("🍋", t.x-20, t.y+20));
@@ -184,7 +380,10 @@
                 if(frame++ % 110 === 0) obs.push({x: canvas.width});
                 obs.forEach((o, i) => {
                     o.x -= 6; ctx.fillText("🌸", o.x, canvas.height-150);
-                    if(o.x < 140 && o.x > 60 && y > canvas.height-200) location.reload();
+                    if(o.x < 140 && o.x > 60 && y > canvas.height-200) {
+                        alert(`Гра закінчена! Твій рахунок: ${score}`);
+                        backToMenu();
+                    }
                     if(o.x < -50) { obs.splice(i,1); score++; update(); }
                 });
                 requestAnimationFrame(loop);
@@ -195,9 +394,9 @@
         function runCatcher() {
             let bx = canvas.width/2, items = [];
             canvas.onmousemove = (e) => bx = e.clientX;
-            setInterval(() => { if(active) items.push({x: Math.random()*canvas.width, y: -50, t: Math.random()>0.3?'🍋':'✨'})}, 800);
+            let interval = setInterval(() => { if(active) items.push({x: Math.random()*canvas.width, y: -50, t: Math.random()>0.3?'🍋':'✨'})}, 800);
             function loop() {
-                if(!active) return;
+                if(!active) { clearInterval(interval); return; }
                 ctx.clearRect(0,0,canvas.width, canvas.height);
                 ctx.font = "80px Arial"; ctx.fillText("🧺", bx-40, canvas.height-50);
                 items.forEach((it, i) => {
@@ -210,6 +409,13 @@
         }
 
         function update() { document.getElementById('score').innerText = score; }
+
+        function backToMenu() {
+            active = false;
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('menu').style.display = 'block';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
     </script>
 </body>
 </html>
