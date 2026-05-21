@@ -54,13 +54,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeOut {
             from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 0; transform: translateY(-15px); }
         }
 
         #content-screen { display: none; }
@@ -122,16 +122,50 @@
         .card i { font-size: 2.5rem; color: var(--main-color); margin-bottom: 15px; }
         .card h3 { font-family: 'Oswald'; font-size: 1.4rem; text-transform: uppercase; }
 
+        /* МОДАЛЬНЕ ВІКНО З ПЛАВНИМ З'ЯВЛЕННЯМ */
         .modal {
             display: none; position: fixed; z-index: 9999;
             left: 0; top: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+            opacity: 1;
         }
         .modal-content {
             max-width: 850px; margin: 40px auto; padding: 50px;
             background: #0f0f0f; border-left: 5px solid var(--main-color); position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
         }
         .close-btn { position: absolute; right: 25px; top: 15px; font-size: 2.5rem; color: var(--main-color); cursor: pointer; }
+        
+        /* СТИЛІЗАЦІЯ ТЕКСТУ ВСЕРЕДИНІ МОДАЛКИ */
+        .modal-content h2 { font-family: 'Oswald'; color: var(--main-color); text-transform: uppercase; font-size: 2rem; margin-top: 0; }
+        .modal-content h4 { font-family: 'Oswald'; color: #fff; text-transform: uppercase; font-size: 1.2rem; margin: 20px 0 5px 0; border-bottom: 1px solid #222; padding-bottom: 5px;}
+        .modal-content p { color: var(--sub-text); font-size: 1rem; margin: 5px 0 15px 0; }
+        .modal-content ul { padding-left: 20px; color: var(--sub-text); }
+        .modal-content li { margin-bottom: 10px; }
+        .modal-content strong { color: #fff; }
+
+        /* СТИЛЬ ЛІЧИЛЬНИКА ВІЗИТІВ */
+        .visit-counter {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--sub-text);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .visit-counter i {
+            color: var(--main-color);
+        }
 
         footer { padding: 60px 20px; text-align: center; background: #080808; border-top: 1px solid #222; margin-top: 50px; }
         .social-links a { color: var(--main-color); margin: 0 15px; font-size: 1.8rem; }
@@ -184,8 +218,123 @@
 <script>
     let currentDiscipline = '';
     const contentData = {
-        skate: { title: "SKATEBOARDING", spots: `<h2>📍 Споти</h2><p>Порохова Вежа, Митна.</p>`, guides: `<h2>🛹 Школа</h2><p>Ollie, Kickflip.</p>`, events: `<h2>📅 Події</h2><p>Go Skate Day.</p>`, media: `<h2>🎥 Медіа</h2><p>Local Edits.</p>`, shops: `<h2>🛒 Шопи</h2><p>Stuff.</p>`, slang: `<h2>🗣️ Сленг</h2><p>Кікфліп.</p>` },
-        dirt: { title: "DIRT & MTB", spots: `<h2>📍 Dirt</h2><p>Погулянка.</p>`, guides: `<h2>🚵 MTB</h2><p>Manual.</p>`, events: `<h2>📅 Події</h2><p>Dirt Jam.</p>`, media: `<h2>🎥 Media</h2><p>Tutorials.</p>`, shops: `<h2>🛒 Шопи</h2><p>Bike Service.</p>`, slang: `<h2>🗣️ Сленг</h2><p>Хардтейл.</p>` }
+        skate: { 
+            title: "SKATEBOARDING", 
+            spots: `
+                <h2>📍 Скейт-споти Львова</h2>
+                <h4>Порохова Вежа (Street / Flat)</h4>
+                <p>Легендарне історичне місце з ідеальним гранітним покриттям. Найкраще місце для флету, тусовок та вечірніх сесій. Тут збирається стара та нова школа райдерів.</p>
+                <h4>Площа Митна (Street)</h4>
+                <p>Оновлений простір з довгими гранітними гранями, сходинками та хорошим мармуром. Будьте обережні з перехожими у пікові години.</p>
+                <h4>Скейт-парк на Широкій (Левандівка)</h4>
+                <p>Класичний скейт-парк з фігурами різної складності: квотерпайпи, фанбокси, рейли та мануал-пади. Підходить як для розминки, так і для вивчення нових ліній.</p>
+                <h4>Нові підземні локації та паркінги</h4>
+                <p>Рятують ком'юніті під час затяжних дощів. Локальні точки з рівною підлогою, де можна пошліфувати базові трюки взимку.</p>
+            `, 
+            guides: `
+                <h2>🛹 Скейт Школа: Від Бази до Про</h2>
+                <h4>1. Правильна стійка (Stance)</h4>
+                <p>Визначте, яка нога попереду: ліва (Regular) чи права (Goofy). Навчіться тримати баланс під час звичайного розгону (Push) і не штовхайтеся "монго" (передньою ногою).</p>
+                <h4>2. Ollie (Базовий стрибок)</h4>
+                <p>Фундамент усього скейтбордингу. Клацання хейлом (Pop), одночасне вирівнювання дошки передньою ногою (Slide) та підтягування колін до грудей.</p>
+                <h4>3. Pop Shuvit</h4>
+                <p>Трюк, при якому дошка обертається на 180 градусів під вашими ногами без перевертання в іншій площині. Секрет у правильному русі задньої стопи назад.</p>
+                <h4>4. Kickflip / Heelflip</h4>
+                <p>Перші серйозні фліпи. Потребують ідеального Ollie. Закручування дошки носком (Kick) або п'яткою (Heel) у повітрі. Ловіть дошку спочатку задньою ногою для контролю.</p>
+            `, 
+            events: `
+                <h2>📅 Скейт Події у Львові (Сезон 2026)</h2>
+                <h4>Go Skateboarding Day 2026 (21 Червня)</h4>
+                <p>Наймасштабніший щорічний збір. Програма включає масовий заїзд центральними вулицями міста, Skate Game на Пороховій вежі та Best Trick контест на Митній з призами від локальних брендів.</p>
+                <h4>Lviv Street Jam (Серпень 2026)</h4>
+                <p>Андерграундний контест по диких вуличних спотах, про які не пишуть в путівниках. Тільки чистий стріт, галас та шалений стиль.</p>
+                <h4>Осіннє закриття сезону (Жовтень 2026)</h4>
+                <p>Фінальний збір у скейт-парку: барбекю, затишна атмосфера, підведення підсумків року та перегляд локальних відео-едитів.</p>
+            `, 
+            media: `
+                <h2>🎥 Медіа та Відео-туторіали</h2>
+                <p>Шукаєте натхнення перед сесією? Дивіться повні профайли локальних райдерів та світові прем'єри:</p>
+                <ul>
+                    <li><strong>Lviv Skate Video #4 (2025):</strong> Повнометражне вуличне відео про становлення львівської сцени.</li>
+                    <li><strong>Thrasher Magazine / YouTube:</strong> Світовий стандарт скейт-медіа. Аналізуйте техніку про-райдерів на спотах США та Європи.</li>
+                    <li><strong>Braille Skateboarding:</strong> Найкраща деталізована база відеоуроків для новачків (від Ollie до найскладніших грайндів).</li>
+                </ul>
+            `, 
+            shops: `
+                <h2>🛒 Скейт Шопи & Стафф у Львові</h2>
+                <h4>Кастомні компліти та комплектуючі</h4>
+                <p>Для збору надійної дошки обирайте перевірені бренди. Звертайте увагу на ширину деки (для стріту зазвичай 8.0 - 8.25 дюймів) та жорсткість коліс (99A-101A для гладкого граніту).</p>
+                <h4>Локальний Stuff</h4>
+                <p>Підтримуйте українські скейт-шопи, де завжди можна знайти свіжі підшипники Bones, підвіски Independent або деки від вітчизняних брендів. Там же вам безкоштовно допоможуть наклеїти наждак (Griptape).</p>
+            `, 
+            slang: `
+                <h2>🗣️ Словник Скейтера</h2>
+                <p>Розмовляй з ком'юніті однією мовою:</p>
+                <ul>
+                    <li><strong>Скетчі (Sketchy):</strong> Трюк, виконаний брудно, невпевнено або з торканням землі руками.</li>
+                    <li><strong>Поп (Pop):</strong> Якість та сила клацання хвостом дошки об землю для створення стрибка.</li>
+                    <li><strong>Позур (Poser):</strong> Людина, яка носить скейтерський одяг і носить дошку під пахвою тільки заради іміджу, але не вміє кататися.</li>
+                    <li><strong>Світч (Switch):</strong> Стійка, протилежна вашій звичайній. Виконання трюків у світчі цінується вдвічі вище.</li>
+                </ul>
+            ` 
+        },
+        dirt: { 
+            title: "DIRT & MTB", 
+            spots: `
+                <h2>📍 Dirt & MTB Локації</h2>
+                <h4>Парк Погулянка (Dirt Lines)</h4>
+                <p>Культове місце для дьорту. Серія земляних трамплінів (роліки, стоули, великі прольоти) різного рівня складності. Постійно оновлюється та підтримується локальними шейперами.</p>
+                <h4>Вулька (Freeride / Downhill лінії)</h4>
+                <p>Технічні лісові спуски з корінням, контрнахилами, дропами та гепами. Чудове місце для тренування контролю байка на швидкості та проходження складних траєкторій.</p>
+                <h4>Залізна Вода & Брюховичі</h4>
+                <p>Ендуро та трейлові маршрути. Затяжні підйоми та довгі фанові спуски, які підійдуть для тривалих тренувань на витривалість та техніку.</p>
+            `, 
+            guides: `
+                <h2>🚵 Школа Керування: Dirt / MTB</h2>
+                <h4>1. Базова стійка "Атака"</h4>
+                <p>Вага тіла по центру, коліна та лікті зігнуті та розведені, п'ятки опущені вниз на педалях. Ви не сидите в сідлі — ви працюєте тілом як амортизатором.</p>
+                <h4>2. Bunny Hop (Правильний хоп)</h4>
+                <p>Служить для перестрибування перешкод (колод, каміння). Спочатку витягується переднє колесо за рахунок зміщення ваги назад, а потім підтягується задня частина байка ногами.</p>
+                <h4>3. Manual (Їзда на задньому колесі без педалювання)</h4>
+                <p>Потребує балансу ваги. Потрібно різко змістити таз назад і вниз за сідло, тримаючи руки прямими. Контроль висоти здійснюється за допомогою заднього гальма.</p>
+                <h4>4. Проходження вильотів (Jump Technique)</h4>
+                <p>На вильоті трампліна не можна розслаблятися або смикай руль вгору. Протискайте підвіску в радіус вильоту (Pump) і розпрямляйте тіло у вищій точці для стабільного польоту.</p>
+            `, 
+            events: `
+                <h2>📅 Dirt / MTB Івенти 2026</h2>
+                <h4>Lviv Dirt Jam 2026 (Липень)</h4>
+                <p>Головне свято офф-роад культури міста. Шалені амплітуди, Best Trick контест на найбільшій лінії Погулянки, крута музика та атмосфера дикого лісового фесту.</p>
+                <h4>Брюховицька Ендуро Гонка</h4>
+                <p>Змагання на час по декількох спецділянках у лісовому масиві. Перевірка на міцність як для аматорів, так і для досвідчених про-райдерів.</p>
+                <h4>Whip-Off Session</h4>
+                <p>Вечірній контест на найкращий залом байка в повітрі (Whip). Оцінюється стиль, кут розвороту рами та чистота приземлення.</p>
+            `, 
+            media: `
+                <h2>🎥 Медіа, Відео та Повні Заїзди</h2>
+                <p>Ресурси для аналізу польотів та геометрії трас:</p>
+                <ul>
+                    <li><strong>Red Bull TV:</strong> Пнямі трансляції Crankworx, Hardline та Кубку Світу з Downhill. Дивіться, як найкращі атлети планети розсувають межі можливого.</li>
+                    <li><strong>YouTube канали (GMBN, Pinkbike):</strong> Професійні розбори геометрії байків, налаштування підвіски під різну вагу та детальні гайди по трюках у повітрі.</li>
+                </ul>
+            `, 
+            shops: `
+                <h2>🛒 Скейт-Сервіси & Шопи у Львові</h2>
+                <h4>Обслуговування амортизаторів та рам</h4>
+                <p>Дьорт та МТБ потребують ідеального технічного стану. Регулярне ТО вилки, перевірка тиску в аморті та налаштування гідравлічних гальм — питання вашої безпеки.</p>
+                <h4>Запчастини (Стафф)</h4>
+                <p>Вибирайте міцні компоненти: керма з високим підйомом, короткі виноси, широкі злі покришки (Maxxis, Schwalbe) та надійні топталки з хорошими шипами для максимального зчеплення з взуттям.</p>
+            `, 
+            slang: `
+                <h2>🗣 *Мова Гірських Райдерів*</h2>
+                <p>Терміни, без яких тебе не зрозуміють на споті:</p>
+                <ul>
+                    <li><strong>Хардтейл (Hardtail):</strong> Велосипед з амортизаційною вилкою спереду, але з жорстким трикутником рами ззаду (класика для дьорту).</li>
+                    <li><strong>Двопідвіс (Full-sus):</strong> Байк з двома амортизаторами для максимального зчеплення на складних фрірайд-трасах.</li>
+                    <li><strong>Прибирання (Bail / Crash):</strong> Жорстке або невдале падіння з велосипеда під час виконання трюку.</li>
+                    <li><strong>Шейпити (Shaping):</strong> Процес копання, вирівнювання та догляду за земляними трамплінами за допомогою лопат.</li>
+                </ul>
+            `
+        }
     };
 
     function goToContent(type) {
@@ -195,16 +344,16 @@
         currentDiscipline = type;
         document.getElementById('current-title').innerText = contentData[type].title;
 
-        // Анімація виходу
         screen1.classList.remove('fade-in');
         screen1.classList.add('fade-out');
 
         setTimeout(() => {
             screen1.style.display = 'none';
             screen2.style.display = 'block';
+            screen2.classList.remove('fade-out');
             screen2.classList.add('fade-in');
             window.scrollTo(0, 0);
-        }, 400); // Час має збігатися з CSS анімацією
+        }, 400); 
     }
 
     function goBack() {
@@ -216,7 +365,6 @@
 
         setTimeout(() => {
             screen2.style.display = 'none';
-            screen2.classList.remove('fade-out');
             screen1.style.display = 'block';
             screen1.classList.remove('fade-out');
             screen1.classList.add('fade-in');
@@ -225,17 +373,45 @@
     }
 
     function openModal(cat) {
+        const modal = document.getElementById('infoModal');
         document.getElementById('modalBody').innerHTML = contentData[currentDiscipline][cat];
-        document.getElementById('infoModal').style.display = 'block';
+        
+        modal.style.display = 'block';
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+        
         document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
-        document.getElementById('infoModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
+        const modal = document.getElementById('infoModal');
+        modal.classList.remove('show');
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }, 300);
     }
 
     window.onclick = function(e) { if(e.target == document.getElementById('infoModal')) closeModal(); }
+
+    // СКРИПТ ЛІЧИЛЬНИКА ВІЗИТІВ
+    function updateVisitCounter() {
+        let visits = localStorage.getItem('site_visits');
+        if (!visits) {
+            visits = 1;
+        } else {
+            visits = parseInt(visits) + 1;
+        }
+        localStorage.setItem('site_visits', visits);
+        document.getElementById('count-value').innerText = visits;
+    }
+    
+    // Запуск підрахунку при завантаженні сторінки
+    window.onload = function() {
+        updateVisitCounter();
+    }
 </script>
 
 <footer>
@@ -244,8 +420,10 @@
         <a href="#"><i class="fab fa-telegram"></i></a>
     </div>
     <p>© 2026 RIDERS HUB | LVIV</p>
+    <div class="visit-counter">
+        <i class="fas fa-eye"></i> Переглядів сайту: <span id="count-value">0</span>
+    </div>
 </footer>
 
 </body>
 </html>
-
