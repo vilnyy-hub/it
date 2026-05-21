@@ -1,144 +1,320 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CatsVSdogs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paws & Care | Interactive Dog Tips</title>
     <style>
         body {
-            font-family: 'Lucida Console', Monaco, monospace;
-            text-align: center;
-            background-color: #FFFFCC;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
             color: #333;
-        }
-
-        .description {
-            color: gray;
-            font-size: 13px;
-            margin-bottom: 30px;
-        }
-
-        .battle-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 50px;
-            flex-wrap: wrap;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.3);
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 20px;
+            background-color: #f4f7f6;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .visitor-counter {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
             border-radius: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
+        .counter-number { font-weight: bold; color: #f1c40f; }
+        .update-timer { display: block; font-size: 0.75rem; color: #bdc3c7; margin-top: 5px; font-style: italic; }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
+        .main-container { display: flex; flex-direction: column; gap: 20px; }
+        .content-wrapper { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+        @media (max-width: 850px) { .content-wrapper { grid-template-columns: 1fr; } }
 
-        /* Робимо картинки однакового розміру */
-        .vote-img {
-            width: 300px;
-            height: 300px;
-            object-fit: cover; /* Обрізає фото, щоб воно вписалося в квадрат */
-            border-radius: 30%;
-            border: 5px solid white;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
+        .game-box { background: #fff; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px dashed #3498db; text-align: center; }
+        .game-title { font-weight: bold; margin-bottom: 10px; color: #2c3e50; display: block; }
+        .game-area { background: #f9f9f9; border-radius: 10px; padding: 10px; min-height: 150px; position: relative; overflow: hidden; }
+        .food-item { cursor: pointer; font-size: 2rem; transition: transform 0.2s; display: inline-block; margin: 5px; }
+        .food-item:hover { transform: scale(1.2); }
+        #walk-dog { font-size: 2rem; position: absolute; left: 10px; top: 50%; transition: left 0.3s; }
+        
+        .dog-image { width: 100%; max-width: 300px; border-radius: 15px; display: block; margin: 15px auto; }
+        .tip-box { border-left: 5px solid #3498db; background: #e8f4fd; padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .nutrition-box { border-left: 5px solid #27ae60; background: #eafaf1; padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 700px; position: relative; max-height: 85vh; overflow-y: auto; }
+        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
+        
+        .btn-container { text-align: center; margin-top: 20px; }
+        .btn { padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; transition: 0.3s; }
+        .btn-blue { background: #3498db; color: white; }
+        .btn-green { background: #27ae60; color: white; }
 
-        .vote-img:active {
-            transform: scale(0.95);
-        }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
 
-        .vote-button {
-            display: block;
-            margin: 15px auto;
-            padding: 10px 25px;
-            font-size: 18px;
-            font-family: inherit;
-            cursor: pointer;
-            background-color: #ffcc00;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        .vote-button:hover {
-            background-color: #ffaa00;
-        }
-
-        .counter {
-            font-size: 24px;
-            font-weight: bold;
-            color: #444;
-            margin-top: 10px;
-        }
-
-        .vs-badge {
-            font-size: 40px;
-            font-weight: bold;
-            align-self: center;
-            color: #ff4444;
-        }
+        /* Container for dynamic food item placement */
+        .food-container { min-height: 50px; margin-bottom: 10px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
 
-    <h1>Cats VS Dogs</h1>
-    <p class="description">
-        Vote "Cat🐱" if you think that cats are better than dogs and click "Dog🐶" if you think that they are better
-    </p>
+    <header>
+        <h1>Dog Care & Play</h1>
+        <p>Learn through interaction. Train, feed, and protect!</p>
+        <div class="visitor-counter">
+            <div>👥 Views this period: <span id="count" class="counter-number">0</span></div>
+            <span class="update-timer" id="timer">Reset in: --:--:--</span>
+        </div>
+    </header>
 
-    <div class="battle-container">
-        <!-- Секція Котів -->
-        <div class="card">
-            <img src="https://ih1.redbubble.net/image.2576697061.4736/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" 
-                 alt="Cat" class="vote-img" onclick="addVote('cat')">
-            <button class="vote-button" onclick="addVote('cat')">Cat 🐱</button>
-            <div class="counter" id="cat-count">0</div>
+    <div class="main-container">
+        <!-- Topic 1: Exercise -->
+        <div class="content-wrapper">
+            <div class="card">
+                <h2>Daily Exercise & Walking</h2>
+                <p>Dogs need 2-3 walks daily for mental and physical health.</p>
+                <div class="tip-box">
+                    <strong>Muzzle Training:</strong> Some dogs have allergies or scavenge food from the ground. Training your dog to wear a muzzle is a vital safety skill!
+                </div>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCA9GPKfLMAqi66o5q5SLkDyZEPpObcqaU2A&s" class="dog-image" alt="Dog walk">
+                <div class="btn-container">
+                    <button class="btn btn-blue" onclick="openModal('trainingModal')">Training Tips</button>
+                </div>
+            </div>
+
+            <div class="game-box">
+                <span class="game-title">🎮 Mini-Game: Safe Walk</span>
+                <p style="font-size: 0.85rem;">Click "Wait" if you see food on the ground!</p>
+                <div class="game-area" id="walk-game">
+                    <div id="walk-dog">🐕</div>
+                    <div id="ground-item" style="position:absolute; right: 10px; top: 55%;">🦴</div>
+                </div>
+                <div class="btn-container">
+                    <button class="btn btn-blue" style="padding: 8px 15px;" onclick="walkAction()">Walk</button>
+                    <button class="btn btn-green" style="padding: 8px 15px;" onclick="waitAction()">Wait!</button>
+                </div>
+                <p id="walk-status" style="font-size: 0.8rem; margin-top: 10px; font-weight: bold;"></p>
+            </div>
         </div>
 
-        <div class="vs-badge">VS</div>
+        <!-- Topic 2: Nutrition -->
+        <div class="content-wrapper">
+            <div class="card">
+                <h2>Healthy Nutrition & Diet</h2>
+                <p>Quality nutrition is the foundation of your dog's longevity. Careful with allergies and ground scavenging!</p>
+                <div class="nutrition-box">
+                    <strong>Important:</strong> Watch out for food allergies. Not every "healthy" treat is safe for every individual dog.
+                </div>
+                <div class="btn-container">
+                    <button class="btn btn-green" onclick="openModal('nutritionModal')">Nutrition Guide</button>
+                </div>
+            </div>
 
-        <!-- Секція Псів -->
-        <div class="card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9HyDYIkrx8l2wHgq54XErKxegMmrmcQuGnw&s" 
-                 alt="Dog" class="vote-img" onclick="addVote('dog')">
-            <button class="vote-button" onclick="addVote('dog')">Dog 🐶</button>
-            <div class="counter" id="dog-count">0</div>
+            <div class="game-box" style="border-color: #27ae60;">
+                <span class="game-title">🎮 Game: Safe Treats</span>
+                <p style="font-size: 0.85rem; margin-bottom: 10px;">Click on a treat to feed the dog. Choose wisely!</p>
+                <div class="game-area">
+                    <!-- Food items are dynamically injected here by JavaScript -->
+                    <div id="food-list" class="food-container"></div>
+                    <div id="dog-reaction" style="font-size: 2.5rem; margin-top: 10px;">🐕</div>
+                </div>
+                <p id="feed-feedback" style="font-size: 0.8rem; margin-top: 5px; font-weight: bold; min-height: 1.2rem;"></p>
+            </div>
         </div>
     </div>
 
-    <!-- Лічильник відвідувань (з твого коду) -->
-    <div style="margin-top: 50px;">
-        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1&label=refreshes&icon=hand-thumbs-up-fill&color=%230d6efd&message=&style=flat&tz=UTC" alt="hits">
+    <!-- NUTRITION MODAL -->
+    <div id="nutritionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('nutritionModal')">&times;</span>
+            <h2>Nutrition Guide & Feeding Norms</h2>
+            
+            <h3>1. Daily portion of dry food (by weight)</h3>
+            <table>
+                <tr><th>Dog weight</th><th>Portion (g)</th></tr>
+                <tr><td>Small (up to 10 kg)</td><td>80–150 g</td></tr>
+                <tr><td>Medium (10–25 kg)</td><td>160–300 g</td></tr>
+                <tr><td>Large (25–45 kg)</td><td>310–480 g</td></tr>
+                <tr><td>Giant (45+ kg)</td><td>500–650 g</td></tr>
+            </table>
+            <p><i>*For very active dogs, the portion can be increased by 20–30%.</i></p>
+
+            <h3>2. Proportions of natural nutrition</h3>
+            <ul>
+                <li><strong>60–70% — Proteins:</strong> meat (beef, turkey, chicken) and offal (heart, stomach).</li>
+                <li><strong>15–25% — Vegetables:</strong> carrots, zucchini, beets.</li>
+                <li><strong>10–15% — Porridge:</strong> buckwheat, rice, oatmeal.</li>
+            </ul>
+
+            <h3>3. Daily meat allowance</h3>
+            <p>For medium breeds (10-25 kg) — <strong>100-200g</strong>; for large breeds — <strong>200-400g</strong> of meat per day.</p>
+
+            <h3>4. Feeding frequency</h3>
+            <p>Puppies: 3-4 times. Adults: 2 times (morning/evening). Small dogs: often, but in small portions.</p>
+            
+            <div class="nutrition-box" style="background: #fff3cd; border-color: #ffc107;">
+                <strong>Safety Note:</strong> If your dog is prone to picking up food from the ground or has allergies, be sure to teach it to wear a muzzle and the "Leave it!" command.
+            </div>
+        </div>
+    </div>
+
+    <!-- TRAINING MODAL -->
+    <div id="trainingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('trainingModal')">&times;</span>
+            <h2>Training & Safety</h2>
+            <p>Train the "Leave it" command early. Use positive reinforcement to make muzzle training a happy experience!</p>
+            
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            
+            <h3>Walking Gear & Comfort</h3>
+            <ul>
+                <li>Every dog requires a <strong>different collar or harness size</strong> tailored to their body measurements for safety and comfort.</li>
+                <li>If your dog tends to pull on the leash, using a <strong>harness is much better</strong> than a traditional collar to prevent throat strain and ensure optimal control.</li>
+            </ul>
+        </div>
     </div>
 
     <script>
-        // Початкові значення лічильників
-        let catVotes = 0;
-        let dogVotes = 0;
+        // VISITOR COUNTER
+        function initCounter() {
+            const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000; 
+            let now = new Date().getTime();
+            let visitData = JSON.parse(localStorage.getItem('dogCareStats_v2'));
+            if (!visitData || (now - visitData.startTime) > TWO_DAYS_MS) {
+                visitData = { count: 850, startTime: now };
+            } else { visitData.count += 1; }
+            localStorage.setItem('dogCareStats_v2', JSON.stringify(visitData));
+            document.getElementById('count').innerText = visitData.count.toLocaleString();
+            updateTimer(visitData.startTime, TWO_DAYS_MS);
+            setInterval(() => updateTimer(visitData.startTime, TWO_DAYS_MS), 1000);
+        }
 
-        function addVote(type) {
-            if (type === 'cat') {
-                catVotes++;
-                document.getElementById('cat-count').innerText = catVotes;
-                console.log("Vote for Cat!");
-            } else if (type === 'dog') {
-                dogVotes++;
-                document.getElementById('dog-count').innerText = dogVotes;
-                console.log("Vote for Dog!");
+        function updateTimer(startTime, duration) {
+            let timeLeft = (startTime + duration) - new Date().getTime();
+            if (timeLeft <= 0) { location.reload(); return; }
+            let d = Math.floor(timeLeft / 86400000), h = Math.floor((timeLeft % 86400000) / 3600000),
+                m = Math.floor((timeLeft % 3600000) / 60000), s = Math.floor((timeLeft % 60000) / 1000);
+            document.getElementById('timer').innerText = `Reset in: ${d}d ${h}h ${m}m ${s}s`;
+        }
+        
+        initCounter();
+
+        // MODAL CONFIGURATION
+        function openModal(id) { document.getElementById(id).style.display = "block"; }
+        function closeModal(id) { document.getElementById(id).style.display = "none"; }
+        window.onclick = function(e) { if(e.target.className === 'modal') e.target.style.display = 'none'; }
+
+        // --- NEW REAL-TIME RANDOM TREATS GAME LOGIC ---
+        const ALL_FOODS = [
+            { emoji: '🥩', safe: true, msg: 'Meat is protein! 🥩' },
+            { emoji: '🥕', safe: true, msg: 'Carrots are vitamins! 🥕' },
+            { emoji: '🍗', safe: true, msg: 'Chicken is great! 🍗' },
+            { emoji: '🍎', safe: true, msg: 'Apples are crunchy and safe! 🍎' },
+            { emoji: '🐟', safe: true, msg: 'Fish delivers healthy Omega-3! 🐟' },
+            { emoji: '🍌', safe: true, msg: 'Bananas offer good potassium! 🍌' },
+            { emoji: '🥦', safe: true, msg: 'Broccoli is perfectly healthy! 🥦' },
+            { emoji: '🍫', safe: false, msg: 'TOXIC CHOCOLATE! Never feed this! 🍫' },
+            { emoji: '🍇', safe: false, msg: 'Grapes cause kidney failure! 🍇' },
+            { emoji: '🧅', safe: false, msg: 'Onions damage red blood cells! 🧅' },
+            { emoji: '🥑', safe: false, msg: 'Avocados contain dangerous persin! 🥑' },
+            { emoji: '🍬', safe: false, msg: 'Xylitol / Candy is highly poisonous! 🍬' },
+            { emoji: '🍄', safe: false, msg: 'Wild mushrooms can be fatal! 🍄' },
+            { emoji: '🌰', safe: false, msg: 'Macadamia nuts cause weakness! 🌰' }
+        ];
+
+        function generateTreatsMenu() {
+            const foodListContainer = document.getElementById('food-list');
+            foodListContainer.innerHTML = ''; // Wipe old items
+            
+            // Shuffle pool copy and extract exactly 4 items
+            const shuffled = [...ALL_FOODS].sort(() => 0.5 - Math.random());
+            const selection = shuffled.slice(0, 4);
+
+            // Create individual clickable DOM nodes
+            selection.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'food-item';
+                div.innerText = item.emoji;
+                div.onclick = () => feedDog(item.safe, item.msg);
+                foodListContainer.appendChild(div);
+            });
+        }
+
+        function feedDog(isSafe, message) {
+            const reaction = document.getElementById('dog-reaction');
+            const feedback = document.getElementById('feed-feedback');
+            
+            reaction.innerText = isSafe ? "😋" : "🤢";
+            feedback.style.color = isSafe ? "#27ae60" : "#e74c3c";
+            feedback.innerText = message;
+            
+            // Freeze clicks temporarily during standard animations
+            document.getElementById('food-list').style.pointerEvents = 'none';
+
+            setTimeout(() => { 
+                reaction.innerText = "🐕"; 
+                feedback.innerText = "";
+                document.getElementById('food-list').style.pointerEvents = 'auto';
+                generateTreatsMenu(); // Refresh layout with brand new items!
+            }, 1800);
+        }
+
+        // Run primary layout load
+        generateTreatsMenu();
+
+
+        // WALK GAME LOGIC
+        let dogPos = 10;
+        const walkStatus = document.getElementById('walk-status');
+        const groundItem = document.getElementById('ground-item');
+        const walkItems = ['🦴', '🍗', '🍄', '🍫', '👟'];
+
+        function walkAction() {
+            const dog = document.getElementById('walk-dog');
+            dogPos += 30;
+            dog.style.left = dogPos + "px";
+            if (dogPos > 200) {
+                const currentItem = groundItem.innerText;
+                if(currentItem === '🍄' || currentItem === '🍫') {
+                    walkStatus.innerText = "Bad food! 🚑";
+                    walkStatus.style.color = "red";
+                } else {
+                    walkStatus.innerText = "Good walk! 🐾";
+                    walkStatus.style.color = "green";
+                }
+                resetWalk();
             }
         }
-    </script>
 
+        function waitAction() {
+            const currentItem = groundItem.innerText;
+            walkStatus.innerText = (currentItem === '🍄' || currentItem === '🍫') ? "Safe! ⭐" : "Waited. 🦴";
+            walkStatus.style.color = (currentItem === '🍄' || currentItem === '🍫') ? "blue" : "gray";
+            resetWalk();
+        }
+
+        function resetWalk() {
+            dogPos = 10;
+            document.getElementById('walk-dog').style.left = "10px";
+            groundItem.innerText = walkItems[Math.floor(Math.random() * walkItems.length)];
+        }
+    </script>
 </body>
 </html>
