@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body { background: #050505; color: #ff0040; font-family: 'Courier New', monospace; text-align: center; padding-top: 50px; }
+        #word-display { font-size: 50px; letter-spacing: 20px; margin: 40px; }
+        .key { padding: 10px; margin: 5px; cursor: pointer; border: 1px solid #ff0040; background: #111; color: #ff0040; }
+        .key:hover { background: #ff0040; color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>CLASSIC HANGMAN</h1>
+    <div id="word-display">_ _ _ _ _ _</div>
+    <div id="lives">LIVES: 6</div>
+    <div id="keyboard"></div>
+
+    <script>
+        const words = ["PYRAMID", "GALAXY", "JUNGLE", "MYSTIC", "QUARTZ", "ZODIAC"];
+        let target = words[Math.floor(Math.random() * words.length)];
+        let guessed = Array(target.length).fill("_");
+        let lives = 6;
+
+        function update() {
+            document.getElementById('word-display').innerText = guessed.join(" ");
+            document.getElementById('lives').innerText = "LIVES: " + lives;
+        }
+
+        function guess(char) {
+            if (lives <= 0) return;
+            let found = false;
+            for (let i = 0; i < target.length; i++) {
+                if (target[i] === char) { guessed[i] = char; found = true; }
+            }
+            if (!found) lives--;
+            
+            if (!guessed.includes("_")) {
+                let check = prompt("YOU WON! Type the word to confirm your mastery:");
+                if (check && check.toUpperCase() === target) {
+                    alert("Mastery Confirmed.");
+                } else {
+                    alert("You won, but couldn't recall the word. Still counts!");
+                }
+                location.reload();
+            }
+            
+            if (lives <= 0) {
+                alert("DEFEATED. The word was: " + target);
+                location.reload();
+            }
+            update();
+        }
+
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(char => {
+            let btn = document.createElement('button');
+            btn.className = 'key'; btn.innerText = char;
+            btn.onclick = () => { guess(char); btn.disabled = true; };
+            document.getElementById('keyboard').appendChild(btn);
+        });
+
+        update();
+    </script>
+</body>
+</html>
