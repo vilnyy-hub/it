@@ -2,6 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Life</title>
     <style>
         body {
@@ -13,6 +14,7 @@
             margin: 0;
             padding: 50px 20px;
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .container {
@@ -26,10 +28,10 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: clamp(2rem, 8vw, 3rem); /* Адаптивний розмір для різних екранів */
             text-transform: uppercase;
             letter-spacing: 3px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             text-shadow: 0 0 15px rgba(186, 104, 200, 0.6);
         }
 
@@ -53,7 +55,7 @@
 
         .contacts p {
             font-size: 1.1rem;
-            margin: 10px 0;
+            margin: 12px 0;
             color: #fff;
         }
 
@@ -61,21 +63,66 @@
             color: #ba68c8;
         }
 
+        /* Стиль для посилань у контактах */
+        .contacts a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contacts a:hover {
+            color: #ba68c8;
+            text-decoration: underline;
+        }
+
+        /* Кнопка запису */
+        .cta-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            background: #ba68c8;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(186, 104, 200, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: #ab47bc;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(186, 104, 200, 0.6);
+        }
+
+        /* Адаптивне фото */
         img.main-photo {
             border-radius: 20px;
-            width: 350px;
+            width: 100%;
+            max-width: 350px;
+            height: auto;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
         img.main-photo:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
+            box-shadow: 0 10px 35px rgba(186, 104, 200, 0.3);
         }
 
         .counter {
-            margin-top: 50px;
-            opacity: 0.7;
+            margin-top: 60px;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .counter:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -92,10 +139,13 @@
             </p>
 
             <div class="contacts">
-                <p><strong>📞 Телефон:</strong> 096 396 а потім вроді 1369 але це не точно</p>
-                <p><strong>📍 Адреса:</strong> вул. Стрийська 45, Fabrik</p>
+                <p><strong>📞 Телефон:</strong> <a href="tel:+380963960139">096 396 01 39</a></p>
+                <p><strong>📍 Адреса:</strong> <a href="https://www.google.com/maps/search/?api=1&query=вул.+Стрийська+45,+Fabrik+Львів" target="_blank" rel="noopener noreferrer">вул. Стрийська 45, Fabrik</a></p>
                 <p><strong>🚪 Вхід:</strong> головний вхід, ліфт на 4 поверх</p>
             </div>
+
+            <!-- Тепер кнопка веде на твій Instagram -->
+            <a href="https://www.instagram.com/magic_lifedancestudio/" target="_blank" rel="noopener noreferrer" class="cta-button">Записатись на заняття</a>
         </div>
 
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT64koHmJwIZnw-H-bvaMUWoYyFjgs2NYXag&s" 
@@ -104,7 +154,7 @@
     </div>
 
     <div class="counter">
-        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FMagic+Life+dance+studio.html&label=%D0%9A%D1%96%D0%BB%D1%8C%D0%BA%D1%96%D1%81%D1%82%D1%8C+%D0%BE%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D1%8C+%D1%81%D1%82%D0%BE%D1%80%D1%96%D0%BD%D0%BA%D0%B8&icon=arrow-clockwise&color=%23ffffff&message=&style=plastic&tz=UTC">
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FMagic+Life+dance+studio.html&label=%D0%9A%D1%96%D0%BB%D1%8C%D0%BA%D1%96%D1%81%D1%82%D1%8C+%D0%BE%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D1%8C+%D1%81%D1%82%D0%BE%D1%80%D1%96%D0%BD%D0%BA%D0%B8&icon=arrow-clockwise&color=%23ffffff&message=&style=plastic&tz=UTC" alt="Лічильник відвідувань">
     </div>
 
 </body>
