@@ -14,6 +14,7 @@
             --glass-border: rgba(255, 255, 255, 0.1);
             --mercedes-cyan: #00a19c;
             --mclaren-orange: #ff8700;
+            --redbull-blue: #002f6c;
         }
 
         body {
@@ -83,6 +84,83 @@
             padding: 20px;
         }
 
+        /* --- Стилі для міні-гри --- */
+        .game-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .game-section h3 {
+            margin-top: 0;
+            font-style: italic;
+            text-transform: uppercase;
+            color: var(--f1-red);
+        }
+
+        #f1GameContainer {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: #222;
+        }
+
+        #f1Canvas {
+            display: block;
+            width: 100%;
+            background: #15151c;
+            cursor: pointer;
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s;
+        }
+
+        .game-btn {
+            background: var(--f1-red);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(225, 6, 0, 0.4);
+            transition: 0.2s;
+        }
+
+        .game-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .game-controls-hint {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        /* --- Картки новин --- */
         .news-card {
             display: flex;
             background: var(--card-bg);
@@ -121,6 +199,15 @@
         .news-content h2 {
             font-size: 24px;
             margin: 0 0 12px 0;
+        }
+
+        .tagline {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 5px;
+            display: block;
         }
 
         .extra-text {
@@ -170,22 +257,40 @@
 
 <header>
     <h1>F1 NEWS 2026</h1>
-    <!-- Твій оригінальний Hits Counter -->
     <img class="hits-counter-img" src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2FFormula1.html&label=hello%F0%9F%91%8B&icon=cursor&color=%238c68cd&message=&style=flat&tz=UTC" alt="Hits Counter">
     <p>Аналітика нової технічної ери</p>
 </header>
 
 <div class="container">
 
+    <!-- СЕКЦІЯ МІНІ-ГРИ -->
+    <section class="game-section">
+        <h3>Гран-прі Твого Браузера 🏎️</h3>
+        <p>Ухиляйся від уламків інших болідів та став рекорд швидкості регламенту 2026 року!</p>
+        
+        <div id="f1GameContainer">
+            <canvas id="f1Canvas" width="400" height="500"></canvas>
+            
+            <!-- Екран старту / програшу -->
+            <div id="gameMenu" class="game-ui">
+                <h2 id="menuTitle" style="margin: 0; color: white; text-transform: uppercase;">F1 СИМУЛЯТОР</h2>
+                <p id="menuScore" style="margin: 5px 0 15px 0; color: #aaa; display: none;">Рахунок: <span id="finalScoreVal" style="color: var(--f1-red); font-weight: bold;">0</span></p>
+                <button class="game-btn" id="startBtn">Старт Гонки</button>
+                <div class="game-controls-hint" id="controlsHint">Керування: Стрілки Ліворуч / Праворуч або Кліки по боках екрану</div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- Red Bull -->
     <article class="news-card" id="redbull">
         <div class="img-container">
-         <img src=" https://img.redbull.com/images/c_limit,w_1500,h_1000/f_auto,q_auto/redbullcom/2026/1/16/ecjlpj8fgcpcfpttc4vz/oracle-red-bull-racing-2026-f1-car-new-livery-detroit">
+            <img src="https://img.redbull.com/images/c_limit,w_1500,h_1000/f_auto,q_auto/redbullcom/2026/1/16/ecjlpj8fgcpcfpttc4vz/oracle-red-bull-racing-2026-f1-car-new-livery-detroit" alt="Red Bull 2026 Car">
         </div>
         <div class="news-content">
             <span class="tagline">Самодостатність та ризик</span>
-            <h2 style="color: #001a30; text-shadow: 0 0 1px #fff;">Oracle Red Bull Racing</h2>
-            <p>У 2026 році Red Bull офіційно став незалежним виробником. Нова силова установка RBPT-001 — це серце машини RB22.</p>
+            <h2 style="color: #fcd34d; text-shadow: 0 0 10px rgba(252,211,77,0.3);">Oracle Red Bull Racing</h2>
+            <p>У 2026 році Red Bull офіційно стал незалежним виробником. Нова силова установка RBPT-001 — це серце машини RB22.</p>
             <div class="extra-text" id="t1">
                 <strong>Технічний фокус:</strong> Інженери в Мілтон-Кінз зосередилися на інтеграції ERS безпосередньо в шасі для зниження центру мас. <br><br>
                 <strong>Ситуація з пілотами:</strong> Макс Ферстаппен залишається ключовою фігурою, хоча адаптація до нових характеристик крутного моменту двигуна зайняла три етапи. Команда використовує агресивну активну аеродинаміку ("X-mode"), що дозволяє нівелювати лобовий спротив на прямих, де їхній двигун поки що трохи поступається Ferrari.
@@ -197,11 +302,11 @@
     <!-- McLaren -->
     <article class="news-card" id="mclaren">
         <div class="img-container">
-            <img src=https://www.f1-ukraine.com.ua/wp-content/uploads/2026/01/mclaren-mcl40_.jpg">
+            <img src="https://www.f1-ukraine.com.ua/wp-content/uploads/2026/01/mclaren-mcl40_.jpg" alt="McLaren 2026 Car">
         </div>
         <div class="news-content">
             <span class="tagline">Аеродинамічна досконалість</span>
-            <h2 style="color: #ff8700;">McLaren Formula 1</h2>
+            <h2 style="color: var(--mclaren-orange);">McLaren Formula 1</h2>
             <p>Використовуючи клієнтські двигуни Mercedes, McLaren зосередив усі ресурси на шасі MCL40.</p>
             <div class="extra-text" id="t2">
                 <strong>Технічний фокус:</strong> Завдяки завершенню модернізації власної аеродинамічної труби, McLaren створив болід, який майже не втрачає притискну силу в "брудному повітрі". <br><br>
@@ -214,15 +319,15 @@
     <!-- Ferrari -->
     <article class="news-card" id="ferrari">
         <div class="img-container">
-            <img src=https://queen-of-motorsport.com/wp-content/uploads/2026/01/Ferrari-SF-26-Bolide-Lewis-Hamilton.webp">
+            <img src="https://queen-of-motorsport.com/wp-content/uploads/2026/01/Ferrari-SF-26-Bolide-Lewis-Hamilton.webp" alt="Ferrari 2026 Car">
         </div>
         <div class="news-content">
             <span class="tagline">Червоний ренесанс</span>
             <h2 style="color: #ff0000;">Scuderia Ferrari</h2>
             <p>Другий рік дуету Хемілтон-Леклер. Двигун Ferrari 067/1 називають "монстром електричної потужності".</p>
             <div class="extra-text" id="t3">
-                <strong>Технічний фокус:</strong> Ferrari першою змогла досягти ідеального балансу між ДВЗ та МGU-K, уникаючи "відключення" енергії на довгих прямих. <br><br>
-                <strong>Паддок-чутки:</strong> Льюїс Хемілтон привніс у команду методику роботи Mercedes, що радикально змінило підхід до збору даних у п'ятницю. Шарль Леклер демонструє неймовірну швидкість у кваліфікаціях, використовуючи спеціальний режим "overboost", який Ferrari розробила спеціально під новий регламент 2026 року.
+                <strong>Технічний фокус:</strong> Ferrari першою змогла досягти ідеального балансу між ДВЗ та MGU-K, уникаючи "відключення" енергії на довгих прямих. <br><br>
+                <strong>Паддок-чутки:</strong> Льюїс Хемілтон привніс у команду методику роботи Mercedes, що радикально змінило підхід до збору даних у п'ятницю. Шарль Леклер демонсутє неймовірну швидкість у кваліфікаціях, використовуючи спеціальний режим "overboost", який Ferrari розробила спеціально під новий регламент 2026 року.
             </div>
             <button class="read-more-btn" onclick="toggleText('t3', this)">Читати повний звіт ↓</button>
         </div>
@@ -231,11 +336,11 @@
     <!-- Mercedes -->
     <article class="news-card" id="mercedes">
         <div class="img-container">
-            <img src=https://queen-of-motorsport.com/wp-content/uploads/2026/01/Mercedes-F1-2026-Livery.webp">
+            <img src="https://queen-of-motorsport.com/wp-content/uploads/2026/01/Mercedes-F1-2026-Livery.webp" alt="Mercedes 2026 Car">
         </div>
         <div class="news-content">
             <span class="tagline">Повернення королів моторизації</span>
-            <h2 style="color: #00a19c;">Mercedes-AMG Petronas</h2>
+            <h2 style="color: var(--mercedes-cyan);">Mercedes-AMG Petronas</h2>
             <p>Джордж Расселл та Кімі Антонеллі ведуть команду в нову еру з найпотужнішою силовою установкою в пелотоні.</p>
             <div class="extra-text" id="t4">
                 <strong>Технічний фокус:</strong> Двигун Mercedes 2026 року має унікальну систему згоряння на 100% екологічному паливі, що дає їм перевагу в термічній ефективності. <br><br>
@@ -248,7 +353,7 @@
     <!-- Audi -->
     <article class="news-card" id="audi">
         <div class="img-container">
-            <img src=https://static.champion.com.ua/champion/images/doc/5/a/237726/5aa1c08ecadb23f7348b16ca66d3968e.jpeg?w=760&q=90">
+            <img src="https://static.champion.com.ua/champion/images/doc/5/a/237726/5aa1c08ecadb23f7348b16ca66d3968e.jpeg?w=760&q=90" alt="Audi 2026 Car">
         </div>
         <div class="news-content">
             <span class="tagline">Німецький прагматизм</span>
@@ -265,6 +370,207 @@
 </div>
 
 <script>
+    /* === Скрипт логіки міні-гри === */
+    const canvas = document.getElementById('f1Canvas');
+    const ctx = canvas.getContext('2d');
+    const gameMenu = document.getElementById('gameMenu');
+    const startBtn = document.getElementById('startBtn');
+    const menuTitle = document.getElementById('menuTitle');
+    const menuScore = document.getElementById('menuScore');
+    const finalScoreVal = document.getElementById('finalScoreVal');
+
+    let gameActive = false;
+    let score = 0;
+    let speed = 5;
+    let obstacles = [];
+    let lineOffset = 0;
+
+    // Параметри нашого боліда (F1 Car)
+    const player = {
+        x: 180,
+        y: 400,
+        width: 35,
+        height: 70,
+        targetX: 180,
+        speed: 8
+    };
+
+    // Обробка управління (Клавіатура)
+    let keys = {};
+    window.addEventListener('keydown', e => keys[e.code] = true);
+    window.addEventListener('keyup', e => keys[e.code] = false);
+
+    // Обробка управління (Тачі / Кліки для телефонів)
+    canvas.addEventListener('touchstart', handleControlInput);
+    canvas.addEventListener('mousedown', handleControlInput);
+
+    function handleControlInput(e) {
+        if (!gameActive) return;
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clickX = clientX - rect.left;
+        
+        // Масштабуємо координату під внутрішню ширину canvas (400px)
+        const scaledX = (clickX / rect.width) * canvas.width;
+        
+        if (scaledX < canvas.width / 2) {
+            player.targetX = Math.max(50, player.x - 60);
+        } else {
+            player.targetX = Math.min(canvas.width - 50 - player.width, player.x + 60);
+        }
+    }
+
+    startBtn.addEventListener('click', startGame);
+
+    function startGame() {
+        gameMenu.style.opacity = '0';
+        setTimeout(() => gameMenu.style.display = 'none', 300);
+        
+        // Ініціалізація стану системи
+        gameActive = true;
+        score = 0;
+        speed = 6;
+        obstacles = [];
+        player.x = 180;
+        player.targetX = 180;
+        
+        gameLoop();
+    }
+
+    function gameOver() {
+        gameActive = false;
+        menuTitle.textContent = "КРАШ! ГРА ЗАКІНЧЕНА";
+        finalScoreVal.textContent = score;
+        menuScore.style.display = 'block';
+        startBtn.textContent = "РЕСТАРТ";
+        gameMenu.style.display = 'flex';
+        setTimeout(() => gameMenu.style.opacity = '1', 10);
+    }
+
+    function spawnObstacle() {
+        if (Math.random() < 0.02 && obstacles.length < 3) {
+            // Випадкова смуга (Траса поділена умовно на 3 смуги)
+            const lanes = [60, 180, 300];
+            const laneX = lanes[Math.floor(Math.random() * lanes.length)];
+            
+            // Перевірка, щоб об'єкти не спавнились один на одному
+            if (!obstacles.some(obs => obs.y < 120 && obs.x === laneX)) {
+                obstacles.push({
+                    x: laneX,
+                    y: -60,
+                    width: 30,
+                    height: 50,
+                    color: Math.random() > 0.5 ? '#ff8700' : '#ffffff' // Уламки різних кольорів
+                });
+            }
+        }
+    }
+
+    function update() {
+        // Рух клавіатурою
+        if (keys['ArrowLeft']) player.targetX = Math.max(45, player.x - player.speed);
+        if (keys['ArrowRight']) player.targetX = Math.min(canvas.width - 45 - player.width, player.x + player.speed);
+
+        // Плавне зміщення до цільової точки (інтерполяція для тачів)
+        player.x += (player.targetX - player.x) * 0.25;
+
+        // Рух ліній розмітки траси
+        lineOffset += speed;
+        if (lineOffset >= 40) lineOffset = 0;
+
+        // Складність зростає поступово
+        speed += 0.002;
+
+        // Оновлення перешкод
+        spawnObstacle();
+
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+            obstacles[i].y += speed;
+
+            // Перевірка колізій (AABB box)
+            if (player.x < obstacles[i].x + obstacles[i].width &&
+                player.x + player.width > obstacles[i].x &&
+                player.y < obstacles[i].y + obstacles[i].height &&
+                player.y + player.height > obstacles[i].y) {
+                gameOver();
+                return;
+            }
+
+            // Видалення об'єктів поза екраном
+            if (obstacles[i].y > canvas.height) {
+                obstacles.splice(i, 1);
+                score += 10;
+            }
+        }
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 1. Малюємо асфальт та поребрики (F1 Керби)
+        ctx.fillStyle = '#292930'; // Траса
+        ctx.fillRect(40, 0, canvas.width - 80, canvas.height);
+
+        // Червоно-білі бордюри з боків
+        let curbY = (lineOffset * 1.5) % 60;
+        for (let y = -60; y < canvas.height; y += 30) {
+            ctx.fillStyle = (Math.floor((y - curbY) / 30) % 2 === 0) ? '#e10600' : '#ffffff';
+            ctx.fillRect(30, y + curbY, 10, 30);
+            ctx.fillRect(canvas.width - 40, y + curbY, 10, 30);
+        }
+
+        // Центральна пунктирна розмітка
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        for (let y = -40; y < canvas.height; y += 40) {
+            ctx.fillRect(130, y + lineOffset, 4, 20);
+            ctx.fillRect(265, y + lineOffset, 4, 20);
+        }
+
+        // 2. Малюємо наш болід (спрощений F1 силует)
+        ctx.fillStyle = '#e10600'; // Основний колір (червона ракета)
+        ctx.fillRect(player.x, player.y + 15, player.width, player.height - 25); // Кокпіт
+        
+        ctx.fillStyle = '#111'; // Колеса
+        ctx.fillRect(player.x - 8, player.y + 5, 8, 14); // Переднє ліве
+        ctx.fillRect(player.x + player.width, player.y + 5, 8, 14); // Переднє праве
+        ctx.fillRect(player.x - 10, player.y + player.height - 22, 10, 18); // Заднє ліве
+        ctx.fillRect(player.x + player.width, player.y + player.height - 22, 10, 18); // Заднє праве
+
+        ctx.fillStyle = '#000'; // Антикрила та елементи
+        ctx.fillRect(player.x - 5, player.y, player.width + 10, 5); // Переднє крило
+        ctx.fillRect(player.x - 8, player.y + player.height - 5, player.width + 16, 6); // Заднє крило
+        ctx.fillStyle = '#ffffff'; 
+        ctx.fillRect(player.x + player.width/2 - 3, player.y + 25, 6, 12); // Шлем пілота
+
+        // 3. Малюємо перешкоди (Конуси/уламки)
+        obstacles.forEach(obs => {
+            ctx.fillStyle = obs.color;
+            ctx.beginPath();
+            ctx.moveTo(obs.x + obs.width / 2, obs.y);
+            ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
+            ctx.lineTo(obs.x, obs.y + obs.height);
+            ctx.closePath();
+            ctx.fill();
+        });
+
+        // 4. Текст інтерфейсу під час заїзду
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 16px Inter, sans-serif';
+        ctx.fillText(`РАХУНОК: ${score}`, 55, 30);
+        
+        ctx.fillStyle = '#fcd34d';
+        ctx.fillText(`ШВИДКІСТЬ: ${Math.floor(speed * 35)} КМ/Г`, 210, 30);
+    }
+
+    function gameLoop() {
+        if (!gameActive) return;
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+    }
+
+
+    /* === Скрипт логіки новин (Твій оригінальний) === */
     function toggleText(id, btn) {
         const text = document.getElementById(id);
         const card = btn.closest('.news-card');
@@ -272,24 +578,23 @@
         if (text.style.display === "block") {
             text.style.display = "none";
             btn.textContent = "Читати повний звіт ↓";
-            btn.style.background = "var(--f1-red)";
+            btn.style.background = ""; 
+            btn.style.color = "";
+            btn.style.borderColor = "";
         } else {
             text.style.display = "block";
             btn.textContent = "Згорнути ↑";
             btn.style.background = "#333";
+            btn.style.color = "#fff";
+            btn.style.borderColor = "#333";
             
-            // Плавний скрол до картки
             setTimeout(() => {
                 card.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
         }
     }
 
-    // Плавна поява карток при скролі
-    const observerOptions = {
-        threshold: 0.1
-    };
-
+    const observerOptions = { threshold: 0.1 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
