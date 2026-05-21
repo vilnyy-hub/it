@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plast Interactive</title>
+    <style>
+        /* Основний темний стиль */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            color: #FFD700; /* Жовтий */
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Контейнери екранів */
+        .screen {
+            display: none;
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Галерея */
+        .main-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .photo-box {
+            width: 300px;
+            cursor: pointer;
+            border: 4px solid #2E8B57; /* Зелений */
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .photo-box:hover {
+            transform: scale(1.03);
+            border-color: #FFD700;
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Кнопки */
+        .btn {
+            background-color: #2E8B57;
+            color: white;
+            padding: 15px 35px;
+            border: 2px solid #FFD700;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            transition: 0.3s;
+            min-width: 280px;
+        }
+
+        .btn:hover {
+            background-color: #FFD700;
+            color: black;
+        }
+
+        .btn-asymmetric {
+            background-color: #FFD700;
+            color: #000;
+            clip-path: polygon(5% 0%, 100% 15%, 95% 100%, 0% 85%);
+            padding: 25px 45px;
+            border: none;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-asymmetric:hover {
+            clip-path: polygon(0% 15%, 95% 0%, 100% 85%, 5% 100%);
+            background-color: #2E8B57;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: #444;
+            border-color: #888;
+            min-width: 200px;
+        }
+        .btn-secondary:hover {
+            background-color: #666;
+            color: white;
+        }
+
+        /* Список країн */
+        .countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #111;
+            border-radius: 15px;
+            border: 1px solid #2E8B57;
+        }
+
+        .country-item {
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background: #1a1a1a;
+        }
+
+        /* Факти та форми */
+        .facts-container, .form-container {
+            text-align: left;
+            background: #111;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px dashed #2E8B57;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .fact-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .fact-item b {
+            color: #FFD700;
+        }
+
+        .input-password {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            margin: 15px 0;
+            border: 2px solid #2E8B57;
+            background-color: #222;
+            color: #fff;
+            border-radius: 5px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .input-password:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .hint-text {
+            color: #FFD700;
+            font-style: italic;
+            margin-top: 10px;
+            text-align: center;
+            min-height: 24px;
+        }
+
+        /* ІГРОВА ЗОНА АРКАДИ */
+        .game-area {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            background-color: #111;
+            margin: 20px auto;
+            border: 3px solid #2E8B57;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .falling-item {
+            position: absolute;
+            font-size: 40px;
+            cursor: pointer;
+            user-select: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { top: -50px; }
+            100% { top: 450px; }
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ЕКРАН 1: ГОЛОВНИЙ -->
+    <div id="home" class="screen active">
+        <h1>Вітаємо у Пластовій Домівці</h1>
+        <div class="main-gallery">
+            <div class="photo-box" onclick="alert('Це пластуни-новаки мають табір у Німеччині')">
+                <img src="https://cdn.informator.ua/@prod/_1920/media/kl/2025/12/01/692d8a18c7a003.32111091.jpg" alt="Табір у Німеччині">
+            </div>
+            <div class="photo-box" onclick="alert('Це табір Юнаків у Америці')">
+                <img src="https://www.plast.org.ua/wp-content/uploads/2023/09/AnyConv.com__ART05812-edited.webp" alt="Табір в Америці">
+            </div>
+            <div class="photo-box" onclick="alert('Це табір старшопластунського куреня Лісові чорти під назвою \'ГЛУЗД\'')">
+                <img src="https://gluzd.org.ua/wp-content/uploads/2019/09/1080.jpg" alt="Табір ГЛУЗД">
+            </div>
+        </div>
+        <button class="btn" onclick="nav('branching')">Вже знаю про <br> Пласт</button>
+        <button class="btn" onclick="nav('facts')">Ще не в темі</button>
+        <br>
+        <button class="btn btn-asymmetric" onclick="nav('game-auth')" style="margin-top: 20px;">Мінігра 🎮</button>
+    </div>
+
+    <!-- ЕКРАН АУТЕНТИФІКАЦІЇ ДЛЯ МІНІГРИ -->
+    <div id="game-auth" class="screen">
+        <h2>Вхід до мінігри</h2>
+        <p>Щоб отримати доступ, введіть пароль (формат: ДД.ММ.РРРР):</p>
+        
+        <div class="form-container">
+            <input type="text" id="password-field" class="input-password" placeholder="Введіть пароль...">
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <button class="btn" style="min-width: 200px;" onclick="checkPassword()">Увійти</button>
+                <button class="btn btn-secondary" onclick="showHint()">Підказка 💡</button>
+            </div>
+            <p id="hint-display" class="hint-text"></p>
+        </div>
+        
+        <button class="btn" onclick="goHome()" style="margin-top:20px; opacity: 0.6;">Назад на головну</button>
+    </div>
+
+    <!-- ЕКРАН МІНІГРИ: ЗБЕРИ РЮКЗАК -->
+    <div id="minigame" class="screen">
+        <h2>Збери рюкзак у табір! 🎒</h2>
+        <p>Клікай лише на <b>корисні речі</b> (намет, компас, спальник, ліхтар)! Уникай зайвого мотлоху.</p>
+        
+        <div class="game-stats">
+            <div>Бали: <span id="score-val">0</span></div>
+            <div>Час: <span id="time-val">15</span>с</div>
+        </div>
+
+        <div class="game-area" id="game-container">
+            <!-- Тут з'являтимуться предмети -->
+        </div>
+
+        <button id="start-game-btn" class="btn" onclick="startGame()">Почати гру</button>
+        <button class="btn btn-secondary" id="exit-game-btn" onclick="goHome()">Вийти</button>
+    </div>
+
+    <!-- ЕКРАН 2: ЦІКАВІ ФАКТИ -->
+    <div id="facts" class="screen">
+        <h2>Що таке Пласт?</h2>
+        <div class="facts-container">
+            <div class="fact-item"><b>Велика Гра:</b> Пласт — це не просто організація, це спосіб життя.</div>
+            <div class="fact-item"><b>Світова мережа:</b> Пластуни є на багатьох континентах!</div>
+            <div class="fact-item"><b>СКОБ:</b> Сильно, Красно, Обережно, Бистро!</div>
+        </div>
+        <button class="btn" onclick="nav('home')" style="margin-top:20px;">Назад на головну</button>
+    </div>
+
+    <!-- ЕКРАН 3: РОЗГАЛУЖЕННЯ -->
+    <div id="branching" class="screen">
+        <h2>Ти вже досвідчений пластун!</h2>
+        <button class="btn btn-asymmetric" onclick="nav('countries-list')">Де ти хочеш приєднатися до пласту?</button>
+        <br>
+        <button class="btn" onclick="nav('home')" style="margin-top: 50px; opacity: 0.6;">Назад</button>
+    </div>
+
+    <!-- ЕКРАН 4: ПЕРЕЛІК КРАЇН -->
+    <div id="countries-list" class="screen">
+        <h2>Пласт існує у цих країнах:</h2>
+        <div class="countries-grid">
+            <div class="country-item">🇺🇦 Україна</div>
+            <div class="country-item">🇺🇸 США</div>
+            <div class="country-item">🇨🇦 Канада</div>
+            <div class="country-item">🇦🇺 Австралія</div>
+            <div class="country-item">🇩🇪 Німеччина</div>
+            <div class="country-item">🇵🇱 Польща</div>
+            <div class="country-item">🇬🇧 Велика Британія</div>
+            <div class="country-item">🇦🇷 Аргентина</div>
+            <div class="country-item">🇸🇰 Словаччина</div>
+            <div class="country-item">🇦🇹 Австрія</div>
+        </div>
+        <p>Обери країну та рухайся далі!</p>
+        <button class="btn" onclick="nav('final-choice')">Продовжити</button>
+        <br>
+        <button class="btn" onclick="nav('branching')" style="margin-top: 20px; opacity: 0.6;">Назад</button>
+    </div>
+
+    <!-- ЕКРАН 5: ОСТАННІЙ ВИБІР -->
+    <div id="final-choice" class="screen">
+        <h2>Оберіть наступний крок:</h2>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+            <button class="btn" onclick="alert('Відкриваємо каталог одностроїв...')">Мені треба купити однострій</button>
+            <button class="btn" onclick="alert('Шукаємо вільні гуртки у вашому регіоні...')">Хочу приєднатись до гуртка</button>
+            <button class="btn" onclick="alert('Ви максимально підготовлені! Зв’язуємось з проводом.')">І те, і інше</button>
+        </div>
+        <button class="btn" onclick="nav('countries-list')" style="margin-top: 30px;">Назад до країн</button>
+    </div>
+
+    <script>
+        // Навігація між екранами
+        function nav(screenId) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(s => s.classList.remove('active'));
+            
+            const target = document.getElementById(screenId);
+            if(target) {
+                target.classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function goHome() {
+            clearInterval(spawnInterval);
+            clearInterval(countdownInterval);
+            document.getElementById('password-field').value = '';
+            document.getElementById('hint-display').innerText = '';
+            document.getElementById('game-container').innerHTML = '';
+            document.getElementById('start-game-btn').style.display = 'inline-block';
+            nav('home');
+        }
+
+        // Логіка пароля та підказки
+        function showHint() {
+            document.getElementById('hint-display').innerText = "Підказка: рік першої пластової присяги";
+        }
+
+        function checkPassword() {
+            const enteredPass = document.getElementById('password-field').value.trim();
+            const correctPass = "21.04.1912";
+
+            if (enteredPass === correctPass) {
+                alert("Пароль правильний! Готуйся збирати намет!");
+                nav('minigame');
+            } else {
+                alert("Неправильний пароль! Спробуй ще раз.");
+            }
+        }
+
+        // АРКАДНА МІНІГРА: "ЗБЕРИ РЮКЗАК"
+        const goodItems = [
+            { icon: '⛺', type: 'good' }, // Намет
+            { icon: '🧭', type: 'good' }, // Компас
+            { icon: '🔦', type: 'good' }, // Ліхтарик
+            { icon: '🎒', type: 'good' }, // Рюкзак
+            { icon: '🪵', type: 'good' }  // Дрова
+        ];
+
+        const badItems = [
+            { icon: '🎮', type: 'bad' },  // Приставка
+            { icon: '📺', type: 'bad' },  // Телевізор
+            { icon: '🍕', type: 'bad' },  // Піца
+            { icon: '👠', type: 'bad' },  // Підбори
+            { icon: '🛋️', type: 'bad' }   // Диван
+        ];
+
+        let score = 0;
+        let timeLeft = 15;
+        let spawnInterval;
+        let countdownInterval;
+        let isPlaying = false;
+
+        function startGame() {
+            if (isPlaying) return;
+            isPlaying = true;
+            score = 0;
+            timeLeft = 15;
+            
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('time-val').innerText = timeLeft;
+            document.getElementById('start-game-btn').style.display = 'none';
+            document.getElementById('game-container').innerHTML = '';
+
+            // Таймер зворотного відліку
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time-val').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            // Інтервал появи предметів
+            spawnInterval = setInterval(spawnItem, 600);
+        }
+
+        function spawnItem() {
+            const container = document.getElementById('game-container');
+            const itemElement = document.createElement('div');
+            itemElement.className = 'falling-item';
+            
+            // Випадково обираємо, хороший предмет чи поганий
+            const isGood = Math.random() > 0.4;
+            const itemData = isGood 
+                ? goodItems[Math.floor(Math.random() * goodItems.length)]
+                : badItems[Math.floor(Math.random() * badItems.length)];
+
+            itemElement.innerText = itemData.icon;
+            
+            // Випадкова позиція по горизонталі та швидкість падіння
+            const randomX = Math.floor(Math.random() * (container.clientWidth - 50));
+            const duration = 2 + Math.random() * 2; // від 2 до 4 секунд
+            
+            itemElement.style.left = randomX + 'px';
+            itemElement.style.animationDuration = duration + 's';
+
+            // Подія при кліку на предмет
+            itemElement.onclick = () => {
+                if (!isPlaying) return;
+                if (itemData.type === 'good') {
+                    score += 10;
+                    itemElement.style.transform = 'scale(1.5)';
+                    itemElement.style.opacity = '0';
+                    setTimeout(() => itemElement.remove(), 200);
+                } else {
+                    score -= 10;
+                    itemElement.style.background = 'red';
+                    itemElement.style.borderRadius = '50%';
+                    setTimeout(() => itemElement.remove(), 200);
+                }
+                document.getElementById('score-val').innerText = score;
+            };
+
+            container.appendChild(itemElement);
+
+            // Видаляємо елемент після завершення анімації, щоб не забивати пам'ять
+            setTimeout(() => {
+                itemElement.remove();
+            }, duration * 1000);
+        }
+
+        function endGame() {
+            isPlaying = false;
+            clearInterval(spawnInterval);
+            clearInterval(countdownInterval);
+            
+            alert(`Час вийшов! Твій фінальний рахунок: ${score} балів! 🏕️`);
+            document.getElementById('start-game-btn').style.display = 'inline-block';
+            document.getElementById('start-game-btn').innerText = 'Грати знову';
+        }
+    </script>
+</body>
+</html>
