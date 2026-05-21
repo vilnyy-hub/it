@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гра: Вгадай код</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .game-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+        }
+        h1 { color: #333; margin-bottom: 10px; }
+        p { color: #666; font-size: 14px; }
+        input {
+            width: 60%;
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+        }
+        .btn-group { margin-bottom: 15px; }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin: 5px;
+        }
+        .btn-check { background-color: #28a745; }
+        .btn-check:hover { background-color: #218838; }
+        .btn-reset { background-color: #007bff; }
+        .btn-reset:hover { background-color: #0056b3; }
+        .error { color: #dc3545; font-weight: bold; margin-bottom: 10px; min-height: 20px; }
+        .history { margin-top: 20px; max-height: 250px; overflow-y: auto; text-align: left; border-top: 1px solid #eee; padding-top: 10px; }
+        .history-item { padding: 5px 0; border-bottom: 1px solid #f9f9f9; font-size: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1>Вгадай код</h1>
+    <p>Загадано 4-цифрове число. Цифри не повторюються, перша — не 0.</p>
+    
+    <input type="text" id="guessInput" maxlength="4" placeholder="1234" autocomplete="off">
+    <br>
+    <div class="btn-group">
+        <button class="btn-check" onclick="checkGuess()">Перевірити</button>
+        <button class="btn-reset" onclick="initGame()">Нова гра</button>
+    </div>
+    
+    <div id="error" class="error"></div>
+    <div id="history" class="history"></div>
+</div>
+
+<script>
+    let secretCode = "";
+
+    // Надійна генерація унікального 4-значного числа
+    function generateSecretCode() {
+        let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        let code = "";
+        
+        // Перша цифра від 1 до 9
+        let firstIndex = Math.floor(Math.random() * 9) + 1; 
+        code += digits[firstIndex];
+        digits.splice(firstIndex, 1); // Видаляємо її, щоб не повторювалась
+        
+        // Перемішуємо залишок цифр (включаючи 0)
+        for (let i = digits.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [digits[i], digits[j]] = [digits[j], digits[i]];
+        }
+        
+        // Додаємо перші 3 цифри з перемішаного масиву
+        code += digits[0] + digits[1] + digits[2];
+        return code;
+    }
+
+    // Перевірка введення гравця
+    function isValidGuess(guess) {
+        if (guess.length !== 4) return "Число має бути чотирицифровим!";
+        if (!/^\d+$/.test(guess)) return "Вводити можна тільки цифри!";
+        if (guess[0] === '0') return "Число не може починатися з нуля!"; 
+        
+        let uniqueDigits = new Set(guess);
+        if (uniqueDigits.size !== 4) return "Цифри не повинні повторюватися!";
+        
+        return true;
+    }
+
+    function checkGuess() {
+        const inputElement = document.getElementById("guessInput");
+        const errorElement = document.getElementById("error");
+        const historyElement = document.getElementById("history");
+        const guess = inputElement.value.trim();
+        
+        errorElement.innerText = ""; 
+
+        let validationResult = isValidGuess(guess);
+        if (validationResult !== true) {
+            errorElement.innerText = validationResult;
+            return;
+        }
+
+        let totalGuessed = 0; 
+        let correctPosition = 0; 
+
+        for (let i = 0; i < 4; i++) {
+            if (secretCode.includes(guess[i])) {
+                totalGuessed++; 
+                if (guess[i] === secretCode[i]) {
+                    correctPosition++; 
+                }
+            }
+        }
+
+        let resultText = "";
+        if (correctPosition === 4) {
+            resultText = `🎉 <b>ВГАДАНО! Код: ${secretCode}</b>`;
+            inputElement.disabled = true;
+        } else {
+            resultText = `▶ <b>${guess}</b> — Відгадано цифр: ${totalGuessed} | З них на місцях: ${correctPosition}`;
+        }
+
+        let item = document.createElement("div");
+        item.className = "history-item";
+        item.innerHTML = resultText;
+        historyElement.insertBefore(item, historyElement.firstChild);
+
+        inputElement.value = "";
+        inputElement.focus();
+    }
+
+    function initGame() {
+        secretCode = generateSecretCode();
+        
+        document.getElementById("guessInput").disabled = false;
+        document.getElementById("guessInput").value = "";
+        document.getElementById("error").innerText = "";
+        document.getElementById("history").innerHTML = "";
+        document.getElementById("guessInput").focus();
+        
+        console.log("Загадане число:", secretCode);
+    }
+
+    window.onload = initGame;
+
+    document.getElementById("guessInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            checkGuess();
+        }
+    });
+</script>
+
+</body>
+</html>
