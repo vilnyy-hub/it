@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>pink💕✧ Game</title>
+    <style>
+        body { background: #fdf2f5; font-family: 'Segoe UI', sans-serif; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 350px; margin-top: 20px; }
+        
+        #game-area { position: relative; width: 320px; height: 400px; background: #fff5f7; border: 2px solid #ffb3c6; border-radius: 15px; margin: 20px auto; overflow: hidden; cursor: none; }
+        .item { position: absolute; font-size: 25px; transition: top 0.1s linear; }
+        #basket { position: absolute; bottom: 10px; font-size: 40px; pointer-events: none; }
+        
+        #rules { font-size: 0.9rem; color: #555; margin-bottom: 10px; text-align: left; }
+        #score, #level { font-size: 1.2rem; color: #fb6f92; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>pink💕✧</h1>
+        <div id="rules">
+            <b>Правила:</b><br>
+            • Керуй кошиком 🧺 мишкою.<br>
+            • Лови 🎀 та 💕 (+1 бал).<br>
+            • Оминай 👾 — гра закінчується!<br>
+            • З кожними 5 балами швидкість зростає!
+        </div>
+        <div id="score">Бали: 0</div>
+        <div id="level">Рівень: 1</div>
+        
+        <div id="game-area">
+            <div id="basket">🧺</div>
+        </div>
+        <button onclick="resetGame()" style="padding: 10px 20px; background: #ff8fab; border:none; border-radius:10px; color:white; cursor:pointer; font-weight:bold;">Почати гру</button>
+    </div>
+
+    <script>
+        const area = document.getElementById('game-area');
+        const basket = document.getElementById('basket');
+        const scoreDisplay = document.getElementById('score');
+        const levelDisplay = document.getElementById('level');
+        
+        let score = 0;
+        let gameActive = false;
+        let gameSpeed = 5;
+        let spawnRate = 800;
+
+        area.addEventListener('mousemove', (e) => {
+            const rect = area.getBoundingClientRect();
+            let x = e.clientX - rect.left - 20;
+            if (x < 0) x = 0;
+            if (x > 280) x = 280;
+            basket.style.left = x + 'px';
+        });
+
+        function createItem() {
+            if (!gameActive) return;
+
+            const item = document.createElement('div');
+            const type = Math.random();
+            item.className = 'item';
+            
+            if (type < 0.4) { item.innerHTML = '🎀'; item.dataset.type = 'good'; }
+            else if (type < 0.8) { item.innerHTML = '💕'; item.dataset.type = 'good'; }
+            else { item.innerHTML = '👾'; item.dataset.type = 'bad'; }
+
+            item.style.left = Math.random() * 290 + 'px';
+            item.style.top = '-30px';
+            area.appendChild(item);
+
+            let pos = -30;
+            let fall = setInterval(() => {
+                if (!gameActive) { clearInterval(fall); return; }
+                pos += gameSpeed;
+                item.style.top = pos + 'px';
+
+                if (pos > 340 && pos < 380 && Math.abs(parseInt(item.style.left) - parseInt(basket.style.left)) < 40) {
+                    if (item.dataset.type === 'good') {
+                        score++;
+                        scoreDisplay.textContent = `Бали: ${score}`;
+                        if (score % 5 === 0) {
+                            gameSpeed += 0.5;
+                            spawnRate = Math.max(300, spawnRate - 50);
+                            levelDisplay.textContent = `Рівень: ${Math.floor(score/5) + 1}`;
+                        }
+                    } else {
+                        gameOver();
+                    }
+                    item.remove();
+                    clearInterval(fall);
+                }
+
+                if (pos > 400) { item.remove(); clearInterval(fall); }
+            }, 50);
+        }
+
+        function spawnLoop() {
+            if (!gameActive) return;
+            createItem();
+            setTimeout(spawnLoop, spawnRate);
+        }
+
+        function gameOver() {
+            gameActive = false;
+            alert("О ні! 👾 Ти програв! Твій рахунок: " + score);
+        }
+
+        function resetGame() {
+            score = 0;
+            gameSpeed = 5;
+            spawnRate = 800;
+            scoreDisplay.textContent = `Бали: 0`;
+            levelDisplay.textContent = `Рівень: 1`;
+            gameActive = true;
+            document.querySelectorAll('.item').forEach(i => i.remove());
+            spawnLoop();
+        }
+    </script>
+</body>
+</html>
