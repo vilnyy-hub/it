@@ -2,137 +2,290 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<title>РІЗНОКОЛЬОРОВИЙ ТУКАН</title>
+<title>SIGMA ULTRA GAMES</title>
 
 <style>
-/* ГОЛОВНИЙ РІЗНОКОЛЬОРОВИЙ ФОН */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    text-align: center;
-    min-height: 100vh;
-    /* Анімований градієнт */
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 10s ease infinite;
-    color: white;
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(45deg,#111,#222);
+    color:white;
+    text-align:center;
+    overflow:hidden;
 }
 
-@keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+h1{
+    color:lime;
+    text-shadow:0 0 20px lime;
+    margin-top:20px;
 }
 
-/* ПРОЗОРА ПАНЕЛЬ ДЛЯ КОНТЕНТУ */
-.main-box {
-    background: rgba(0, 0, 0, 0.4); /* Напівпрозорий чорний, щоб бачити фон */
-    backdrop-filter: blur(5px);      /* Ефект розмиття фону під текстом */
-    margin: 20px auto;
-    padding: 30px;
-    width: 90%;
-    max-width: 600px;
-    border-radius: 30px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+button{
+    padding:12px 20px;
+    margin:10px;
+    font-size:18px;
+    cursor:pointer;
+    border:none;
+    border-radius:10px;
 }
 
-/* СТИЛЬ ГРИ */
-#game-zone {
-    background: rgba(255, 255, 255, 0.1);
-    height: 200px;
-    border-radius: 20px;
-    position: relative;
-    margin: 20px 0;
-    overflow: hidden;
-    border: 2px dashed white;
+#games{
+    display:none;
 }
 
-#bird {
-    position: absolute;
-    font-size: 50px;
-    cursor: pointer;
-    user-select: none;
-    transition: 0.1s;
+.gameBtn{
+    background:#333;
+    color:white;
+    width:250px;
 }
 
-/* КНОПКИ */
-button {
-    background: white;
-    color: #e73c7e;
-    border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: 0.3s;
-    margin: 10px;
+.gameBtn:hover{
+    background:lime;
+    color:black;
 }
 
-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px white;
+#gameArea{
+    width:90%;
+    height:400px;
+    margin:auto;
+    border:3px solid lime;
+    background:black;
+    position:relative;
+    overflow:hidden;
+    border-radius:20px;
 }
 
-img {
-    width: 200px;
-    border-radius: 20px;
-    margin-top: 20px;
+.target{
+    position:absolute;
+    font-size:50px;
+    cursor:pointer;
+    user-select:none;
+}
+
+#scoreBoard{
+    font-size:25px;
+    margin:10px;
+    color:yellow;
+}
+
+.sigmaMode{
+    animation:flash 1s infinite alternate;
+}
+
+@keyframes flash{
+    from{background:#111;}
+    to{background:#003300;}
 }
 </style>
 </head>
+
 <body>
 
-    <div class="main-box">
-        <h1>TUKAN PRO NAVI 🦜</h1>
-        
-        <div id="game-zone">
-            <div id="bird" onclick="hit()">🦜</div>
-            <p style="margin-top: 10px;">Рахунок: <span id="score-val">0</span></p>
-        </div>
+<h1>⚡ SIGMA HUB ⚡</h1>
 
-        <button onclick="startGame()">ПОЧАТИ ГРУ</button>
-        
-        <p>це сайт початкового програміста</p>
-        <p style="color: yellow; font-size: 20px;">hello🐔🦭🐧🐥</p>
-        
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqKDCbGOYxTXLmgjqL3Vvp2PAqZpyjZCeFow&s">
-        <br>
-        <button onclick="alert('Ти легенда!')">Натисни мене</button>
-    </div>
+<button onclick="sigmaMode()">SIGMA</button>
+
+<div id="scoreBoard">
+    SCORE: <span id="score">0</span>
+</div>
+
+<div id="games">
+
+    <button class="gameBtn" onclick="clickGame()">
+        🎯 Click Hunter
+    </button>
+
+    <button class="gameBtn" onclick="alienGame()">
+        👾 Alien Attack
+    </button>
+
+    <button class="gameBtn" onclick="bombGame()">
+        💣 Bomb Dodge
+    </button>
+
+</div>
+
+<div id="gameArea"></div>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
 
 <script>
+
 let score = 0;
-let gameActive = false;
 
-function startGame() {
-    gameActive = true;
-    score = 0;
-    document.getElementById('score-val').innerText = score;
-    moveBird();
-    setInterval(() => {
-        if(gameActive) moveBird();
-    }, 1000);
+function updateScore(){
+    document.getElementById("score").innerText = score;
 }
 
-function moveBird() {
-    const zone = document.getElementById('game-zone');
-    const bird = document.getElementById('bird');
-    
-    const x = Math.random() * (zone.clientWidth - 60);
-    const y = Math.random() * (zone.clientHeight - 80);
-    
-    bird.style.left = x + 'px';
-    bird.style.top = y + 'px';
+function sigmaMode(){
+
+    let code = prompt("Введи SIGMA CODE:");
+
+    if(code === "2202"){
+
+        alert("⚡ SIGMA MODE ACTIVATED ⚡");
+
+        document.body.classList.add("sigmaMode");
+
+        document.getElementById("games").style.display = "block";
+
+        document.getElementById("music").play();
+
+    }else{
+
+        alert("❌ WRONG CODE");
+
+    }
 }
 
-function hit() {
-    if(!gameActive) return;
-    score++;
-    document.getElementById('score-val').innerText = score;
-    moveBird();
+function clearGame(){
+    document.getElementById("gameArea").innerHTML = "";
 }
+
+//////////////////////////////////////////////////////
+// CLICK GAME
+//////////////////////////////////////////////////////
+
+function clickGame(){
+
+    clearGame();
+
+    let area = document.getElementById("gameArea");
+
+    let target = document.createElement("div");
+
+    target.className = "target";
+
+    target.innerHTML = "🎯";
+
+    area.appendChild(target);
+
+    move();
+
+    target.onclick = function(){
+
+        score++;
+
+        updateScore();
+
+        move();
+    }
+
+    function move(){
+
+        target.style.left =
+            Math.random()*700 + "px";
+
+        target.style.top =
+            Math.random()*300 + "px";
+
+        target.style.fontSize =
+            (Math.random()*40+30)+"px";
+    }
+
+    setInterval(move,1000);
+}
+
+//////////////////////////////////////////////////////
+// ALIEN GAME
+//////////////////////////////////////////////////////
+
+function alienGame(){
+
+    clearGame();
+
+    let area = document.getElementById("gameArea");
+
+    let alien = document.createElement("div");
+
+    alien.className = "target";
+
+    alien.innerHTML = "👾";
+
+    area.appendChild(alien);
+
+    let x = 100;
+
+    let speed = 5;
+
+    alien.style.top = "150px";
+
+    let game = setInterval(()=>{
+
+        x += speed;
+
+        alien.style.left = x + "px";
+
+        if(x > 800){
+
+            x = 0;
+
+        }
+
+    },30);
+
+    alien.onclick = function(){
+
+        score += 5;
+
+        updateScore();
+
+        alien.innerHTML = "💥";
+
+        setTimeout(()=>{
+
+            alien.innerHTML = "👾";
+
+        },300);
+    }
+}
+
+//////////////////////////////////////////////////////
+// BOMB GAME
+//////////////////////////////////////////////////////
+
+function bombGame(){
+
+    clearGame();
+
+    let area = document.getElementById("gameArea");
+
+    let bomb = document.createElement("div");
+
+    bomb.className = "target";
+
+    bomb.innerHTML = "💣";
+
+    area.appendChild(bomb);
+
+    moveBomb();
+
+    bomb.onclick = function(){
+
+        score--;
+
+        updateScore();
+
+        alert("💥 BOOM! -1 SCORE");
+
+        moveBomb();
+    }
+
+    function moveBomb(){
+
+        bomb.style.left =
+            Math.random()*700 + "px";
+
+        bomb.style.top =
+            Math.random()*300 + "px";
+    }
+
+    setInterval(moveBomb,800);
+}
+
 </script>
 
 </body>
