@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 Лови монетки (PRO)</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+#game {
+    position: relative;
+    width: 400px;
+    height: 500px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.15);
+    border: 3px solid white;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+#player {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: yellow;
+    border-radius: 10px;
+    bottom: 10px;
+    left: 180px;
+}
+
+.coin {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.enemy {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    background: red;
+    border-radius: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background: white;
+    color: #333;
+    font-weight: bold;
+}
+
+#gameOverText {
+    display: none;
+    font-size: 28px;
+    color: yellow;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎮 Лови монетки PRO</h1>
+
+<p>🏆 Рахунок: <span id="score">0</span></p>
+<p>🔥 Комбо: <span id="combo">0</span></p>
+<p>⭐ Рівень: <span id="level">1</span></p>
+<p>🥇 Рекорд: <span id="highScore">0</span></p>
+
+<div id="game">
+    <div id="player"></div>
+</div>
+
+<div id="gameOverText">💀 Гру завершено!</div>
+
+<button onclick="moveLeft()">⬅️</button>
+<button onclick="moveRight()">➡️</button>
+<button onclick="startGame()">▶️ Старт</button>
+<button onclick="restartGame()">🔄 Заново</button>
+
+<audio id="coinSound" src="https://www.soundjay.com/misc/sounds/coin-drop-4.mp3"></audio>
+<audio id="hitSound" src="https://www.soundjay.com/misc/sounds/fail-buzzer-02.mp3"></audio>
+
+<script>
+let player = document.getElementById("player");
+let game = document.getElementById("game");
+
+let scoreText = document.getElementById("score");
+let comboText = document.getElementById("combo");
+let levelText = document.getElementById("level");
+let highScoreText = document.getElementById("highScore");
+let gameOverText = document.getElementById("gameOverText");
+
+let coinSound = document.getElementById("coinSound");
+let hitSound = document.getElementById("hitSound");
+
+let score = 0;
+let combo = 0;
+let level = 1;
+
+let highScore = localStorage.getItem("highScore") || 0;
+highScoreText.textContent = highScore;
+
+let speedCoin = 5;
+let speedEnemy = 7;
+
+let playerX = 180;
+
+let coins = [];
+let enemies = [];
+
+let gameStarted = false;
+let gameOver = false;
+
+let shield = false;
+let lastCoinTime = 0;
+let canRevive = true;
+
+let coinInterval;
+let enemyInterval;
+let gameInterval;
+
+// ➡️ рух кнопками
+function moveLeft() {
+    if (gameOver) return;
+    playerX = Math.max(0, playerX - 20);
+    player.style.left = playerX + "px";
+}
+
+function moveRight() {
+    if (gameOver) return;
+    playerX = Math.min(360, playerX + 20);
+    player.style.left = playerX + "px";
+}
+
+//////////////////////////////
+// 🖱️ МИШКА (ДОДАНО)
+//////////////////////////////
+
+game.addEventListener("mousemove", (e) => {
+    if (!gameStarted || gameOver) return;
+
+    let rect = game.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+
+    playerX = Math.max(0, Math.min(360, x - 20));
+    player.style.left = playerX + "px";
+});
+
+//////////////////////////////
+
+function createCoin() {
+    let coin = document.createElement("div");
+    coin.className = "coin";
+
+    let r = Math.random();
+
+    if (r < 0.6) {
+        coin.dataset.type = "normal";
+        coin.innerHTML = "🪙";
+    } else if (r < 0.85) {
+        coin.dataset.type = "double";
+        coin.innerHTML = "💰";
+    } else {
+        coin.dataset.type = "shield";
+        coin.innerHTML = "🛡️";
+    }
+
+    coin.style.left = Math.random() * 370 + "px";
+    coin.style.top = "0px";
+
+    game.appendChild(coin);
+    coins.push(coin);
+}
+
+function createEnemy() {
+    let enemy = document.createElement("div");
+    enemy.className = "enemy";
+    enemy.innerHTML = "👾";
+
+    enemy.style.left = Math.random() * 365 + "px";
+    enemy.style.top = "0px";
+
+    game.appendChild(enemy);
+    enemies.push(enemy);
+}
+
+function updateGame() {
+
+    let now = Date.now();
+
+    for (let i = coins.length - 1; i >= 0; i--) {
+        let c = coins[i];
+        let top = parseInt(c.style.top);
+        top += speedCoin;
+        c.style.top = top + "px";
+
+        let cx = parseInt(c.style.left);
+
+        if (top > 430 && cx > playerX - 20 && cx < playerX + 40) {
+
+            c.remove();
+            coins.splice(i, 1);
+
+            if (now - lastCoinTime < 800) combo++;
+            else combo = 1;
+
+            lastCoinTime = now;
+
+            let mult = combo > 5 ? 2 : 1;
+
+            if (c.dataset.type === "normal") score += 1 * mult;
+            if (c.dataset.type === "double") score += 2 * mult;
+            if (c.dataset.type === "shield") shield = true;
+
+            scoreText.textContent = score;
+            comboText.textContent = combo;
+
+            coinSound.play();
+        }
+
+        if (top > 500) {
+            c.remove();
+            coins.splice(i, 1);
+        }
+    }
+
+    for (let i = enemies.length - 1; i >= 0; i--) {
+        let e = enemies[i];
+        let top = parseInt(e.style.top);
+        top += speedEnemy;
+        e.style.top = top + "px";
+
+        let ex = parseInt(e.style.left);
+
+        if (top > 420 && ex > playerX - 25 && ex < playerX + 40) {
+
+            if (shield) {
+                shield = false;
+                e.remove();
+                enemies.splice(i, 1);
+                continue;
+            }
+
+            endGame();
+        }
+
+        if (top > 500) {
+            e.remove();
+            enemies.splice(i, 1);
+        }
+    }
+}
+
+function endGame() {
+    gameOver = true;
+    gameStarted = false;
+
+    hitSound.play();
+
+    clearInterval(coinInterval);
+    clearInterval(enemyInterval);
+    clearInterval(gameInterval);
+
+    gameOverText.style.display = "block";
+
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("highScore", highScore);
+        highScoreText.textContent = highScore;
+    }
+
+    if (canRevive) {
+        setTimeout(() => {
+            if (confirm("Хочеш revive? 🛡️")) {
+                reviveGame();
+            }
+        }, 200);
+    }
+}
+
+function reviveGame() {
+    canRevive = false;
+    gameOver = false;
+    gameStarted = true;
+
+    gameOverText.style.display = "none";
+
+    coinInterval = setInterval(createCoin, 1000);
+    enemyInterval = setInterval(createEnemy, 1500);
+    gameInterval = setInterval(updateGame, 30);
+}
+
+function startGame() {
+    if (gameStarted && !gameOver) return;
+
+    gameStarted = true;
+    gameOver = false;
+
+    gameOverText.style.display = "none";
+
+    coinInterval = setInterval(createCoin, 1000);
+    enemyInterval = setInterval(createEnemy, 1500);
+    gameInterval = setInterval(updateGame, 30);
+}
+
+function restartGame() {
+
+    coins.forEach(c => c.remove());
+    enemies.forEach(e => e.remove());
+
+    coins = [];
+    enemies = [];
+
+    score = 0;
+    combo = 0;
+    level = 1;
+
+    speedCoin = 7;
+    speedEnemy = 7;
+
+    playerX = 180;
+
+    shield = false;
+    canRevive = true;
+
+    scoreText.textContent = 0;
+    comboText.textContent = 0;
+    levelText.textContent = 1;
+
+    player.style.left = playerX + "px";
+
+    gameOver = false;
+    gameStarted = false;
+
+    gameOverText.style.display = "none";
+
+    clearInterval(coinInterval);
+    clearInterval(enemyInterval);
+    clearInterval(gameInterval);
+}
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") moveLeft();
+    if (e.key === "ArrowRight") moveRight();
+});
+</script>
+
+</body>
+</html>
