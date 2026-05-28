@@ -8,422 +8,101 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root {
-            --main-color: #ffcc00;
-            --bg-color: #0c0c0c;
-            --card-bg: #161616;
-            --text-color: #ffffff;
-            --sub-text: #b0b0b0;
-        }
+        :root { --main-color: #ffcc00; --bg-color: #0c0c0c; --card-bg: #161616; --text-color: #ffffff; --sub-text: #b0b0b0; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; }
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            line-height: 1.6;
-        }
+        header { height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 5px solid var(--main-color); text-align: center; }
+        h1 { font-family: 'Oswald'; font-size: 5rem; text-transform: uppercase; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        header {
-            height: 45vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(12,12,12,1));
-            border-bottom: 5px solid var(--main-color);
-            text-align: center;
-        }
+        .marker-animation { width: 100px; height: 100px; stroke: #ffffff; fill: none; stroke-width: 5; stroke-linecap: round; opacity: 0; transition: opacity 0.3s; stroke-dasharray: 200; stroke-dashoffset: 200; }
+        .draw-active { opacity: 1 !important; animation: draw-finish 1s ease-out forwards !important; }
+        @keyframes draw-finish { 0% { stroke-dashoffset: 200; } 100% { stroke-dashoffset: 0; } }
 
-        h1 { font-family: 'Oswald', sans-serif; font-size: clamp(3rem, 10vw, 5.5rem); margin: 0; text-transform: uppercase; }
-        header p { font-size: 1.2rem; color: var(--main-color); letter-spacing: 5px; text-transform: uppercase; }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; min-height: 50vh; }
-
-        /* АНІМАЦІЇ ПЕРЕХОДУ */
-        .page {
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .fade-out {
-            animation: fadeOut 0.4s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-15px); }
-        }
-
-        #content-screen { display: none; }
-
-        .branching-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .branch-card {
-            height: 300px;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #333;
-            cursor: pointer;
-            transition: 0.3s;
-            background: #111;
-        }
-
-        .branch-card:hover { border-color: var(--main-color); background: #1a1a1a; transform: translateY(-5px); }
-        .branch-card h2 { font-family: 'Oswald'; font-size: 3.5rem; margin: 0; }
-        .branch-card span { color: var(--sub-text); font-size: 0.8rem; letter-spacing: 2px; }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            color: var(--main-color);
-            text-transform: uppercase;
-            font-family: 'Oswald';
-            cursor: pointer;
-            letter-spacing: 2px;
-            transition: 0.3s;
-        }
-        .back-btn:hover { opacity: 0.7; transform: translateX(-5px); }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 40px 20px;
-            border-radius: 12px;
-            text-align: center;
-            transition: 0.3s;
-            border: 1px solid #222;
-            cursor: pointer;
-        }
-
-        .card:hover { border-color: var(--main-color); transform: translateY(-5px); }
-        .card i { font-size: 2.5rem; color: var(--main-color); margin-bottom: 15px; }
-        .card h3 { font-family: 'Oswald'; font-size: 1.4rem; text-transform: uppercase; }
-
-        /* МОДАЛЬНЕ ВІКНО З ПЛАВНИМ З'ЯВЛЕННЯМ */
-        .modal {
-            display: none; position: fixed; z-index: 9999;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .modal.show {
-            opacity: 1;
-        }
-        .modal-content {
-            max-width: 850px; margin: 40px auto; padding: 50px;
-            background: #0f0f0f; border-left: 5px solid var(--main-color); position: relative;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .modal.show .modal-content {
-            transform: scale(1);
-        }
-        .close-btn { position: absolute; right: 25px; top: 15px; font-size: 2.5rem; color: var(--main-color); cursor: pointer; }
+        .branching-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .branch-card { height: 350px; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid #333; cursor: pointer; transition: 0.4s; background: #111; }
+        .branch-card:hover { border-color: var(--main-color); background: #1a1a1a; transform: translateY(-10px); }
+        .branch-card h2 { font-family: 'Oswald'; font-size: 5rem; margin: 0; }
         
-        /* СТИЛІЗАЦІЯ ТЕКСТУ ВСЕРЕДИНІ МОДАЛКИ */
-        .modal-content h2 { font-family: 'Oswald'; color: var(--main-color); text-transform: uppercase; font-size: 2rem; margin-top: 0; }
-        .modal-content h4 { font-family: 'Oswald'; color: #fff; text-transform: uppercase; font-size: 1.2rem; margin: 20px 0 5px 0; border-bottom: 1px solid #222; padding-bottom: 5px;}
-        .modal-content p { color: var(--sub-text); font-size: 1rem; margin: 5px 0 15px 0; }
-        .modal-content ul { padding-left: 20px; color: var(--sub-text); }
-        .modal-content li { margin-bottom: 10px; }
-        .modal-content strong { color: #fff; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; }
+        .card { background: var(--card-bg); padding: 40px 20px; border-radius: 12px; text-align: center; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--main-color); transform: translateY(-5px); }
+        .card h3 { font-family: 'Oswald'; font-size: 1.5rem; text-transform: uppercase; margin: 10px 0; }
 
-        /* СТИЛЬ ЛІЧИЛЬНИКА ВІЗИТІВ */
-        .visit-counter {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: var(--sub-text);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .visit-counter i {
-            color: var(--main-color);
-        }
-
-        footer { padding: 60px 20px; text-align: center; background: #080808; border-top: 1px solid #222; margin-top: 50px; }
-        .social-links a { color: var(--main-color); margin: 0 15px; font-size: 1.8rem; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .back-btn { color: var(--main-color); cursor: pointer; margin-bottom: 30px; font-weight: bold; font-family: 'Oswald'; letter-spacing: 2px; }
+        
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.98); padding: 50px; overflow-y: auto; z-index: 1000; }
+        .modal-content { max-width: 900px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .content-box { background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid #333; }
+        .full-width { grid-column: span 2; }
+        .modal-content h2 { color: var(--main-color); font-family: 'Oswald'; font-size: 2.5rem; text-transform: uppercase; margin-bottom: 20px; }
+        .close-btn { color: var(--main-color); font-size: 3rem; cursor: pointer; position: fixed; right: 50px; top: 20px; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>SKATE & DIRT</h1>
-    <p>LVIV RIDERS HUB // 2026</p>
-</header>
+<header><h1>SKATE & DIRT</h1><p>LVIV RIDERS HUB // 2026</p></header>
 
 <main class="container">
-    <!-- СЛАЙД 1: ВИБІР -->
-    <section id="selection-screen" class="page fade-in">
-        <nav class="branching-container">
-            <div class="branch-card" onclick="goToContent('skate')">
-                <span>STREET CULTURE</span>
+    <section id="selection-screen" class="page active">
+        <div class="branching-container">
+            <div class="branch-card" onclick="startLoading(this, 'skate')">
+                <svg class="marker-animation" viewBox="0 0 100 100"><path d="M10,50 Q50,20 90,50"/><circle cx="25" cy="60" r="8"/><circle cx="75" cy="60" r="8"/></svg>
                 <h2>SKATE</h2>
             </div>
-            <div class="branch-card" onclick="goToContent('dirt')">
-                <span>OFF-ROAD ACTION</span>
+            <div class="branch-card" onclick="startLoading(this, 'dirt')">
+                <svg class="marker-animation" viewBox="0 0 100 100"><circle cx="20" cy="50" r="15"/><circle cx="80" cy="50" r="15"/><path d="M20,50 L50,30 L80,50 M50,30 L45,15"/></svg>
                 <h2>DIRT</h2>
             </div>
-        </nav>
+        </div>
     </section>
 
-    <!-- СЛАЙД 2: КОНТЕНТ -->
     <section id="content-screen" class="page">
-        <div class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> ПОВЕРНУТИСЯ</div>
-        <h2 id="current-title" style="font-family: 'Oswald'; text-transform: uppercase; margin-bottom: 30px; font-size: 2.5rem; color: var(--main-color);"></h2>
+        <div class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> НАЗАД ДО ВИБОРУ</div>
+        <h2 id="current-title" style="color:var(--main-color); font-family:'Oswald'; font-size: 4rem; margin: 0 0 30px 0;"></h2>
         <div class="grid">
-            <article class="card" onclick="openModal('spots')"><i class="fas fa-map-marked-alt"></i><h3>Локації</h3><p>Де сьогодні сесія?</p></article>
-            <article class="card" onclick="openModal('guides')"><i class="fas fa-graduation-cap"></i><h3>Школа</h3><p>Гайди на трюки</p></article>
-            <article class="card" onclick="openModal('events')"><i class="fas fa-calendar-alt"></i><h3>Події</h3><p>Календар 2026</p></article>
-            <article class="card" onclick="openModal('media')"><i class="fab fa-youtube"></i><h3>Медіа</h3><p>Відео та туторіали</p></article>
-            <article class="card" onclick="openModal('shops')"><i class="fas fa-shopping-bag"></i><h3>Шопи</h3><p>Магазини стаффу</p></article>
-            <article class="card" onclick="openModal('slang')"><i class="fas fa-comments"></i><h3>Сленг</h3><p>Мова ком'юніті</p></article>
+            <article class="card" onclick="openModal('spots')"><i class="fas fa-map-marked-alt fa-3x" style="color:var(--main-color)"></i><h3>Локації</h3></article>
+            <article class="card" onclick="openModal('guides')"><i class="fas fa-graduation-cap fa-3x" style="color:var(--main-color)"></i><h3>Школа</h3></article>
+            <article class="card" onclick="openModal('events')"><i class="fas fa-calendar-alt fa-3x" style="color:var(--main-color)"></i><h3>Події</h3></article>
+            <article class="card" onclick="openModal('media')"><i class="fab fa-youtube fa-3x" style="color:var(--main-color)"></i><h3>Медіа</h3></article>
+            <article class="card" onclick="openModal('shops')"><i class="fas fa-shopping-bag fa-3x" style="color:var(--main-color)"></i><h3>Шопи</h3></article>
+            <article class="card" onclick="openModal('slang')"><i class="fas fa-comments fa-3x" style="color:var(--main-color)"></i><h3>Сленг</h3></article>
         </div>
     </section>
 </main>
 
 <div id="infoModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <div id="modalBody"></div>
-    </div>
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <div class="modal-content" id="modalBody"></div>
 </div>
 
 <script>
-    let currentDiscipline = '';
-    const contentData = {
+    const db = {
         skate: { 
             title: "SKATEBOARDING", 
-            spots: `
-                <h2>📍 Скейт-споти Львова</h2>
-                <h4>Порохова Вежа (Street / Flat)</h4>
-                <p>Легендарне історичне місце з ідеальним гранітним покриттям. Найкраще місце для флету, тусовок та вечірніх сесій. Тут збирається стара та нова школа райдерів.</p>
-                <h4>Площа Митна (Street)</h4>
-                <p>Оновлений простір з довгими гранітними гранями, сходинками та хорошим мармуром. Будьте обережні з перехожими у пікові години.</p>
-                <h4>Скейт-парк на Широкій (Левандівка)</h4>
-                <p>Класичний скейт-парк з фігурами різної складності: квотерпайпи, фанбокси, рейли та мануал-пади. Підходить як для розминки, так і для вивчення нових ліній.</p>
-                <h4>Нові підземні локації та паркінги</h4>
-                <p>Рятують ком'юніті під час затяжних дощів. Локальні точки з рівною підлогою, де можна пошліфувати базові трюки взимку.</p>
-            `, 
-            guides: `
-                <h2>🛹 Скейт Школа: Від Бази до Про</h2>
-                <h4>1. Правильна стійка (Stance)</h4>
-                <p>Визначте, яка нога попереду: ліва (Regular) чи права (Goofy). Навчіться тримати баланс під час звичайного розгону (Push) і не штовхайтеся "монго" (передньою ногою).</p>
-                <h4>2. Ollie (Базовий стрибок)</h4>
-                <p>Фундамент усього скейтбордингу. Клацання хейлом (Pop), одночасне вирівнювання дошки передньою ногою (Slide) та підтягування колін до грудей.</p>
-                <h4>3. Pop Shuvit</h4>
-                <p>Трюк, при якому дошка обертається на 180 градусів під вашими ногами без перевертання в іншій площині. Секрет у правильному русі задньої стопи назад.</p>
-                <h4>4. Kickflip / Heelflip</h4>
-                <p>Перші серйозні фліпи. Потребують ідеального Ollie. Закручування дошки носком (Kick) або п'яткою (Heel) у повітрі. Ловіть дошку спочатку задньою ногою для контролю.</p>
-            `, 
-            events: `
-                <h2>📅 Скейт Події у Львові (Сезон 2026)</h2>
-                <h4>Go Skateboarding Day 2026 (21 Червня)</h4>
-                <p>Наймасштабніший щорічний збір. Програма включає масовий заїзд центральними вулицями міста, Skate Game на Пороховій вежі та Best Trick контест на Митній з призами від локальних брендів.</p>
-                <h4>Lviv Street Jam (Серпень 2026)</h4>
-                <p>Андерграундний контест по диких вуличних спотах, про які не пишуть в путівниках. Тільки чистий стріт, галас та шалений стиль.</p>
-                <h4>Осіннє закриття сезону (Жовтень 2026)</h4>
-                <p>Фінальний збір у скейт-парку: барбекю, затишна атмосфера, підведення підсумків року та перегляд локальних відео-едитів.</p>
-            `, 
-            media: `
-                <h2>🎥 Медіа та Відео-туторіали</h2>
-                <p>Шукаєте натхнення перед сесією? Дивіться повні профайли локальних райдерів та світові прем'єри:</p>
-                <ul>
-                    <li><strong>Lviv Skate Video #4 (2025):</strong> Повнометражне вуличне відео про становлення львівської сцени.</li>
-                    <li><strong>Thrasher Magazine / YouTube:</strong> Світовий стандарт скейт-медіа. Аналізуйте техніку про-райдерів на спотах США та Європи.</li>
-                    <li><strong>Braille Skateboarding:</strong> Найкраща деталізована база відеоуроків для новачків (від Ollie до найскладніших грайндів).</li>
-                </ul>
-            `, 
-            shops: `
-                <h2>🛒 Скейт Шопи & Стафф у Львові</h2>
-                <h4>Кастомні компліти та комплектуючі</h4>
-                <p>Для збору надійної дошки обирайте перевірені бренди. Звертайте увагу на ширину деки (для стріту зазвичай 8.0 - 8.25 дюймів) та жорсткість коліс (99A-101A для гладкого граніту).</p>
-                <h4>Локальний Stuff</h4>
-                <p>Підтримуйте українські скейт-шопи, де завжди можна знайти свіжі підшипники Bones, підвіски Independent або деки від вітчизняних брендів. Там же вам безкоштовно допоможуть наклеїти наждак (Griptape).</p>
-            `, 
-            slang: `
-                <h2>🗣️ Словник Скейтера</h2>
-                <p>Розмовляй з ком'юніті однією мовою:</p>
-                <ul>
-                    <li><strong>Скетчі (Sketchy):</strong> Трюк, виконаний брудно, невпевнено або з торканням землі руками.</li>
-                    <li><strong>Поп (Pop):</strong> Якість та сила клацання хвостом дошки об землю для створення стрибка.</li>
-                    <li><strong>Позур (Poser):</strong> Людина, яка носить скейтерський одяг і носить дошку під пахвою тільки заради іміджу, але не вміє кататися.</li>
-                    <li><strong>Світч (Switch):</strong> Стійка, протилежна вашій звичайній. Виконання трюків у світчі цінується вдвічі вище.</li>
-                </ul>
-            ` 
+            spots: "<div class='full-width'><h2>Локації</h2></div><div class='content-box'><h3>Порохова Вежа</h3><p>Ідеальне покриття для техніки: відпрацьовуйте 50-50 grind, boardslide, nosegrind та blunt slide на гранітних парапетах.</p></div><div class='content-box'><h3>Площа Митна</h3><p>Високі сходинки для ollie, gap-ів, kickflip-ів та heelflip-ів. Чудовий простір для виконання manual-ів та varial flip-ів.</p></div>", 
+            guides: "<div class='full-width'><h2>Скейт-школа</h2></div><div class='content-box'><h3>Фліпи</h3><p>Опануйте kickflip, heelflip, hardflip, 360 flip (tre flip) та laser flip. Важливо правильно «викидати» дошку передньою ногою.</p></div><div class='content-box'><h3>Слайди</h3><p>Вивчіть crooked grind, suski grind, feeble grind та smith grind. Контроль балансу та рівномірний розподіл ваги — ваш ключ до успіху.</p></div>", 
+            events: "<div class='full-width'><h2>Події 2026</h2></div><div class='content-box'><h3>Go Skate Day</h3><p>Контести на найкращий tech-line (комбінація з 3+ трюків) та Best Trick на сходах.</p></div><div class='content-box'><h3>Нічні Сесії</h3><p>Вивчення нових combo: revert, body varial, bigspin та shuv-it 360 у нічних умовах на нових спотах.</p></div>", 
+            media: "<div class='full-width'><h2>Медіа</h2></div><div class='content-box'><h3>Техніка</h3><p>Дивіться розбори trick tips для виконання: gazelle flip, nightmare flip та impossible. Slow-motion — найкращий спосіб зрозуміти рух стопи.</p></div><div class='content-box'><h3>Стиль</h3><p>Вивчення стильних трюків: late flip, finger flip та wallie. Знімайте себе, щоб бачити, чи вистачає «попу» для чистого виконання.</p></div>", 
+            shops: "<div class='full-width'><h2>Скейт-шопи</h2></div><div class='content-box'><h3>Комплектуючі</h3><p>Для складних трюків як tre flip або hardflip обирайте деки з кращим pop-ом та підшипники Bones Swiss для вищої швидкості.</p></div><div class='content-box'><h3>Налаштування</h3><p>Правильна жорсткість бушингів у траках допоможе легше робити carve або стійко приземляти trick-и на вильоті.</p></div>", 
+            slang: "<div class='full-width'><h2>Сленг</h2></div><div class='content-box'><h3>Трюки</h3><p><strong>Fakie:</strong> рух назад. <strong>Nollie:</strong> олі з носа. <strong>Switch:</strong> протилежна стійка. <strong>Manual:</strong> баланс на двох колесах.</p></div><div class='content-box'><h3>Терміни</h3><p><strong>Pop:</strong> клацання. <strong>Bail:</strong> невдача. <strong>Stoked:</strong> заряджений на трюк. <strong>Clean:</strong> ідеально приземлений трюк.</p></div>" 
         },
         dirt: { 
             title: "DIRT & MTB", 
-            spots: `
-                <h2>📍 Dirt & MTB Локації</h2>
-                <h4>Парк Погулянка (Dirt Lines)</h4>
-                <p>Культове місце для дьорту. Серія земляних трамплінів (роліки, стоули, великі прольоти) різного рівня складності. Постійно оновлюється та підтримується локальними шейперами.</p>
-                <h4>Вулька (Freeride / Downhill лінії)</h4>
-                <p>Технічні лісові спуски з корінням, контрнахилами, дропами та гепами. Чудове місце для тренування контролю байка на швидкості та проходження складних траєкторій.</p>
-                <h4>Залізна Вода & Брюховичі</h4>
-                <p>Ендуро та трейлові маршрути. Затяжні підйоми та довгі фанові спуски, які підійдуть для тривалих тренувань на витривалість та техніку.</p>
-            `, 
-            guides: `
-                <h2>🚵 Школа Керування: Dirt / MTB</h2>
-                <h4>1. Базова стійка "Атака"</h4>
-                <p>Вага тіла по центру, коліна та лікті зігнуті та розведені, п'ятки опущені вниз на педалях. Ви не сидите в сідлі — ви працюєте тілом як амортизатором.</p>
-                <h4>2. Bunny Hop (Правильний хоп)</h4>
-                <p>Служить для перестрибування перешкод (колод, каміння). Спочатку витягується переднє колесо за рахунок зміщення ваги назад, а потім підтягується задня частина байка ногами.</p>
-                <h4>3. Manual (Їзда на задньому колесі без педалювання)</h4>
-                <p>Потребує балансу ваги. Потрібно різко змістити таз назад і вниз за сідло, тримаючи руки прямими. Контроль висоти здійснюється за допомогою заднього гальма.</p>
-                <h4>4. Проходження вильотів (Jump Technique)</h4>
-                <p>На вильоті трампліна не можна розслаблятися або смикай руль вгору. Протискайте підвіску в радіус вильоту (Pump) і розпрямляйте тіло у вищій точці для стабільного польоту.</p>
-            `, 
-            events: `
-                <h2>📅 Dirt / MTB Івенти 2026</h2>
-                <h4>Lviv Dirt Jam 2026 (Липень)</h4>
-                <p>Головне свято офф-роад культури міста. Шалені амплітуди, Best Trick контест на найбільшій лінії Погулянки, крута музика та атмосфера дикого лісового фесту.</p>
-                <h4>Брюховицька Ендуро Гонка</h4>
-                <p>Змагання на час по декількох спецділянках у лісовому масиві. Перевірка на міцність як для аматорів, так і для досвідчених про-райдерів.</p>
-                <h4>Whip-Off Session</h4>
-                <p>Вечірній контест на найкращий залом байка в повітрі (Whip). Оцінюється стиль, кут розвороту рами та чистота приземлення.</p>
-            `, 
-            media: `
-                <h2>🎥 Медіа, Відео та Повні Заїзди</h2>
-                <p>Ресурси для аналізу польотів та геометрії трас:</p>
-                <ul>
-                    <li><strong>Red Bull TV:</strong> Пнямі трансляції Crankworx, Hardline та Кубку Світу з Downhill. Дивіться, як найкращі атлети планети розсувають межі можливого.</li>
-                    <li><strong>YouTube канали (GMBN, Pinkbike):</strong> Професійні розбори геометрії байків, налаштування підвіски під різну вагу та детальні гайди по трюках у повітрі.</li>
-                </ul>
-            `, 
-            shops: `
-                <h2>🛒 Скейт-Сервіси & Шопи у Львові</h2>
-                <h4>Обслуговування амортизаторів та рам</h4>
-                <p>Дьорт та МТБ потребують ідеального технічного стану. Регулярне ТО вилки, перевірка тиску в аморті та налаштування гідравлічних гальм — питання вашої безпеки.</p>
-                <h4>Запчастини (Стафф)</h4>
-                <p>Вибирайте міцні компоненти: керма з високим підйомом, короткі виноси, широкі злі покришки (Maxxis, Schwalbe) та надійні топталки з хорошими шипами для максимального зчеплення з взуттям.</p>
-            `, 
-            slang: `
-                <h2>🗣 *Мова Гірських Райдерів*</h2>
-                <p>Терміни, без яких тебе не зрозуміють на споті:</p>
-                <ul>
-                    <li><strong>Хардтейл (Hardtail):</strong> Велосипед з амортизаційною вилкою спереду, але з жорстким трикутником рами ззаду (класика для дьорту).</li>
-                    <li><strong>Двопідвіс (Full-sus):</strong> Байк з двома амортизаторами для максимального зчеплення на складних фрірайд-трасах.</li>
-                    <li><strong>Прибирання (Bail / Crash):</strong> Жорстке або невдале падіння з велосипеда під час виконання трюку.</li>
-                    <li><strong>Шейпити (Shaping):</strong> Процес копання, вирівнювання та догляду за земляними трамплінами за допомогою лопат.</li>
-                </ul>
-            `
+            spots: "<div class='full-width'><h2>Локації</h2></div><div class='content-box'><h3>Парк Погулянка</h3><p>Ідеально для: backflip, frontflip, 360, tailwhip та barspin. Велика висота дозволяє вивчити cashroll або cork 720.</p></div><div class='content-box'><h3>Вулька</h3><p>Стежки для тренування: manual, bunny hop, drop (до 2м), перельоти через коріння та круті контрнахили (berms).</p></div>", 
+            guides: "<div class='full-width'><h2>Техніка</h2></div><div class='content-box'><h3>Повітряні трюки</h3><p>Почніть з: tuck no-hander, superman seatgrab, toboggan та nac-nac. Це база для впевненого керування байком у польоті.</p></div><div class='content-box'><h3>Складні елементи</h3><p>Вивчайте: decade, bikeflip, cork 360 та flair (на вилеті з рампи). Важливо чітко знати траєкторію приземлення.</p></div>", 
+            events: "<div class='full-width'><h2>Змагання</h2></div><div class='content-box'><h3>Lviv Dirt Jam</h3><p>Контест на кращий whip, найвищий стрибок (air amplitude) та виконання найскладнішої комбінації типу backflip-tailwhip.</p></div><div class='content-box'><h3>Whip-Off</h3><p>Змагання на стиль: виконуйте максимальний розворот байка в повітрі та повертайте його назад перед приземленням.</p></div>", 
+            media: "<div class='full-width'><h2>Медіа</h2></div><div class='content-box'><h3>Навчання</h3><p>Вивчайте: 360-barspin, x-up, table top та cannonball. Повільна зйомка допоможе проаналізувати момент відриву та положення тіла.</p></div><div class='content-box'><h3>Прогрес</h3><p>Аналізуйте: backflip-barspin, double tailwhip та 720. Слідкуйте за топовими райдерами для розуміння таймінгу в трюках.</p></div>", 
+            shops: "<div class='full-width'><h2>Обслуговування</h2></div><div class='content-box'><h3>Деталі</h3><p>Для виконання трюків типу tailwhip або barspin важливо мати довгу гідролінію та надійні ротори. Вчасна заміна покришок гарантує зчеплення.</p></div><div class='content-box'><h3>Налаштування</h3><p>Налаштуйте rebound на вилці для швидкого відскоку після стрибків — це критично для вивчення combo типу backflip-barspin.</p></div>", 
+            slang: "<div class='full-width'><h2>Сленг</h2></div><div class='content-box'><h3>Трюки</h3><p><strong>Backflip:</strong> сальто. <strong>Tailwhip:</strong> прокрут рами. <strong>Barspin:</strong> прокрут керма. <strong>Manual:</strong> їзда на одному колесі.</p></div><div class='content-box'><h3>Терміни</h3><p><strong>Drop:</strong> стрибок вниз. <strong>Hardtail:</strong> жорстка рама. <strong>Shaping:</strong> догляд за трасою. <strong>Bail:</strong> падіння.</p></div>" 
         }
     };
-
-    function goToContent(type) {
-        const screen1 = document.getElementById('selection-screen');
-        const screen2 = document.getElementById('content-screen');
-        
-        currentDiscipline = type;
-        document.getElementById('current-title').innerText = contentData[type].title;
-
-        screen1.classList.remove('fade-in');
-        screen1.classList.add('fade-out');
-
-        setTimeout(() => {
-            screen1.style.display = 'none';
-            screen2.style.display = 'block';
-            screen2.classList.remove('fade-out');
-            screen2.classList.add('fade-in');
-            window.scrollTo(0, 0);
-        }, 400); 
-    }
-
-    function goBack() {
-        const screen1 = document.getElementById('selection-screen');
-        const screen2 = document.getElementById('content-screen');
-
-        screen2.classList.remove('fade-in');
-        screen2.classList.add('fade-out');
-
-        setTimeout(() => {
-            screen2.style.display = 'none';
-            screen1.style.display = 'block';
-            screen1.classList.remove('fade-out');
-            screen1.classList.add('fade-in');
-            window.scrollTo(0, 0);
-        }, 400);
-    }
-
-    function openModal(cat) {
-        const modal = document.getElementById('infoModal');
-        document.getElementById('modalBody').innerHTML = contentData[currentDiscipline][cat];
-        
-        modal.style.display = 'block';
-        setTimeout(() => {
-            modal.classList.add('show');
-        }, 10);
-        
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('infoModal');
-        modal.classList.remove('show');
-        
-        setTimeout(() => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }, 300);
-    }
-
-    window.onclick = function(e) { if(e.target == document.getElementById('infoModal')) closeModal(); }
-
-    // СКРИПТ ЛІЧИЛЬНИКА ВІЗИТІВ
-    function updateVisitCounter() {
-        let visits = localStorage.getItem('site_visits');
-        if (!visits) {
-            visits = 1;
-        } else {
-            visits = parseInt(visits) + 1;
-        }
-        localStorage.setItem('site_visits', visits);
-        document.getElementById('count-value').innerText = visits;
-    }
-    
-    // Запуск підрахунку при завантаженні сторінки
-    window.onload = function() {
-        updateVisitCounter();
-    }
+    function startLoading(el, t) { const s = el.querySelector('.marker-animation'); s.classList.add('draw-active'); cur = t; setTimeout(() => { document.getElementById('selection-screen').classList.remove('active'); document.getElementById('content-screen').classList.add('active'); document.getElementById('current-title').innerText = db[t].title; s.classList.remove('draw-active'); }, 1000); }
+    function goBack() { document.getElementById('content-screen').classList.remove('active'); document.getElementById('selection-screen').classList.add('active'); }
+    function openModal(cat) { document.getElementById('infoModal').style.display = 'block'; document.getElementById('modalBody').innerHTML = db[cur][cat]; }
+    function closeModal() { document.getElementById('infoModal').style.display = 'none'; }
 </script>
-
-<footer>
-    <div class="social-links">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-telegram"></i></a>
-    </div>
-    <p>© 2026 RIDERS HUB | LVIV</p>
-    <div class="visit-counter">
-        <i class="fas fa-eye"></i> Переглядів сайту: <span id="count-value">0</span>
-    </div>
-</footer>
-
 </body>
 </html>
