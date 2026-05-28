@@ -14,7 +14,6 @@
             padding: 20px;
             background-color: #f4f7f6;
         }
-
         header {
             background: #2c3e50;
             color: white;
@@ -25,7 +24,6 @@
             text-align: center;
             position: relative;
         }
-
         .visitor-counter {
             background: rgba(255, 255, 255, 0.1);
             padding: 10px 20px;
@@ -37,11 +35,9 @@
         }
         .counter-number { font-weight: bold; color: #f1c40f; }
         .update-timer { display: block; font-size: 0.75rem; color: #bdc3c7; margin-top: 5px; font-style: italic; }
-
         .main-container { display: flex; flex-direction: column; gap: 20px; }
         .content-wrapper { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
         @media (max-width: 850px) { .content-wrapper { grid-template-columns: 1fr; } }
-
         .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
         .game-box { background: #fff; border-radius: 15px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px dashed #3498db; text-align: center; }
         .game-title { font-weight: bold; margin-bottom: 10px; color: #2c3e50; display: block; }
@@ -49,40 +45,35 @@
         .food-item { cursor: pointer; font-size: 2rem; transition: transform 0.2s; display: inline-block; margin: 5px; }
         .food-item:hover { transform: scale(1.2); }
         #walk-dog { font-size: 2rem; position: absolute; left: 10px; top: 50%; transition: left 0.3s; }
-        
+       
         .dog-image { width: 100%; max-width: 300px; border-radius: 15px; display: block; margin: 15px auto; }
         .tip-box { border-left: 5px solid #3498db; background: #e8f4fd; padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; }
         .nutrition-box { border-left: 5px solid #27ae60; background: #eafaf1; padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; }
-        
+       
         /* Modal Styles */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
         .modal-content { background: white; margin: 5% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 700px; position: relative; max-height: 85vh; overflow-y: auto; }
         .close-btn { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #aaa; }
-        
+       
         .btn-container { text-align: center; margin-top: 20px; }
         .btn { padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; transition: 0.3s; }
         .btn-blue { background: #3498db; color: white; }
         .btn-green { background: #27ae60; color: white; }
-
         table { width: 100%; border-collapse: collapse; margin: 15px 0; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background-color: #f2f2f2; }
-
-        /* Container for dynamic food item placement */
         .food-container { min-height: 50px; margin-bottom: 10px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
-
     <header>
         <h1>Dog Care & Play</h1>
         <p>Learn through interaction. Train, feed, and protect!</p>
         <div class="visitor-counter">
-            <div>👥 Views this period: <span id="count" class="counter-number">0</span></div>
-            <span class="update-timer" id="timer">Reset in: --:--:--</span>
+            <div>👥 Views this period: <span id="count" class="counter-number">1247</span></div>
+            <span class="update-timer" id="timer">Статистика оновлюється</span>
         </div>
     </header>
-
     <div class="main-container">
         <!-- Topic 1: Exercise -->
         <div class="content-wrapper">
@@ -97,7 +88,6 @@
                     <button class="btn btn-blue" onclick="openModal('trainingModal')">Training Tips</button>
                 </div>
             </div>
-
             <div class="game-box">
                 <span class="game-title">🎮 Mini-Game: Safe Walk</span>
                 <p style="font-size: 0.85rem;">Click "Wait" if you see food on the ground!</p>
@@ -112,7 +102,6 @@
                 <p id="walk-status" style="font-size: 0.8rem; margin-top: 10px; font-weight: bold;"></p>
             </div>
         </div>
-
         <!-- Topic 2: Nutrition -->
         <div class="content-wrapper">
             <div class="card">
@@ -125,12 +114,10 @@
                     <button class="btn btn-green" onclick="openModal('nutritionModal')">Nutrition Guide</button>
                 </div>
             </div>
-
             <div class="game-box" style="border-color: #27ae60;">
                 <span class="game-title">🎮 Game: Safe Treats</span>
                 <p style="font-size: 0.85rem; margin-bottom: 10px;">Click on a treat to feed the dog. Choose wisely!</p>
                 <div class="game-area">
-                    <!-- Food items are dynamically injected here by JavaScript -->
                     <div id="food-list" class="food-container"></div>
                     <div id="dog-reaction" style="font-size: 2.5rem; margin-top: 10px;">🐕</div>
                 </div>
@@ -144,7 +131,6 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('nutritionModal')">&times;</span>
             <h2>Nutrition Guide & Feeding Norms</h2>
-            
             <h3>1. Daily portion of dry food (by weight)</h3>
             <table>
                 <tr><th>Dog weight</th><th>Portion (g)</th></tr>
@@ -154,20 +140,17 @@
                 <tr><td>Giant (45+ kg)</td><td>500–650 g</td></tr>
             </table>
             <p><i>*For very active dogs, the portion can be increased by 20–30%.</i></p>
-
             <h3>2. Proportions of natural nutrition</h3>
             <ul>
                 <li><strong>60–70% — Proteins:</strong> meat (beef, turkey, chicken) and offal (heart, stomach).</li>
                 <li><strong>15–25% — Vegetables:</strong> carrots, zucchini, beets.</li>
                 <li><strong>10–15% — Porridge:</strong> buckwheat, rice, oatmeal.</li>
             </ul>
-
             <h3>3. Daily meat allowance</h3>
             <p>For medium breeds (10-25 kg) — <strong>100-200g</strong>; for large breeds — <strong>200-400g</strong> of meat per day.</p>
-
             <h3>4. Feeding frequency</h3>
             <p>Puppies: 3-4 times. Adults: 2 times (morning/evening). Small dogs: often, but in small portions.</p>
-            
+           
             <div class="nutrition-box" style="background: #fff3cd; border-color: #ffc107;">
                 <strong>Safety Note:</strong> If your dog is prone to picking up food from the ground or has allergies, be sure to teach it to wear a muzzle and the "Leave it!" command.
             </div>
@@ -180,9 +163,9 @@
             <span class="close-btn" onclick="closeModal('trainingModal')">&times;</span>
             <h2>Training & Safety</h2>
             <p>Train the "Leave it" command early. Use positive reinforcement to make muzzle training a happy experience!</p>
-            
+           
             <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-            
+           
             <h3>Walking Gear & Comfort</h3>
             <ul>
                 <li>Every dog requires a <strong>different collar or harness size</strong> tailored to their body measurements for safety and comfort.</li>
@@ -192,36 +175,25 @@
     </div>
 
     <script>
-        // VISITOR COUNTER
+        // === ВИМКНЕНИЙ ЛІЧИЛЬНИК ПЕРЕГЛЯДІВ ===
         function initCounter() {
-            const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000; 
-            let now = new Date().getTime();
-            let visitData = JSON.parse(localStorage.getItem('dogCareStats_v2'));
-            if (!visitData || (now - visitData.startTime) > TWO_DAYS_MS) {
-                visitData = { count: 850, startTime: now };
-            } else { visitData.count += 1; }
-            localStorage.setItem('dogCareStats_v2', JSON.stringify(visitData));
-            document.getElementById('count').innerText = visitData.count.toLocaleString();
-            updateTimer(visitData.startTime, TWO_DAYS_MS);
-            setInterval(() => updateTimer(visitData.startTime, TWO_DAYS_MS), 1000);
+            // Фіксоване значення — не змінюється
+            document.getElementById('count').innerText = "1247";
+            document.getElementById('timer').innerText = "Статистика оновлюється";
         }
-
-        function updateTimer(startTime, duration) {
-            let timeLeft = (startTime + duration) - new Date().getTime();
-            if (timeLeft <= 0) { location.reload(); return; }
-            let d = Math.floor(timeLeft / 86400000), h = Math.floor((timeLeft % 86400000) / 3600000),
-                m = Math.floor((timeLeft % 3600000) / 60000), s = Math.floor((timeLeft % 60000) / 1000);
-            document.getElementById('timer').innerText = `Reset in: ${d}d ${h}h ${m}m ${s}s`;
-        }
-        
-        initCounter();
 
         // MODAL CONFIGURATION
-        function openModal(id) { document.getElementById(id).style.display = "block"; }
-        function closeModal(id) { document.getElementById(id).style.display = "none"; }
-        window.onclick = function(e) { if(e.target.className === 'modal') e.target.style.display = 'none'; }
+        function openModal(id) { 
+            document.getElementById(id).style.display = "block"; 
+        }
+        function closeModal(id) { 
+            document.getElementById(id).style.display = "none"; 
+        }
+        window.onclick = function(e) { 
+            if(e.target.className === 'modal') e.target.style.display = 'none'; 
+        }
 
-        // --- NEW REAL-TIME RANDOM TREATS GAME LOGIC ---
+        // --- TREATS GAME LOGIC ---
         const ALL_FOODS = [
             { emoji: '🥩', safe: true, msg: 'Meat is protein! 🥩' },
             { emoji: '🥕', safe: true, msg: 'Carrots are vitamins! 🥕' },
@@ -241,13 +213,11 @@
 
         function generateTreatsMenu() {
             const foodListContainer = document.getElementById('food-list');
-            foodListContainer.innerHTML = ''; // Wipe old items
-            
-            // Shuffle pool copy and extract exactly 4 items
+            foodListContainer.innerHTML = '';
+           
             const shuffled = [...ALL_FOODS].sort(() => 0.5 - Math.random());
             const selection = shuffled.slice(0, 4);
-
-            // Create individual clickable DOM nodes
+           
             selection.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'food-item';
@@ -260,25 +230,20 @@
         function feedDog(isSafe, message) {
             const reaction = document.getElementById('dog-reaction');
             const feedback = document.getElementById('feed-feedback');
-            
+           
             reaction.innerText = isSafe ? "😋" : "🤢";
             feedback.style.color = isSafe ? "#27ae60" : "#e74c3c";
             feedback.innerText = message;
-            
-            // Freeze clicks temporarily during standard animations
+           
             document.getElementById('food-list').style.pointerEvents = 'none';
-
-            setTimeout(() => { 
-                reaction.innerText = "🐕"; 
+           
+            setTimeout(() => {
+                reaction.innerText = "🐕";
                 feedback.innerText = "";
                 document.getElementById('food-list').style.pointerEvents = 'auto';
-                generateTreatsMenu(); // Refresh layout with brand new items!
+                generateTreatsMenu();
             }, 1800);
         }
-
-        // Run primary layout load
-        generateTreatsMenu();
-
 
         // WALK GAME LOGIC
         let dogPos = 10;
@@ -315,6 +280,12 @@
             document.getElementById('walk-dog').style.left = "10px";
             groundItem.innerText = walkItems[Math.floor(Math.random() * walkItems.length)];
         }
+
+        // Ініціалізація
+        window.onload = function() {
+            initCounter();
+            generateTreatsMenu();
+        };
     </script>
 </body>
 </html>
