@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Hatsune Miku Fan Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d1117;
+            color: #e6edf3;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #0d1117 0%, #004d4d 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        h1 {
+            color: #39ffca;
+            text-shadow: 0 0 10px #39ffca;
+            border-bottom: 2px solid #39ffca;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        p {
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #39ffca;
+        }
+        
+        /* Стиль для клікера */
+        .miku-clicker {
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            user-select: none;
+            margin-top: 20px;
+            max-width: 300px;
+            filter: drop-shadow(0 0 10px #39ffca);
+        }
+
+        /* Ефект натискання */
+        .miku-clicker:active {
+            transform: scale(0.95);
+        }
+
+        .counter-text {
+            color: #39ffca;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hatsune Miku</h1>
+    
+    <p>
+        Хацуне Міку (Hatsune Miku) — це японська віртуальна співачка, яку створили у 2007 році. 
+        У реальному житті такої людини немає, це лише аніме-образ. Насправді це музичний інструмент — вокалоїд. 
+        Зараз її концерти проводяться по всьому світу з різноманітними піснями, як-от: 
+        Mesmerizer, The Intese voice of Hatsune Miku та PoPiPo (Vegetable Juice).
+    </p>
+
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeiC8oGFyfNgOev62nMih3i5vtpvsyQUBqzw&s" 
+         alt="Miku Clicker" 
+         class="miku-clicker" 
+         id="mikuBtn">
+
+    <div class="counter-text">Кліків: <span id="clickCount">0</span></div>
+
+    <script>
+        const mikuBtn = document.getElementById('mikuBtn');
+        const countDisplay = document.getElementById('clickCount');
+        let count = 0;
+
+        // Створюємо один об'єкт аудіо для нашого файлу
+        // ВАЖЛИВО: Назва файлу має точно збігатися з тією, що на GitHub
+        const mikuAudio = new Audio('miku_song.mp3'); 
+
+        mikuBtn.addEventListener('click', () => {
+            // 1. Скидаємо звук на початок, щоб можна було клікати часто
+            mikuAudio.currentTime = 0;
+            // 2. Відтворюємо звук
+            mikuAudio.play();
+
+            // 3. Оновлюємо лічильник
+            count++;
+            countDisplay.innerText = count;
+        });
+    </script>
+</body>
+</html>
