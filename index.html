@@ -1,4 +1,5 @@
-<!DOCTYPE html> <html lang="uk"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width,initial-scale=1.0"> <title>IT Табір - Проєкти</title> <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> <style>body{font-family:sans-serif;text-align:center;padding-top:50px;background-color:#f4f4f9;margin:0}.container{background:#fff;padding:30px;border-radius:10px;display:inline-block;box-shadow:0 4px 6px rgba(0,0,0,.1)}input{padding:10px;border:1px solid #ccc;border-radius:5px;width:200px}button{padding:10px 20px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer}#content{display:none}ul{list-style:none;padding:0;text-align:left;display:inline-block}li{margin:10px 0;background:#fff;padding:10px;border-radius:5px;border:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;gap:20px}li a{text-decoration:none;color:#333;font-weight:bold}li a:hover{color:#28a745}.qr-btn{background:#007bff;font-size:12px;padding:5px 10px}#secret-door{position:fixed;bottom:0;right:0;width:50px;height:50px;z-index:9999;background:transparent;cursor:default}#print-zone{display:none;background:white;width:148mm;height:210mm;padding:5mm;margin:0 auto;box-sizing:border-box;overflow:hidden}.print-title{font-size:14pt;font-weight:bold;margin-bottom:10mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.qr-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:8mm;justify-items:center;align-items:center}.qr-item{width:32mm;height:32mm}@media print{body *{display:none!important}#print-zone,#print-zone *{display:block!important}.qr-grid{display:grid!important}.no-print-back{display:none!important}@page{size:A5;margin:0}}.no-print-back{margin-bottom:10px;background:#6c757d}</style> </head> <body> <div id="secret-door" ondblclick="unlock()"></div> <div id="login-screen" class="container"> <h2>Вхід до кабінету</h2> <input type="password" id="pass-field" placeholder="Пароль..."> <button onclick="check()">Увійти</button> <p id="error" style="color:red;display:none">Неправильний код!</p> </div> <div id="content"> <h1>Проєкти учнів</h1> <ul id="project-list"></ul> </div> <div id="print-zone"> <button class="no-print-back" onclick="location.reload()">← Назад</button> <div class="print-title" id="print-url-text"></div> <div class="qr-grid" id="qr-container"></div> <p class="no-print-back" style="font-size:10px;margin-top:5mm">Ctrl+P для друку</p> </div> <script>
+<!DOCTYPE html><html lang="uk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>IT Табір - Проєкти</title><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><style>body{font-family:system-ui,-apple-system,sans-serif;background-color:#f4f4f9;margin:0;padding:20px;box-sizing:border-box;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}.container{background:#fff;padding:30px;border-radius:10px;box-shadow:0 4px 6px rgba(0,0,0,.1);text-align:center;}input{padding:10px;border:1px solid #ccc;border-radius:5px;width:200px;margin-right:5px;}button{padding:10px 20px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;}#content{display:none;width:100%;max-width:1400px;margin:0 auto;}h1{text-align:center;margin:0 0 15px 0;font-size:24px;color:#333;}#project-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;width:100%;}li{background:#fff;padding:8px 12px;border-radius:6px;border:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;transition:transform 0.1s,box-shadow 0.1s;}li:hover{box-shadow:0 2px 4px rgba(0,0,0,0.05);border-color:#28a745;}.project-link{text-decoration:none;color:#333;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-grow:1;}.project-link:hover{color:#28a745;}.file-name{font-weight:normal;color:#777;font-size:11px;margin-left:4px;}.qr-btn{background:#007bff;border:none;border-radius:4px;width:26px;height:26px;min-width:26px;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s;}.qr-btn:hover{background:#0056b3;}.qr-btn svg{width:16px;height:16px;fill:white;}#secret-door{position:fixed;bottom:0;right:0;width:50px;height:50px;z-index:9999;background:transparent;cursor:default;}#print-zone{display:none;background:white;width:148mm;height:210mm;padding:5mm;margin:0 auto;box-sizing:border-box;overflow:hidden;}.print-title{font-size:14pt;font-weight:bold;margin-bottom:10mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;}.qr-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:8mm;justify-items:center;align-items:center;}.qr-item{width:32mm;height:32mm;}@media print{body *{display:none !important}#print-zone,#print-zone *{display:block !important}.qr-grid{display:grid !important}.no-print-back{display:none !important}@page{size:A5;margin:0}}.no-print-back{margin-bottom:10px;background:#6c757d;}</style></head><body><div id="secret-door" ondblclick="unlock()"></div><div id="login-screen" class="container"><h2>Вхід до кабінету</h2><input type="password" id="pass-field" placeholder="Пароль..."><button onclick="check()">Увійти</button><p id="error" style="color:red;display:none">Неправильний код!</p></div><div id="content"><h1>Проєкти учнів</h1><ul id="project-list"></ul></div><div id="print-zone"><button class="no-print-back" onclick="location.reload()">← Назад</button><div class="print-title" id="print-url-text"></div><div class="qr-grid" id="qr-container"></div><p class="no-print-back" style="font-size:10px;margin-top:5mm;text-align:center">Ctrl+P для друку</p></div>
+    <script>
         const projects = [
             {name:"Віки",file:"viktoria.html"},
             {name:"Юри",file:"CocaCola.html"},
@@ -50,20 +51,34 @@
             {name:"Mark",file:"CLASSIC_HANGMAN.html"},
             {name:"Матвій",file:"Coin.html"},
             {name:"Павла",file:"PRO.html"},
-                {name:"Кароліни",file:"HatsuneMiku.html"},
-                {name:"",file:""},
-                {name:"",file:""},
-                {name:"",file:""},
-                {name:"",file:""},
-                {name:"",file:""}
+            {name:"Кароліни",file:"HatsuneMiku.html"},
+            {name:"",file:""},
+            {name:"",file:""},
+            {name:"",file:""},
+            {name:"",file:""},
+            {name:"",file:""}
         ];
 
         const listEl = document.getElementById('project-list');
+        
         projects.forEach(p => {
             if(p.name && p.file) {
                 const url = "https://vilnyy-hub.github.io/it/1/" + p.file;
+                
+                // Витягуємо назву сторінки (все що до .html)
+                const pageName = p.file.replace('.html', '');
+                
                 const li = document.createElement('li');
-                li.innerHTML = `<a href="${url}" target="_blank">Проєкт ${p.name}</a><button class="qr-btn" onclick="generatePrintPage('${url}')">QR для друку</button>`;
+                li.innerHTML = `
+                    <a href="${url}" target="_blank" class="project-link">
+                        Проєкт ${p.name} <span class="file-name">(${pageName})</span>
+                    </a>
+                    <button class="qr-btn" onclick="generatePrintPage('${url}')" title="QR для друку">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM13 13h2v2h-2v-2zm2 2h2v2h-2v-2zm-2 2h2v2h-2v-2zm2 2h2v2h-2v-2zm2-2h2v2h-2v-2zm0-2h2v2h-2v-2zm2 2h2v2h-2v-2z"/>
+                        </svg>
+                    </button>
+                `;
                 listEl.appendChild(li);
             }
         });
@@ -86,6 +101,8 @@
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('content').style.display = 'block';
             document.getElementById('secret-door').style.display = 'none';
+            // Адаптуємо висоту body для сітки
+            document.body.style.justifyContent = 'flex-start';
         }
 
         function check() {
@@ -99,4 +116,6 @@
         document.getElementById('pass-field').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') check();
         });
-    </script> </body> </html>
+    </script>
+</body>
+</html>
