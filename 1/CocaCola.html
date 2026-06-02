@@ -2,13 +2,14 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<title>SIGMA ULTRA GAMES</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIGMA ULTRA HUB</title>
 
 <style>
 body{
     margin:0;
     font-family:Arial;
-    background:linear-gradient(45deg,#111,#222);
+    background:linear-gradient(45deg,#000,#111,#003300);
     color:white;
     text-align:center;
     overflow:hidden;
@@ -16,25 +17,28 @@ body{
 
 h1{
     color:lime;
-    text-shadow:0 0 20px lime;
-    margin-top:20px;
+    text-shadow:0 0 15px lime;
 }
 
 button{
     padding:12px 20px;
-    margin:10px;
+    margin:8px;
+    border:none;
+    border-radius:12px;
     font-size:18px;
     cursor:pointer;
-    border:none;
-    border-radius:10px;
+    transition:0.2s;
 }
 
-#games{
-    display:none;
+button:hover{
+    transform:scale(1.1);
+    box-shadow:0 0 15px lime;
 }
+
+#games{display:none;}
 
 .gameBtn{
-    background:#333;
+    background:#222;
     color:white;
     width:250px;
 }
@@ -44,80 +48,136 @@ button{
     color:black;
 }
 
+#scoreBoard,#rank,#timer,#highscore{
+    font-size:22px;
+    margin:6px;
+}
+
+#rank{color:cyan;}
+#timer{color:red;}
+#highscore{color:gold;}
+
 #gameArea{
     width:90%;
-    height:400px;
+    height:420px;
     margin:auto;
     border:3px solid lime;
-    background:black;
+    border-radius:20px;
+    background:radial-gradient(circle,#000,#050505);
     position:relative;
     overflow:hidden;
-    border-radius:20px;
+    box-shadow:0 0 25px lime inset;
 }
 
 .target{
     position:absolute;
-    font-size:50px;
     cursor:pointer;
     user-select:none;
+    transition:0.2s;
+    opacity:0;
+    transform:scale(0.5);
+    filter:drop-shadow(0 0 10px lime);
 }
 
-#scoreBoard{
-    font-size:25px;
-    margin:10px;
-    color:yellow;
+.target.show{
+    opacity:1;
+    transform:scale(1);
 }
 
-.sigmaMode{
-    animation:flash 1s infinite alternate;
+.target:hover{
+    transform:scale(1.3) rotate(10deg);
 }
 
-@keyframes flash{
-    from{background:#111;}
-    to{background:#003300;}
+/* BOSS */
+.boss{
+    position:absolute;
+    font-size:120px;
+    cursor:pointer;
+    user-select:none;
+    filter:drop-shadow(0 0 20px red);
+}
+
+.hpBar{
+    position:absolute;
+    width:160px;
+    height:10px;
+    background:#222;
+    border:1px solid red;
+    top:-20px;
+    left:-30px;
+}
+
+.hpFill{
+    height:100%;
+    background:red;
+    width:100%;
 }
 </style>
 </head>
 
 <body>
 
-<h1>⚡ SIGMA HUB ⚡</h1>
+<h1>⚡ SIGMA ULTRA HUB ⚡</h1>
 
-<button onclick="sigmaMode()">SIGMA</button>
+<button onclick="sigmaMode()">🔓 SIGMA MODE</button>
 
-<div id="scoreBoard">
-    SCORE: <span id="score">0</span>
-</div>
+<div id="scoreBoard">SCORE: <span id="score">0</span></div>
+<div id="rank">RANK: NOOB</div>
+<div id="timer">TIME: 60</div>
+<div id="highscore">BEST: 0</div>
 
 <div id="games">
-
-    <button class="gameBtn" onclick="clickGame()">
-        🎯 Click Hunter
-    </button>
-
-    <button class="gameBtn" onclick="alienGame()">
-        👾 Alien Attack
-    </button>
-
-    <button class="gameBtn" onclick="bombGame()">
-        💣 Bomb Dodge
-    </button>
-
+    <button class="gameBtn" onclick="clickGame()">🎯 Click Hunter</button>
+    <button class="gameBtn" onclick="alienGame()">👾 Alien Attack</button>
+    <button class="gameBtn" onclick="bombGame()">💣 Bomb Dodge</button>
+    <button class="gameBtn" onclick="bossGame()">👹 Boss Fight</button>
 </div>
 
 <div id="gameArea"></div>
 
-<!-- MUSIC -->
-<audio id="music" loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
-</audio>
-
 <script>
-
+let mouseX = 0;
+let mouseY = 0;
 let score = 0;
+let time = 60;
+let intervals = [];
 
+let highScore = localStorage.getItem("sigmaBest") || 0;
+document.getElementById("highscore").innerText = "BEST: " + highScore;
+document.addEventListener("mousemove", (e)=>{
+
+    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+
+});
+
+
+function move(){
+
+    let area = document.getElementById("gameArea");
+
+    let x = (mouseX + 1) / 2 * 800;
+    let y = (mouseY + 1) / 2 * 320;
+
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+}
 function updateScore(){
+
     document.getElementById("score").innerText = score;
+
+    if(score > highScore){
+        highScore = score;
+        localStorage.setItem("sigmaBest", highScore);
+        document.getElementById("highscore").innerText = "BEST: " + highScore;
+    }
+
+    let rank = "NOOB";
+    if(score >= 20) rank = "PRO";
+    if(score >= 50) rank = "SIGMA";
+    if(score >= 100) rank = "ULTRA SIGMA GOD";
+
+    document.getElementById("rank").innerText = "RANK: " + rank;
 }
 
 function sigmaMode(){
@@ -125,30 +185,44 @@ function sigmaMode(){
     let code = prompt("Введи SIGMA CODE:");
 
     if(code === "2202"){
-
+        document.getElementById("games").style.display = "block";
         alert("⚡ SIGMA MODE ACTIVATED ⚡");
 
-        document.body.classList.add("sigmaMode");
+    } else if(code === "9999"){
+        score += 100;
+        updateScore();
+        alert("👑 SECRET +100 SCORE");
 
-        document.getElementById("games").style.display = "block";
-
-        document.getElementById("music").play();
-
-    }else{
-
+    } else {
         alert("❌ WRONG CODE");
-
     }
 }
 
 function clearGame(){
+    intervals.forEach(clearInterval);
+    intervals = [];
     document.getElementById("gameArea").innerHTML = "";
 }
 
-//////////////////////////////////////////////////////
-// CLICK GAME
-//////////////////////////////////////////////////////
+/* ✨ ефект */
+function particle(x,y){
+    let p = document.createElement("div");
+    p.innerHTML = "✨";
+    p.style.position = "absolute";
+    p.style.left = x + "px";
+    p.style.top = y + "px";
+    p.style.transition = "0.5s";
+    document.getElementById("gameArea").appendChild(p);
 
+    setTimeout(()=>{
+        p.style.transform = "translateY(-30px)";
+        p.style.opacity = "0";
+    },10);
+
+    setTimeout(()=>p.remove(),500);
+}
+
+/* 🎯 CLICK GAME */
 function clickGame(){
 
     clearGame();
@@ -156,43 +230,34 @@ function clickGame(){
     let area = document.getElementById("gameArea");
 
     let target = document.createElement("div");
-
     target.className = "target";
-
     target.innerHTML = "🎯";
+    target.style.fontSize = "60px";
 
     area.appendChild(target);
 
+    function move(){
+        target.classList.remove("show");
+
+        setTimeout(()=>{
+            target.style.left = Math.random()*800 + "px";
+            target.style.top = Math.random()*320 + "px";
+            target.classList.add("show");
+        },100);
+    }
+
     move();
+    intervals.push(setInterval(move,1100));
 
     target.onclick = function(){
-
         score++;
-
         updateScore();
-
+        particle(target.offsetLeft, target.offsetTop);
         move();
     }
-
-    function move(){
-
-        target.style.left =
-            Math.random()*700 + "px";
-
-        target.style.top =
-            Math.random()*300 + "px";
-
-        target.style.fontSize =
-            (Math.random()*40+30)+"px";
-    }
-
-    setInterval(move,1000);
 }
 
-//////////////////////////////////////////////////////
-// ALIEN GAME
-//////////////////////////////////////////////////////
-
+/* 👾 ALIEN */
 function alienGame(){
 
     clearGame();
@@ -200,53 +265,32 @@ function alienGame(){
     let area = document.getElementById("gameArea");
 
     let alien = document.createElement("div");
-
-    alien.className = "target";
-
+    alien.className = "target show";
     alien.innerHTML = "👾";
+    alien.style.fontSize = "70px";
+    alien.style.top = "150px";
 
     area.appendChild(alien);
 
-    let x = 100;
+    let x = 0;
 
-    let speed = 5;
+    intervals.push(setInterval(()=>{
 
-    alien.style.top = "150px";
-
-    let game = setInterval(()=>{
-
-        x += speed;
-
+        x += 5;
+        if(x > 900) x = -60;
         alien.style.left = x + "px";
 
-        if(x > 800){
-
-            x = 0;
-
-        }
-
-    },30);
+    },20));
 
     alien.onclick = function(){
-
         score += 5;
-
         updateScore();
-
         alien.innerHTML = "💥";
-
-        setTimeout(()=>{
-
-            alien.innerHTML = "👾";
-
-        },300);
+        setTimeout(()=>alien.innerHTML="👾",300);
     }
 }
 
-//////////////////////////////////////////////////////
-// BOMB GAME
-//////////////////////////////////////////////////////
-
+/* 💣 BOMB */
 function bombGame(){
 
     clearGame();
@@ -254,37 +298,100 @@ function bombGame(){
     let area = document.getElementById("gameArea");
 
     let bomb = document.createElement("div");
-
-    bomb.className = "target";
-
+    bomb.className = "target show";
     bomb.innerHTML = "💣";
+    bomb.style.fontSize = "70px";
 
     area.appendChild(bomb);
 
-    moveBomb();
+    function move(){
+        bomb.style.left = Math.random()*800 + "px";
+        bomb.style.top = Math.random()*320 + "px";
+    }
+
+    move();
+    intervals.push(setInterval(move,900));
 
     bomb.onclick = function(){
-
         score--;
+        updateScore();
+        particle(bomb.offsetLeft,bomb.offsetTop);
+        move();
+    }
+}
 
+/* 👹 BOSS */
+function bossGame(){
+
+    clearGame();
+
+    let area = document.getElementById("gameArea");
+
+    let boss = document.createElement("div");
+    boss.className = "boss";
+    boss.innerHTML = "👹";
+
+    let hp = 20;
+
+    let hpBar = document.createElement("div");
+    hpBar.className = "hpBar";
+
+    let hpFill = document.createElement("div");
+    hpFill.className = "hpFill";
+
+    hpBar.appendChild(hpFill);
+    boss.appendChild(hpBar);
+
+    area.appendChild(boss);
+
+    boss.style.left = "300px";
+    boss.style.top = "150px";
+
+    let x = 300, y = 150;
+
+    intervals.push(setInterval(()=>{
+
+        x += (Math.random()-0.5)*40;
+        y += (Math.random()-0.5)*40;
+
+        x = Math.max(0, Math.min(800, x));
+        y = Math.max(0, Math.min(320, y));
+
+        boss.style.left = x + "px";
+        boss.style.top = y + "px";
+
+    },400));
+
+    boss.onclick = function(){
+
+        hp--;
+        score += 2;
         updateScore();
 
-        alert("💥 BOOM! -1 SCORE");
+        hpFill.style.width = (hp/20*100) + "%";
 
-        moveBomb();
+        boss.style.transform = "scale(0.9)";
+        setTimeout(()=>boss.style.transform="scale(1)",100);
+
+        if(hp <= 0){
+            alert("🏆 BOSS DEFEATED!");
+            clickGame();
+        }
     }
-
-    function moveBomb(){
-
-        bomb.style.left =
-            Math.random()*700 + "px";
-
-        bomb.style.top =
-            Math.random()*300 + "px";
-    }
-
-    setInterval(moveBomb,800);
 }
+
+/* ⏱ TIMER */
+setInterval(()=>{
+
+    time--;
+    document.getElementById("timer").innerText = "TIME: " + time;
+
+    if(time <= 0){
+        alert("🏆 GAME OVER\nSCORE: " + score);
+        location.reload();
+    }
+
+},1000);
 
 </script>
 
