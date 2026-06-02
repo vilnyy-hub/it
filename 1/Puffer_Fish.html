@@ -3,253 +3,478 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puffer Fish ✨</title>
-    
+    <title>🐱 Мяу 🐱</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        :root { --ocean: #0a3d62; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(to bottom, #0a3d62, #1e90ff);
             color: white;
-            text-align: center;
+            overflow-x: hidden;
             min-height: 100vh;
+            position: relative;
         }
 
-        .big-stars {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; pointer-events: none;
+        .fish-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; overflow: hidden;
         }
-
-        .star-svg {
+        .fish {
             position: absolute;
-            fill: #ffeb3b;
-            filter: drop-shadow(0 0 10px #fff700);
-            animation: pulse 3s infinite ease-in-out;
+            font-size: 2.5rem;
+            opacity: 0.85;
+            animation: swim linear infinite;
+            text-shadow: 0 0 8px rgba(255,255,255,0.6);
         }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.7; }
-            50% { transform: scale(1.3) rotate(15deg); opacity: 1; }
+        @keyframes swim {
+            from { transform: translateX(-150px) rotate(0deg); }
+            to { transform: translateX(calc(100vw + 150px)) rotate(15deg); }
         }
+        .fish.reverse { animation-direction: reverse; }
 
-        .header-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            padding: 40px;
-            margin: 20px auto;
-            border-radius: 40px;
-            max-width: 600px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        .content {
+            position: relative; z-index: 2; padding: 20px; text-align: center;
         }
+        h1 { font-size: 3.5rem; color: #ffeb3b; text-shadow: 4px 4px 10px rgba(0,0,0,0.5); margin: 20px 0; }
+        .greeting { color: #00ff9d; font-size: 2.2rem; margin: 15px 0; text-shadow: 0 0 15px #00ff9d; }
+        .subtitle { color: #e91e63; font-size: 1.4rem; margin: 20px 0; }
 
-        .main-img {
-            border-radius: 30px;
-            width: 180px;
-            transition: 0.5s;
-            cursor: pointer;
-        }
-
-        .main-img:hover { transform: scale(1.1); }
-
-        .search-container {
-            margin: 20px auto;
-            max-width: 450px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .search-input {
-            width: 70%;
-            padding: 12px 20px;
-            border-radius: 25px 0 0 25px;
-            border: none;
-            outline: none;
-        }
-
-        .search-btn {
-            width: 30%;
-            padding: 12px;
-            border-radius: 0 25px 25px 0;
-            border: none;
-            background: #ffeb3b;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .pinterest-container {
-            column-count: 4;
-            column-gap: 20px;
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        @media (max-width: 900px) { .pinterest-container { column-count: 2; } }
-
-        .pin {
-            display: inline-block;
-            width: 100%;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.08);
+        img {
             border-radius: 20px;
-            overflow: hidden;
-            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            margin: 15px;
+            transition: transform 0.4s ease;
             cursor: pointer;
         }
+        img:hover { transform: scale(1.08) rotate(3deg); }
 
-        .pin:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.2); }
-        .pin img { width: 100%; display: block; }
-        .pin p { padding: 10px; font-weight: bold; }
+        .big-text { font-size: 6rem; color: #ff9800; text-shadow: 0 0 20px #ff5722; margin: 30px 0; }
+        .tongue { color: #ff69b4; font-size: 2.8rem; margin: 20px 0; }
 
         .modal {
-            display: none; 
+            display: none;
             position: fixed;
-            z-index: 2000;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(15px);
-            overflow-y: auto;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(10, 61, 98, 0.98);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
         }
-
         .modal-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 80px 40px 40px;
+            background: linear-gradient(to bottom, #0a3d62, #1e90ff);
+            width: 96vw;
+            max-width: 920px;
+            height: 97vh;
+            border-radius: 25px;
+            box-shadow: 0 20px 70px rgba(0,0,0,0.85);
+            border: 6px solid #ffeb3b;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .modal-header {
+            padding: 20px 25px 10px;
+            text-align: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 25px;
+            font-size: 3.5rem;
+            cursor: pointer;
+            color: #ffeb3b;
+        }
+        .modal h2 {
+            color: #ffeb3b;
+            font-size: 2.3rem;
+            margin: 0;
+        }
+        .facts {
+            padding: 15px 32px 40px;
+            font-size: 1.32rem;
+            line-height: 1.82;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .facts p {
+            margin-bottom: 26px;
+        }
+        .facts::-webkit-scrollbar { width: 12px; }
+        .facts::-webkit-scrollbar-thumb {
+            background: #ffeb3b;
+            border-radius: 10px;
         }
 
-        .modal-content img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: 20px;
-            border: 2px solid #ffeb3b;
-        }
-
-        .close-btn {
-            position: fixed;
-            top: 20px; right: 40px;
-            font-size: 50px; color: white; cursor: pointer;
-            z-index: 2100;
-        }
-
-        .counter-section {
-            background: rgba(0, 0, 0, 0.4);
+        .mini-modal-content {
+            background: linear-gradient(to bottom, #0a3d62, #1e90ff);
+            width: 90vw;
+            max-width: 500px;
+            border-radius: 25px;
+            box-shadow: 0 20px 70px rgba(0,0,0,0.85);
+            border: 6px solid #ffeb3b;
             padding: 30px;
-            margin-top: 50px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
+    <div class="fish-container" id="fishContainer"></div>
+    
+    <div class="content">
+        <h1>ОГОГО ти прям потужна 🐱</h1>
+        <p class="greeting">ПРивІт дЯкуЮ що приЙшОВ/лА нА МІй СаЙТ 💕🐱</p>
+        
+        <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fvilnyy-hub.github.io%2Fit%2F1%2Fsofi.html&label=&icon=eye&color=%239ec5fe&message=&style=flat&tz=UTC">
 
-    <div class="big-stars" id="starField"></div>
+        <img src="https://images.squarespace-cdn.com/content/v1/607f89e638219e13eee71b1e/1684821560422-SD5V37BAG28BURTLIXUQ/michael-sum-LEpfefQf4rU-unsplash.jpg"
+             style="width: 320px;" 
+             data-title="Котик гріється на сонечку"
+             data-fact="1.Коти — живі сонячні годинники: Якщо ти поспостерігаєш за котом протягом дня, то помітиш, що він постійно переходить з місця на місце. Коти безпомилково вираховують, як рухається Земля відносно Сонця, і перелягають точно в ту точку кімнати, куди перемістилася сонячна пляма.<br><br>2.Чому вони не перегріваються: У котів майже немає потових залоз на тілі (вони є тільки на подушечках лапок). Коли кіт лежить на сонці, від перегріву його рятує саме шерсть! Вона працює як термос: взимку утримує тепло, а влітку — захищає шкіру від палючих променів.<br><br>3.Засмага на носі та вухах: Так, коти теж можуть обгоріти на сонці! Особливо це стосується білих котів або котиків із рожевими носиками та вушками. Оскільки шерсть там тонка, сонечко може сильно напекти, тому домашні білі пухнастики іноді навіть потребують спеціального безпечного сонцезахисного крему.">
 
-    <div id="imageModal" class="modal">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle" style="margin-top: 40px; color: #ffeb3b;"></h2>
-        <div class="modal-content" id="modalImages"></div>
+        <p class="subtitle">Ти потрапив у світ кітиків :)</p>
+
+        <img src="https://applaws.com/uk/wp-content/uploads/sites/3/2025/06/orange_cat_in_cardboard_box.png"
+             style="width: 380px;" 
+             data-title="Котик у коробці"
+             data-fact="1.Безпека та затишок (власна фортеця): Коти за своєю природою є хижаками, але водночас вони досить маленькі, тому в дикій природі на них теж полювали. Коробка — це ідеальне укриття. Коли кіт сидить у ній, у нього захищені спина і боки, а ворог не підбереться непомітно. Звідти дуже зручно спостерігати за світом і почуватися у повній безпеці.<br><br>2.Зменшення стресу: Вчені навіть проводили дослідження в притулках для тварин. Вони помітили, що коти, яким давали звичайні картонні коробки, набагато швидше звикали до нового місця, менше стресували та охочіше йшли на контакт із людьми. Коробка для них — це такий собі 'антистрес-зонінг'.<br><br>3.Ідеальна засідка: Коти — мисливці, які атакують із засідки. Коробка є чудовим замаскованим пунктом. З неї можна дуже весело і зненацька вистрибнути на чиїсь ноги, іграшкову мишку або на іншого кота, що проходить повз.">
+
+        <img src="https://cdn.britannica.com/70/234870-050-D4D024BB/Orange-colored-cat-yawns-displaying-teeth.jpg"
+             style="width: 380px;" 
+             data-title="Зіваючий котик"
+             data-fact="1.Генетика дикого хижака: У дикій природі котячі (навіть леви та тигри) витрачають величезну кількість енергії на полювання. Їм потрібно вистежити здобич, тихо підкрастися і зробити блискавичний, потужний стрибок. Сон — це спосіб накопичити якнайбільше сил для такого енергетичного вибуху. Домашньому коту полювати на мишей уже не треба, а от інстинкт 'зберігати енергію' залишився.<br><br>2.Режим 'напівсну' (чуйне дрімання): Близько 70% часу, який кіт проводить із заплющеними очима, — це насправді не глибокий сон, а легка дрімота. Вони контролюють усе навколо: їхні вуха повертаються на кожен шурхіт, а ніс вловлює запахи. Кіт готовий миттєво прокинутися і втекти або напасти, якщо це знадобиться. Глибокий сон (коли вони смішно смикають лапками чи вусами) триває всього по 10–15 хвилин за раз.<br><br>3.Вплив погоди: Коти, як і люди, дуже чутливі до погоди. Якщо на вулиці дощ, хмарно або холодно, твій пухнастик, скоріш за все, спатиме ще довше, ніж зазвичай.">
+
+        <p class="big-text">ААААААААААААААА!!!</p>
+
+        <img src="https://images.squarespace-cdn.com/content/v1/53d40acae4b00000003f5e7c/d9aebc57-a9d3-4c44-ba26-ea546698f73d/Applesauce+1.jpg?format=jpg"
+             style="width: 420px; border-radius: 50%;" 
+             data-title="Коти — королі"
+             data-fact="1.Відомий британський біолог Джон Бредшоу багато років досліджував поведінку домашніх котів і дійшов приголомшливого висновку: коти не розуміють, що люди — це інший біологічний вид. Для кота ти — просто величезний, дуже добрий і чомусь лисий кіт. Оскільки вони сприймають нас як рівних (або просто як великих співмешканців), вони не збираються підкорятися чи виконувати команди, як це роблять собаки.<br><br>2.Вимогливе нявкання: Коли кіт голосно нявчить біля миски чи зачинених дверей, він не «наказує слузі». Насправді дорослі коти між собою майже ніколи не нявкають — цей звук вони вигадали спеціально для нас. Вони зрозуміли, що люди реагують на цей звуковий сигнал, і просто користуються цим «інструментом», щоб попросити про допомогу.<br><br>3.Подарунки у вигляді мишей чи іграшок: Якщо кіт приносить тобі спійману мишу або свою улюблену плюшеву іграшку, він не «нагороджує підданого». Навпаки, у котячій родині так роблять авторитетні дорослі коти (мами або вожаки), які приносять здобич, щоб навчити молодших або слабших полювати. Тобто кіт у цей момент вважає себе головним піклувальником, а тебе — невмілим кошеням, яке не може саме зловити мишу.">
+
+        <img src="https://metro.co.uk/wp-content/uploads/2020/05/PRI_150473631-e1588316954238.jpg?quality=90&strip=all"
+             style="width: 280px;" 
+             data-title="Нічні пригоди"
+             data-fact="1.Атака о другій ночі: Ти точно знаєш цей «режим тигидика», коли о другій чи третій ночі в кота всередині прокидається шалений демон, і він починає бігати по стінах, диванах і твоєму обличчю. Біологи кажуть, що це просто скидання накопиченої за 16 годин сну енергії. Коті просто терміново треба розім'ятися, і начхати, що всі сплять!<br><br>2.Поцілунок очима: Якщо кіт дивиться на тебе і дуже повільно мружиться або заплющує очі — це не тому, що він засинає від нудьги. На котячій мові це означає «Я тебе люблю». Якщо ти зробиш так само у відповідь, кіт зрозуміє, що це взаємно. Але якщо ти будеш просто пильно дивитися йому в очі не кліпаючи — він сприйме це як виклик на дуель.<br><br>3.Стрибки-паркур: Коти вміють стрибати на висоту, яка у 5–6 разів перевищує їхній власний зріст. Це все одно, якби людина звичайного зросту змогла одним стрибком залетіти на дах триповерхового будинку!">
+
+        <p class="tongue">язисьок 👅</p>
+
+        <button id="startGameBtn" style="padding: 15px 40px; font-size: 2.2rem; background-color: #ff9800; color: white; border: 4px solid #ffeb3b; border-radius: 20px; cursor: pointer; margin: 40px auto; display: block; box-shadow: 0 10px 25px rgba(0,0,0,0.4); font-family: 'Comic Neue', cursive; transition: transform 0.2s;">Почати гру 🎮</button>
     </div>
 
-    <div class="header-card">
-        <h1>Puffer Fish 🐡✨</h1>
-        <img src="https://www.shutterstock.com/shutterstock/photos/2233588391/display_1500/stock-vector-cute-puffer-fish-angry-cartoon-vector-icon-illustration-animal-nature-icon-concept-isolated-2233588391.jpg" 
-             class="main-img" alt="Puffer" onclick="showMorePhotos('Puffer Magic', 'pufferfish')">
-        <p>Візити: <b id="userCounter" style="color: #ffeb3b;">0</b></p>
-        <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Шукай будь-що...">
-            <button class="search-btn" onclick="performSearch()">Шукати</button>
+    <div class="modal" id="factModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-close" id="closeModal">×</span>
+                <h2 id="modalTitle"></h2>
+            </div>
+            <div class="facts" id="modalFacts"></div>
         </div>
     </div>
 
-    <div class="pinterest-container" id="gallery"></div>
+    <div class="modal" id="rulesModal" style="z-index: 10001;">
+        <div class="mini-modal-content">
+            <h2 style="color: #ffeb3b; font-size: 2.5rem; margin-bottom: 20px;">Правила гри:</h2>
+            <p style="font-size: 1.8rem; margin-bottom: 15px;">1. Лови рибок та креветок! 🐟🦐</p>
+            <p style="font-size: 1.8rem; margin-bottom: 15px; color: #ff5252; font-weight: bold;">2. Оминай акул! НЕБЕЗПЕКА!!! 🦈</p>
+            <p style="font-size: 1.8rem; margin-bottom: 30px; color: #00e5ff; font-weight: bold;">3. Лови дельфінів!!! інакше програєш! 🐬</p>
+            <button id="startPlayBtn" style="padding: 12px 35px; font-size: 1.8rem; background-color: #00ff9d; color: #0a3d62; font-weight: bold; border: none; border-radius: 15px; cursor: pointer; font-family: 'Comic Neue', cursive; transition: transform 0.2s;">Зрозуміло!</button>
+        </div>
+    </div>
 
-    <div class="counter-section">
-        <p>Загальна кількість відвідувачів:</p>
-        <img src="https://hitscounter.dev/api/hit?url=puffer-fish-ultra-magic&label=&icon=brightness-alt-high&color=%23ffc107&style=plastic">
+    <div class="modal" id="gameOverModal" style="z-index: 10002;">
+        <div class="mini-modal-content">
+            <h2 id="gameOverTitle" style="color: #ff5252; font-size: 2.8rem; margin-bottom: 15px;">Гру закінчено</h2>
+            <p id="gameOverText" style="font-size: 1.6rem; margin-bottom: 30px;">На жаль, ти програв, але ти дуже старався!!!</p>
+            <button id="closeGameOverBtn" style="padding: 12px 35px; font-size: 1.5rem; background-color: #ffeb3b; color: #0a3d62; font-weight: bold; border: none; border-radius: 15px; cursor: pointer; font-family: 'Comic Neue', cursive; transition: transform 0.2s;">Закрити</button>
+        </div>
+    </div>
+
+    <div id="gameScreen" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #add8e6; z-index: 9999; overflow: hidden; cursor: none; user-select: none; touch-action: none;">
+        <div style="position: absolute; top: 20px; left: 20px; font-size: 2.5rem; color: #0a3d62; font-weight: bold; font-family: 'Comic Neue', cursive; text-shadow: 2px 2px 4px rgba(255,255,255,0.5); z-index: 10;">
+            Зловлено: <span id="score">0</span>
+        </div>
+        
+        <div id="heartsContainer" style="position: absolute; top: 70px; left: 20px; font-size: 2rem; z-index: 10;">
+            ❤️❤️❤️❤️❤️
+        </div>
+
+        <button id="exitGameBtn" style="position: absolute; top: 20px; right: 20px; padding: 10px 20px; font-size: 1.5rem; background-color: #e91e63; color: white; border: 3px solid white; border-radius: 15px; cursor: pointer; font-family: 'Comic Neue', cursive; z-index: 10;">Вийти</button>
+        
+        <img id="playerCat" src="" style="position: absolute; bottom: 20px; left: 50%; width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transform: translateX(-50%); pointer-events: none; z-index: 5; will-change: left;">
     </div>
 
     <script>
-        function handleUserCounter() {
-            let count = localStorage.getItem('puffer_v4_visits') || 0;
-            count++;
-            localStorage.setItem('puffer_v4_visits', count);
-            document.getElementById('userCounter').innerText = count;
-        }
-
-        function drawBigStars() {
-            const field = document.getElementById('starField');
-            for (let i = 0; i < 25; i++) {
-                const star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                star.setAttribute("viewBox", "0 0 572.467 572.467");
-                star.classList.add("star-svg");
-                star.style.width = (Math.random() * 25 + 10) + "px";
-                star.style.top = Math.random() * 95 + "%";
-                star.style.left = Math.random() * 95 + "%";
-                star.style.animationDelay = Math.random() * 3 + "s";
-                star.innerHTML = `<path d="M572.467,222.062l-206.331-15.011L286.134,20l-80.003,187.051L0,222.062l157.067,133.681l-50.534,201.725 L286.134,443.916l179.6,113.551l-50.534-201.725L572.467,222.062z"/>`;
-                field.appendChild(star);
+        function createFish() {
+            const container = document.getElementById('fishContainer');
+            const fishTypes = ['🐟', '🐠', '🐡', '🐬', '🦈'];
+            const colors = ['#ffeb3b', '#ff4081', '#00e5ff', '#76ff03', '#e040fb', '#ff9800'];
+            for (let i = 0; i < 35; i++) {
+                const fish = document.createElement('div');
+                fish.className = 'fish';
+                fish.textContent = fishTypes[Math.floor(Math.random() * fishTypes.length)];
+                fish.style.fontSize = `${Math.random()*2.2 + 1.8}rem`;
+                fish.style.color = colors[Math.floor(Math.random() * colors.length)];
+                fish.style.top = `${Math.random() * 100}vh`;
+                fish.style.left = `-${Math.random() * 100}px`;
+                fish.style.animationDuration = `${Math.random() * 25 + 18}s`;
+                fish.style.animationDelay = `-${Math.random() * 30}s`;
+                if (Math.random() > 0.7) fish.classList.add('reverse');
+                container.appendChild(fish);
             }
         }
 
-        const topics = [
-            { t: "Аніме (Покращено) 🌟", q: "anime", img: "https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=400" },
-            { t: "Космос 🌌", q: "galaxy", img: "https://images.unsplash.com/photo-1464802686167-b939a67e06a1?w=400" },
-            { t: "Котики 🐈", q: "cat", img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400" },
-            { t: "Океан 🌊", q: "ocean", img: "https://images.unsplash.com/photo-1502675135487-e971002a6adb?w=400" },
-            { t: "Кіберпанк 🤖", q: "cyberpunk", img: "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=400" },
-            { t: "Дракони 🐉", q: "dragon", img: "https://images.unsplash.com/photo-1577493322601-3ae1f35c7505?w=400" },
-            { t: "Панди 🐼", q: "panda", img: "https://images.unsplash.com/photo-1564349683136-77e08bef1ed1?w=400" },
-            { t: "Лисички 🦊", q: "fox", img: "https://images.unsplash.com/photo-1504197885-609741792ce7?w=400" },
-            { t: "Природа 🌲", q: "forest", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400" },
-            { t: "Машини 🏎️", q: "sportscar", img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400" }
-        ];
+        function createBubbles() {
+            const container = document.getElementById('fishContainer');
+            setInterval(() => {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 18 + 8;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}vw`;
+                bubble.style.bottom = `-30px`;
+                bubble.style.opacity = Math.random() * 0.6 + 0.3;
+                container.appendChild(bubble);
+                setTimeout(() => bubble.remove(), 9000);
+            }, 280);
+        }
 
-        const gallery = document.getElementById('gallery');
-        topics.forEach(item => {
-            const pin = document.createElement('div');
-            pin.className = 'pin';
-            pin.onclick = () => showMorePhotos(item.t, item.q);
-            pin.innerHTML = `<img src="${item.img}" alt="img"><p>${item.t}</p>`;
-            gallery.appendChild(pin);
+        window.onload = () => {
+            createFish();
+            createBubbles();
+        };
+
+        const modal = document.getElementById('factModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalFacts = document.getElementById('modalFacts');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
         });
 
-        function performSearch() {
-            const val = document.getElementById('searchInput').value;
-            if(val) showMorePhotos('Пошук: ' + val, val);
+        document.querySelectorAll('.content img').forEach(img => {
+            if (img.dataset.title) {
+                img.addEventListener('click', () => {
+                    modalTitle.textContent = img.dataset.title;
+                    modalFacts.innerHTML = img.dataset.fact;
+                    modal.style.display = 'flex';
+                });
+            }
+        });
+
+        const startGameBtn = document.getElementById('startGameBtn');
+        const rulesModal = document.getElementById('rulesModal');
+        const startPlayBtn = document.getElementById('startPlayBtn');
+        const gameOverModal = document.getElementById('gameOverModal');
+        const closeGameOverBtn = document.getElementById('closeGameOverBtn');
+        const gameOverTitle = document.getElementById('gameOverTitle');
+        const gameOverText = document.getElementById('gameOverText');
+        
+        const gameScreen = document.getElementById('gameScreen');
+        const playerCat = document.getElementById('playerCat');
+        const scoreElement = document.getElementById('score');
+        const heartsContainer = document.getElementById('heartsContainer');
+        const exitGameBtn = document.getElementById('exitGameBtn');
+
+        const catImages = [
+            "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+            "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+            "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+            "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+            "https://images.unsplash.com/photo-1529778459826-3d2319fbc958?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+            "https://images.unsplash.com/photo-1573865526739-10659fec78a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+        ];
+
+        let animationFrameId;
+        let fishSpawnInterval;
+        let score = 0;
+        let lives = 5;
+        let activeFishes = [];
+        let mouseX = window.innerWidth / 2;
+        let isGameRunning = false;
+        let difficultyMultiplier = 0;
+        let spawnRate = 500;
+
+        startGameBtn.addEventListener('mouseover', () => startGameBtn.style.transform = 'scale(1.1)');
+        startGameBtn.addEventListener('mouseout', () => startGameBtn.style.transform = 'scale(1)');
+        startPlayBtn.addEventListener('mouseover', () => startPlayBtn.style.transform = 'scale(1.1)');
+        startPlayBtn.addEventListener('mouseout', () => startPlayBtn.style.transform = 'scale(1)');
+
+        startGameBtn.addEventListener('click', () => {
+            rulesModal.style.display = 'flex';
+        });
+
+        startPlayBtn.addEventListener('click', () => {
+            rulesModal.style.display = 'none';
+            document.body.style.overflow = 'hidden'; 
+            gameScreen.style.display = 'block';
+            
+            score = 0;
+            lives = 5;
+            difficultyMultiplier = 0;
+            spawnRate = 500;
+            scoreElement.textContent = score;
+            updateHearts();
+            
+            playerCat.src = catImages[Math.floor(Math.random() * catImages.length)];
+            mouseX = window.innerWidth / 2;
+            isGameRunning = true;
+            
+            window.addEventListener('mousemove', handleInput);
+            window.addEventListener('touchmove', handleInput, { passive: false });
+            
+            startGame();
+        });
+
+        exitGameBtn.addEventListener('click', () => {
+            quitGame();
+        });
+
+        closeGameOverBtn.addEventListener('click', () => {
+            gameOverModal.style.display = 'none';
+            quitGame();
+        });
+
+        function quitGame() {
+            isGameRunning = false;
+            document.body.style.overflow = 'auto';
+            gameScreen.style.display = 'none';
+            window.removeEventListener('mousemove', handleInput);
+            window.removeEventListener('touchmove', handleInput);
+            stopGame();
         }
 
-        function showMorePhotos(title, query) {
-            const modal = document.getElementById('imageModal');
-            const modalImages = document.getElementById('modalImages');
-            document.getElementById('modalTitle').innerText = title;
-            modalImages.innerHTML = "";
-            modal.style.display = "block";
+        function updateHearts() {
+            heartsContainer.textContent = '❤️'.repeat(lives);
+        }
+
+        function triggerGameOver(isDolphin = false) {
+            isGameRunning = false;
+            stopGame();
+            if (isDolphin) {
+                gameOverTitle.textContent = "Ой-ой!";
+                gameOverText.textContent = "На жаль, ти пропустив дельфіна, спробуй ще раз!! Я знаю ти старався/ла!!( •̀ ω •́ )✧";
+            } else {
+                gameOverTitle.textContent = "Гру закінчено";
+                gameOverText.textContent = "На жаль, ти програв, але ти дуже старався!!!";
+            }
+            gameOverModal.style.display = 'flex';
+        }
+
+        function handleInput(e) {
+            if (!isGameRunning) return;
+            mouseX = e.clientX || (e.touches && e.touches[0].clientX);
+        }
+
+        function gameLoop() {
+            if (!isGameRunning) return;
             
-            for(let i = 0; i < 9; i++) {
-                const img = document.createElement('img');
-                // Використовуємо Source.Unsplash для Аніме та Пошуку - він надійніший
-                if(query === 'anime') {
-                    img.src = `https://source.unsplash.com/800x1000/?anime,art&sig=${i}`;
+            let halfWidth = playerCat.offsetWidth / 2;
+            let newLeft = Math.max(halfWidth, Math.min(window.innerWidth - halfWidth, mouseX));
+            playerCat.style.left = newLeft + 'px';
+
+            let catRect = playerCat.getBoundingClientRect();
+            
+            for (let i = 0; i < activeFishes.length; i++) {
+                let fish = activeFishes[i];
+                let currentTop = parseFloat(fish.style.top);
+                let speed = parseFloat(fish.dataset.speed) + difficultyMultiplier;
+                fish.style.top = (currentTop + speed) + 'px';
+                
+                let fishRect = fish.getBoundingClientRect();
+                
+                if (
+                    fishRect.left < catRect.right &&
+                    fishRect.right > catRect.left &&
+                    fishRect.top < catRect.bottom &&
+                    fishRect.bottom > catRect.top
+                ) {
+                    if (fish.dataset.type === 'shark') {
+                        lives--;
+                        updateHearts();
+                        if (lives <= 0) triggerGameOver(false);
+                    } else if (fish.dataset.type === 'dolphin') {
+                        score += 5;
+                        scoreElement.textContent = score;
+                    } else {
+                        score++;
+                        scoreElement.textContent = score;
+                        if (score % 50 === 0) {
+                            difficultyMultiplier += 0.5;
+                            spawnRate = Math.max(200, spawnRate - 50);
+                            clearInterval(fishSpawnInterval);
+                            startSpawnInterval();
+                        }
+                    }
+                    fish.remove();
+                    activeFishes.splice(i, 1);
+                    i--;
+                } 
+                else if (currentTop > window.innerHeight) {
+                    if (fish.dataset.type === 'dolphin') {
+                        triggerGameOver(true);
+                        return;
+                    }
+                    fish.remove();
+                    activeFishes.splice(i, 1);
+                    i--;
+                }
+            }
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function startSpawnInterval() {
+            fishSpawnInterval = setInterval(() => {
+                if (!isGameRunning) return;
+                const fish = document.createElement('div');
+                fish.style.position = 'absolute';
+                fish.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+                fish.style.top = '-80px';
+                fish.style.zIndex = '4';
+                
+                let rand = Math.random();
+                if (rand < 0.1) {
+                    fish.textContent = '🐬';
+                    fish.dataset.type = 'dolphin';
+                    fish.style.fontSize = '60px';
+                } else if (rand < 0.35) {
+                    fish.textContent = '🦈';
+                    fish.dataset.type = 'shark';
+                    fish.style.fontSize = '80px';
                 } else {
-                    img.src = `https://loremflickr.com/500/600/${query}?random=${i}`;
+                    const goods = ['🐟', '🐠', '🐡', '🦐'];
+                    fish.textContent = goods[Math.floor(Math.random() * goods.length)];
+                    fish.dataset.type = 'food';
+                    fish.style.fontSize = (Math.random() * 20 + 35) + 'px';
                 }
                 
-                // Якщо картинка не вантажиться, спробувати інший сервіс
-                img.onerror = function() {
-                    this.src = `https://picsum.photos/500/600?random=${i + 20}`;
-                };
-                
-                modalImages.appendChild(img);
-            }
+                fish.dataset.speed = (Math.random() * 4 + 3); 
+                gameScreen.appendChild(fish);
+                activeFishes.push(fish);
+            }, spawnRate);
         }
 
-        function closeModal() { document.getElementById('imageModal').style.display = "none"; }
-        window.onclick = function(e) { if(e.target == document.getElementById('imageModal')) closeModal(); }
+        function startGame() {
+            startSpawnInterval();
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
 
-        window.onload = () => { drawBigStars(); handleUserCounter(); };
+        function stopGame() {
+            cancelAnimationFrame(animationFrameId);
+            clearInterval(fishSpawnInterval);
+            activeFishes.forEach(fish => fish.remove());
+            activeFishes = [];
+        }
     </script>
 </body>
 </html>
