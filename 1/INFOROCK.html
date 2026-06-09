@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤘INFOROCK — SEARCH & DISCOGRAPHY🎸</title>
+    <style>
+        :root {
+            --primary-red: #ff0000;
+            --bg-black: #050505;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --accent-gold: #ffcc00;
+        }
+
+        body {
+            background: var(--bg-black);
+            color: #fff;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h1 { 
+            color: var(--primary-red); 
+            font-size: clamp(2.5em, 8vw, 5em); 
+            letter-spacing: -2px;
+            text-shadow: 0 0 30px rgba(255,0,0,0.5);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* SEARCH BAR SYSTEM */
+        .search-wrapper {
+            max-width: 700px;
+            margin: 0 auto 10px auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-red);
+        }
+
+        .btn-search-trigger {
+            background: var(--primary-red);
+            border: none;
+            color: #000;
+            font-weight: bold;
+            padding: 0 30px;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-search-trigger:hover {
+            box-shadow: 0 0 15px var(--primary-red);
+            background: #ff3333;
+        }
+
+        /* SEARCH RESULTS BUTTONS DOCK */
+        .search-results-dock {
+            max-width: 700px;
+            margin: 15px auto 40px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            text-align: left;
+        }
+
+        .btn-search-result {
+            background: #111;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px 15px;
+            font-size: 0.9em;
+            cursor: pointer;
+            text-align: left;
+            border-radius: 4px;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .btn-search-result:hover {
+            border-color: var(--accent-gold);
+            background: rgba(255, 204, 0, 0.05);
+        }
+
+        .btn-search-result .result-type {
+            color: var(--accent-gold);
+            font-size: 0.75em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .btn-search-result .result-title {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* LANGUAGE SELECTION SCREEN */
+        .lang-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lang-box {
+            background: #0a0a0a;
+            border: 1px solid var(--primary-red);
+            padding: 50px;
+            border-radius: 4px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.2);
+        }
+
+        .lang-title { font-size: 1.8em; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+        .lang-btn-group { display: flex; gap: 20px; justify-content: center; }
+        .btn-lang {
+            background: var(--card-glass); border: 1px solid var(--primary-red); color: #fff;
+            padding: 15px 35px; font-size: 1.1em; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-lang:hover { background: var(--primary-red); color: #000; box-shadow: 0 0 20px var(--primary-red); }
+
+        /* CATEGORIES & TACTICAL ROCK GRID */
+        .category-label {
+            color: var(--accent-gold); text-transform: uppercase; letter-spacing: 4px; font-size: 1em;
+            margin: 50px 0 20px 0; display: block; border-bottom: 1px solid rgba(255, 204, 0, 0.2); padding-bottom: 10px;
+            text-align: left; max-width: 1400px; margin-left: auto; margin-right: auto; font-weight: bold;
+        }
+
+        .genre-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; max-width: 1400px; margin: 0 auto 30px auto;
+        }
+
+        .genre-node {
+            background: var(--card-glass); border: 1px solid rgba(255, 0, 0, 0.15); padding: 22px 10px;
+            border-radius: 4px; cursor: pointer; transition: all 0.2s ease;
+        }
+
+        .genre-node:hover {
+            background: rgba(255, 0, 0, 0.1); border-color: var(--primary-red); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
+        }
+
+        .node-title { font-size: 0.85em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* THE ROCK MODAL SYSTEM */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); backdrop-filter: blur(15px); z-index: 1000; justify-content: center; align-items: center;
+        }
+
+        .modal-content {
+            background: #080808; width: 95%; max-width: 1200px; max-height: 90vh;
+            border: 1px solid var(--primary-red); padding: 50px; overflow-y: auto; text-align: left; position: relative;
+        }
+
+        .close-trigger { position: absolute; top: 20px; right: 30px; color: var(--primary-red); font-size: 35px; cursor: pointer; }
+        .modal-h2 { color: var(--primary-red); font-size: 2.5em; text-transform: uppercase; margin: 0 0 20px 0; border-bottom: 2px solid var(--primary-red); }
+        .article-text { color: #ccc; font-size: 1.1em; line-height: 1.7; text-align: justify; margin-bottom: 30px; }
+
+        /* DYNAMIC BAND STAGE COMPONENTS */
+        .bands-section-title { color: var(--accent-gold); font-size: 1.2em; text-transform: uppercase; letter-spacing: 2px; margin: 30px 0 15px 0; border-top: 1px dashed #333; padding-top: 25px;}
+        .bands-btn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 30px; }
+        
+        .btn-band {
+            background: transparent; color: #fff; border: 1px solid #444; padding: 12px;
+            font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 0.8em; transition: 0.2s; text-align: center;
+        }
+        .btn-band:hover { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(255, 204, 0, 0.05); }
+
+        /* DEEP CHRONOLOGY BAND CARD */
+        .band-details-card {
+            background: #0d0d0d; border-left: 4px solid var(--accent-gold); padding: 40px;
+            margin-top: 25px; display: none; animation: fadeIn 0.4s ease-in-out; border-top: 1px solid #1a1a1a;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .history-epoch-title { color: var(--primary-red); font-size: 1em; text-transform: uppercase; margin: 25px 0 10px 0; letter-spacing: 1.5px; font-weight: bold; border-bottom: 1px dashed rgba(255,0,0,0.2); padding-bottom: 5px; }
+        .band-story-paragraph { color: #ddd; margin: 0 0 15px 0; font-size: 1.1rem; line-height: 1.7; text-align: justify; }
+        .band-meta-title { color: var(--accent-gold); font-size: 0.95em; text-transform: uppercase; margin: 30px 0 8px 0; letter-spacing: 1.5px; font-weight: bold; }
+        
+        /* LINEUP & SONG LIST STYLES */
+        .lineup-list { list-style: none; padding: 0; margin: 15px 0; display: flex; flex-direction: column; gap: 6px; }
+        .lineup-list li { background: rgba(255,255,255,0.01); padding: 10px 15px; border-left: 3px solid var(--primary-red); border-radius: 2px; font-size: 1.05em; color: #eee; }
+        .lineup-list strong { color: #fff; }
+        .lineup-list span { color: var(--accent-gold); font-weight: 500; }
+
+        .song-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 8px; margin-top: 15px; padding-left: 0; list-style: none; }
+        .song-list li { 
+            background: #151515; padding: 10px 14px; font-size: 0.82em; color: #aaa; border-radius: 2px; 
+            border-left: 2px solid var(--primary-red); font-family: 'Courier New', monospace; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .btn-simple {
+            padding: 6px 12px; font-size: 12px; cursor: pointer; background: #222; border: 1px solid #444; color: #fff;
+            text-transform: uppercase; font-weight: bold; transition: 0.2s;
+        }
+        .btn-simple:hover { background: var(--primary-red); border-color: var(--primary-red); color: #000; }
+
+        /* LYRICS LYRICAL DISPLAY WINDOW */
+        .inner-window {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 2000; justify-content: center; align-items: center;
+        }
+        .inner-window-content {
+            background: #0d0d0d; border: 1px solid var(--primary-red); width: 85%; max-width: 650px; height: 75vh;
+            padding: 40px; position: relative; border-radius: 4px; box-shadow: 0 0 35px rgba(255,0,0,0.3);
+            text-align: left; display: flex; flex-direction: column;
+        }
+        .lyrics-title-area { border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px; }
+        .lyrics-box {
+            flex: 1; overflow-y: auto; white-space: pre-line; font-family: 'Courier New', monospace;
+            font-size: 1.05em; line-height: 1.6; color: #ddd; padding-right: 10px;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-red); }
+    </style>
+</head>
+<body>
+
+    <div id="languageOverlay" class="lang-overlay">
+        <div class="lang-box">
+            <div class="lang-title">Choose Interface Language / Оберіть мову</div>
+            <div class="lang-btn-group">
+                <button class="btn-lang" onclick="setLanguage('en')">English</button>
+                <button class="btn-lang" onclick="setLanguage('uk')">Українська</button>
+            </div>
+        </div>
+    </div>
+
+    <h1>🤘INFOROCK🎸</h1>
+
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by band or song title..." onkeydown="handleSearchKeyDown(event)">
+        <button id="searchButton" class="btn-search-trigger" onclick="executeSearch()">Search</button>
+    </div>
+    
+    <div id="searchResultsDock" class="search-results-dock"></div>
+
+    <div id="master-container"></div>
+
+    <div id="masterModal" class="modal">
+        <div class="modal-content">
+            <span class="close-trigger" onclick="closeModal()">&times;</span>
+            <h2 id="mTitle" class="modal-h2"></h2>
+            <div id="mArticle" class="article-text"></div>
+            
+            <div class="bands-section-title" id="bandsTitleText">Key Pillars & Artists</div>
+            <div id="mBandsGrid" class="bands-btn-grid"></div>
+            
+            <div id="mBandDetails" class="band-details-card">
+                <h3 id="bName" style="color: #fff; text-transform: uppercase; font-size: 2.2em; margin: 0 0 5px 0; letter-spacing: 1px;"></h3>
+                <div id="bMeta"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="trackWindow" class="inner-window">
+        <div class="inner-window-content">
+            <span class="close-trigger" onclick="closeTrackWindow()">&times;</span>
+            <div class="lyrics-title-area">
+                <h3 id="lyricsBand" style="color: var(--accent-gold); margin: 0; text-transform: uppercase; font-size: 1.1em;"></h3>
+                <h2 id="lyricsTrack" style="color: #fff; margin: 5px 0 0 0; font-size: 1.6em;"></h2>
+            </div>
+            <div id="lyricsContent" class="lyrics-box"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+
+        const localization = {
+            en: { 
+                bandsTitle: "Comprehensive Roster & Iconic Artists", history: "Deep History, Evolution & Cultural Paradigm", 
+                members: "Historical Lineup & Member Roles", tracks: "Complete Exhaustive Discography & Songs Archive",
+                ep1: "Phase I: The Genesis & Sonic Architecture", ep2: "Phase II: The Breakthrough Horizon & Cultural Detonation",
+                ep3: "Phase III: Absolute Zenith, Internal Friction & Evolution", ep4: "Phase IV: The Immortal Legacy & Eternal Paradigm",
+                btnText: "Lyrics", bandLabel: "Band", songLabel: "Song", searchPlaceholder: "Search by band or song title...", searchBtn: "Search"
+            },
+            uk: { 
+                bandsTitle: "Повний реєстр та культові виконавці", history: "Глибока історія, еволюція та культурна парадигма", 
+                members: "Історичний склад та детальні ролі учасників", tracks: "Вичерпний архів треків та повна дискографія",
+                ep1: "Фаза I: Зародження, коріння та архітектура звуку", ep2: "Фаза II: Горизонт прориву та культурна детонація",
+                ep3: "Фаза III: Абсолютний зеніт, внутрішні кризи та еволюція", ep4: "Фаза IV: Безсмертна спадщина та вічна парадигма",
+                btnText: "Текст", bandLabel: "Гурт", songLabel: "Пісня", searchPlaceholder: "Шукати гурт або пісню...", searchBtn: "Пошук"
+            }
+        };
+
+        const rockDatabase = {
+            "Core Rock Genres": ["Rock and Roll", "Classic Rock", "Hard Rock", "Soft Rock", "Arena Rock", "Blues Rock", "Folk Rock", "Country Rock", "Southern Rock", "Heartland Rock", "Glam Rock", "Pub Rock", "Garage Rock", "Surf Rock", "Roots Rock", "Instrumental Rock"],
+            "Alternative & Indie": ["Alternative Rock", "Indie Rock", "College Rock", "Noise Rock", "Dream Pop", "Shoegaze", "Slowcore", "Lo-fi Rock", "Slacker Rock", "Britpop", "Madchester", "Grunge", "Post-Grunge", "Skillet"],
+            "Punk-Related Genres": ["Punk Rock", "Proto-Punk", "Hardcore Punk", "Post-Punk", "Pop Punk", "Skate Punk", "Street Punk", "Anarcho-Punk", "Crust Punk", "D-beat", "Oi!", "Horror Punk", "Riot Grrrl", "Egg Punk", "Sasscore", "Queercore", "Celtic Punk", "Cowpunk", "Psychobilly"],
+            "Metal & Metal-Adjacent Rock": ["Heavy Metal", "Doom Metal", "Thrash Metal", "Speed Metal", "Glam Metal", "Groove Metal", "Progressive Metal", "Power Metal", "Symphonic Metal", "Black Metal", "Death Metal", "Metalcore", "Deathcore", "Nu Metal", "Industrial Metal", "Sludge Metal", "Stoner Metal", "Viking Metal", "Folk Metal", "Gothic Metal", "Djent"],
+            "Progressive & Experimental": ["Progressive Rock", "Art Rock", "Canterbury Scene", "Krautrock", "Avant-Prog", "Experimental Rock", "Math Rock", "Zeuhl", "Space Rock", "Psychedelic Rock", "Acid Rock", "Neo-Prog", "RIO (Rock in Opposition)"],
+            "Goth & Dark Styles": ["Gothic Rock", "Darkwave", "Deathrock", "Ethereal Wave", "Coldwave"],
+            "Electronic-Influenced Rock": ["Electronic Rock", "Synth Rock", "Industrial Rock", "Dance-Punk", "Electroclash", "Digital Hardcore", "Indietronica"],
+            "Pop-Oriented Rock": ["Pop Rock", "Power Pop", "Jangle Pop", "Teen Rock", "Sunshine Pop"],
+            "Regional & Fusion Styles": ["Latin Rock", "Afro Rock", "Desert Rock", "Celtic Rock", "Anatolian Rock", "Japanese Rock (J-Rock)", "Visual Kei", "Samba Rock", "Raga Rock", "Flamenco Rock", "Reggae Rock", "Rap Rock", "Funk Rock", "Jazz Rock", "Fusion Rock"],
+            "Extreme / Underground Styles": ["No Wave", "Noise Punk", "Drone Rock", "Post-Metal", "Avant-Garde Metal", "Blackgaze", "Shoegaze Metal", "Industrial Noise Rock"],
+            "Emo & Related": ["Emo", "Emo Pop", "Screamo", "Midwest Emo", "Emocore"],
+            "Post-Rock Family": ["Post-Rock", "Cinematic Rock", "Ambient Rock"],
+            "Revival Movements": ["Garage Rock Revival", "Post-Punk Revival", "New Wave Revival"],
+            "New Wave & Related": ["New Wave", "Synthpop Rock", "Power New Wave"],
+            "Miscellaneous / Niche Genres": ["Yacht Rock", "Christian Rock", "Comedy Rock", "Pirate Rock", "Viking Rock", "Medieval Rock", "Zombie Rock", "Geek Rock"]
+        };
+
+        const categoryTranslations = {
+            en: {
+                "Core Rock Genres": "Core Rock Genres", "Alternative & Indie": "Alternative & Indie", "Punk-Related Genres": "Punk-Related Genres",
+                "Metal & Metal-Adjacent Rock": "Metal & Metal-Adjacent Rock", "Progressive & Experimental": "Progressive & Experimental", "Goth & Dark Styles": "Goth & Dark Styles",
+                "Electronic-Influenced Rock": "Electronic-Influenced Rock", "Pop-Oriented Rock": "Pop-Oriented Rock", "Regional & Fusion Styles": "Regional & Fusion Styles",
+                "Extreme / Underground Styles": "Extreme / Underground Styles", "Emo & Related": "Emo & Related", "Post-Rock Family": "Post-Rock Family",
+                "Revival Movements": "Revival Movements", "New Wave & Related": "New Wave & Related", "Miscellaneous / Niche Genres": "Miscellaneous / Niche Genres"
+            },
+            uk: {
+                "Core Rock Genres": "Основні Рок Жанри", "Alternative & Indie": "Альтернатива та Інді", "Punk-Related Genres": "Панк та Суміжні Напрямки",
+                "Metal & Metal-Adjacent Rock": "Метал та Важкі Піджанри", "Progressive & Experimental": "Прогресив та Експериментал", "Goth & Dark Styles": "Готичні та Темні Стилі",
+                "Electronic-Influenced Rock": "Електронний Рок", "Pop-Oriented Rock": "Поп-Орієнтований Рок", "Regional & Fusion Styles": "Регіональні Ф'южн Стилі",
+                "Extreme / Underground Styles": "Екстремальний Андеграунд", "Emo & Related": "Емо та Суміжні Жанри", "Post-Rock Family": "Пост-Рок Родина",
+                "Revival Movements": "Рев'ювал Рухи (Відродження)", "New Wave & Related": "Нова Хвиля та Суміжні", "Miscellaneous / Niche Genres": "Різні Нішеві Жанри"
+            }
+        };
+
+        const genreArtists = {
+            "Rock and Roll": ["Elvis Presley", "Chuck Berry", "Little Richard"],
+            "Classic Rock": ["The Beatles", "The Rolling Stones", "Pink Floyd"],
+            "Hard Rock": ["Led Zeppelin", "AC/DC", "Guns N' Roses"],
+            "Alternative Rock": ["Nirvana", "Red Hot Chili Peppers", "Pearl Jam"],
+            "Grunge": ["Nirvana", "Pearl Jam"],
+            "Thrash Metal": ["Metallica", "Slayer"],
+            "Skillet": ["Skillet"]
+        };
+
+        // Спеціальні унікальні пісні для відомих гуртів
+        const realBandTracks = {
+            "Skillet": ["Monster", "Hero", "Awake and Alive", "Comatose", "Whispers in the Dark"],
+            "Nirvana": ["Smells Like Teen Spirit", "Come As You Are", "Lithium", "Heart-Shaped Box"],
+            "Metallica": ["Master of Puppets", "Enter Sandman", "Nothing Else Matters", "One"],
+            "Elvis Presley": ["Jailhouse Rock", "Hound Dog", "Can't Help Falling in Love"],
+            "Chuck Berry": ["Johnny B. Goode", "Maybellene"],
+            "Little Richard": ["Tutti Frutti", "Long Tall Sally"],
+            "The Beatles": ["Hey Jude", "Yesterday", "Let It Be", "Come Together"],
+            "The Rolling Stones": ["Paint It Black", "Satisfaction", "Gimme Shelter"],
+            "Pink Floyd": ["Comfortably Numb", "Wish You Were Here", "Another Brick in the Wall"],
+            "Led Zeppelin": ["Stairway to Heaven", "Whole Lotta Love", "Kashmir"],
+            "AC/DC": ["Back In Black", "Highway to Hell", "Thunderstruck"],
+            "Guns N' Roses": ["Sweet Child O' Mine", "Welcome to the Jungle"],
+            "Red Hot Chili Peppers": ["Californication", "Under the Bridge", "Can't Stop"],
+            "Pearl Jam": ["Alive", "Jeremy", "Even Flow"],
+            "Slayer": ["Raining Blood", "Angel of Death"]
+        };
+
+        const realBandLineups = {
+            "Skillet": {
+                en: [{ name: "John Cooper", role: "Lead Vocals, Bass Guitar" }, { name: "Korey Cooper", role: "Rhythm Guitar, Keyboards" }, { name: "Jen Ledger", role: "Drums, Co-Vocals" }, { name: "Seth Morrison", role: "Lead Guitar" }],
+                uk: [{ name: "Джон Купер", role: "Головний вокал, бас-гітара" }, { name: "Корі Купер", role: "Ритм-гітара, клавішні" }, { name: "Джен Леджер", role: "Ударні, додатковий вокал" }, { name: "Сет Моррісон", role: "Лід-гітара" }]
+            },
+            "Nirvana": {
+                en: [{ name: "Kurt Cobain", role: "Lead Vocals, Lead Guitar" }, { name: "Krist Novoselic", role: "Bass Guitar" }, { name: "Dave Grohl", role: "Drums" }],
+                uk: [{ name: "Курт Кобейн", role: "Головний вокал, лід-гітара" }, { name: "Кріст Новоселіч", role: "Бас-гітара" }, { name: "Дейв Ґрол", role: "Ударні" }]
+            },
+            "Metallica": {
+                en: [{ name: "James Hetfield", role: "Lead Vocals, Rhythm Guitar" }, { name: "Kirk Hammett", role: "Lead Guitar" }, { name: "Robert Trujillo", role: "Bass Guitar" }, { name: "Lars Ulrich", role: "Drums" }],
+                uk: [{ name: "Джеймс Гетфілд", role: "Головний вокал, ритм-гітара" }, { name: "Кірк Гемметт", role: "Лід-гітара" }, { name: "Роберт Трухільйо", role: "Бас-гітара" }, { name: "Ларс Ульріх", role: "Ударні" }]
+            }
+        };
+
+        // База текстів пісень (включає відомі треки та універсальні структури для згенерованих гуртів)
+        const songLyricsDatabase = {
+            "monster": `The secret side of me, I never let you see\nI keep it caged but I can't control it\nSo stay away from me, the beast is ugly\nI feel the rage and I just can't hold it...`,
+            "hero": `I'm just a step away, I'm just a breath away\nLosin' my faith today, fallin' off the edge today\nI need a hero to save me now!`,
+            "awake and alive": `I'm awake! I'm alive!\nNow I know what I believe inside\nNow it's my time\nI'll do what I want 'cause this is my life!`,
+            "comatose": `I hate feeling like this\nI'm so tired of trying to fight this\nI'm comatose, I'm modern-dead\nFloating inside this empty head...`,
+            "whispers in the dark": `No, you'll never be alone\nWhen you are lost, I'll guide you home\nI hear your whispers in the dark...`,
+            "smells like teen spirit": `Load up on guns, bring your friends\nIt's fun to lose and to pretend\nWith the lights out, it's less dangerous\nHere we are now, entertain us!`,
+            "come as you are": `Come as you are, as you were\nAs I want you to be\nAs a friend, as a friend\nAs an old enemy...`,
+            "lithium": `I'm so happy 'cause today I've found my friends\nThey're in my head\nI'm so ugly, but that's okay, 'cause so are you...`,
+            "heart-shaped box": `She eyes me like a Pisces when I am weak\nI've been locked inside your heart-shaped box for weeks...`,
+            "master of puppets": `End of passion play, crumbling away\nI'm your source of self-destruction\nMaster of puppets, I'm pulling your strings!`,
+            "enter sandman": `Say your prayers, little one\nDon't forget, my son\nExit light, enter night\nTake my hand, we're off to never-never land!`,
+            "nothing else matters": `So close, no matter how far\nCouldn't be much more from the heart\nForever trusting who we are\nAnd nothing else matters...`,
+            "one": `I can't remember anything\nCan't tell if this is true or dream\nDeep down inside I feel the scream\nThis terrible silence stops me...`
+        };
+
+        const container = document.getElementById('master-container');
+
+        Object.keys(rockDatabase).forEach(cat => {
+            const label = document.createElement('span');
+            label.className = 'category-label';
+            label.innerText = categoryTranslations[currentLang][cat];
+            container.appendChild(label);
+
+            const grid = document.createElement('div');
+            grid.className = 'genre-grid';
+
+            rockDatabase[cat].forEach(genre => {
+                const node = document.createElement('div');
+                node.className = 'genre-node';
+                node.innerHTML = `<span class="node-title">${genre}</span>`;
+                node.onclick = () => openGenreModal(genre);
+                grid.appendChild(node);
+            });
+            container.appendChild(grid);
+        });
+
+        function generateSmartArticle(genre, lang) {
+            return lang === 'en' ? `<p>Classification registers <strong>${genre}</strong> as an iconic developmental pillar in music history.</p>` : `<p>Класифікація реєструє напрямок <strong>${genre}</strong> як фундаментальний стовп в історії музики.</p>`;
+        }
+
+        function getSmartBandList(genre) {
+            if (genreArtists[genre]) return genreArtists[genre];
+            const base = genre.replace(" Rock", "").replace(" Metal", "").replace(" Punk", "");
+            return [`${base} Legion`, `${base} Empire`, `${base} Pioneers`];
+        }
+
+        // ПОКРАЩЕНА ГЕНЕРАЦІЯ ТРЕКІВ: Працює ДЛЯ ВСІХ гуртів на сайті!
+        function generateGiganticTracklist(bandName) {
+            if (realBandTracks[bandName]) return realBandTracks[bandName];
+            
+            // Якщо гурт процедурний (наприклад "Yacht Rock Legion"), створюємо для нього унікальні круті треки
+            const baseName = bandName.split(' ')[0] || "Rock";
+            return [
+                `${baseName} Anthem`,
+                `Subcultural Friction`,
+                `Echoes of the Night`,
+                `Rebel Rhythm`,
+                `Shattered Glass`
+            ];
+        }
+
+        function generateDeepHistory(bandName, lang) {
+            if (bandName === "Skillet") {
+                return lang === 'en' ? {
+                    ep1: "Formed in Memphis, Tennessee in 1996 by John Cooper and Ken Steorts, Skillet began as a grunge project.",
+                    ep2: "With Korey Cooper joining, they pivoted. The release of 'Collide' in 2003 established their symphonic rock sound.",
+                    ep3: "The launch of 'Comatose' (2006) and 'Awake' (2009) skyrocketed the band to global arena supremacy. 'Monster' became an absolute hit.",
+                    ep4: "With Jen Ledger and Seth Morrison, Skillet transformed into an unstoppable, immortal modern touring rock machine."
+                } : {
+                    ep1: "Сформований у Мемфісі в 1996 році Джоном Купером та Кеном Стіртсом, гурт Skillet починав як гранж-проект.",
+                    ep2: "З приходом Корі Купер вони змінилися. Альбом 'Collide' у 2003 році заклав основу фірмового симфонічного металу.",
+                    ep3: "Вихід шедеврів 'Comatose' (2006) та 'Awake' (2009) підніс Skillet на вершину стадіонного року. Сингл 'Monster' став мега-хітом.",
+                    ep4: "З приходом Джен Леджер та Сета Моррісона, Skillet перетворилися на культову та безсмертну концертну рок-машину."
+                };
+            }
+            return lang === 'en' ? { 
+                ep1: `Inception of ${bandName} was legendary, marking the beginning of a sonic revolution.`, 
+                ep2: `Evolution expanded their horizons as they experimented with groundbreaking studio arrangements.`, 
+                ep3: `Zenith was successfully reached with chart-topping releases and monumental world tours.`, 
+                ep4: `Legacy remains entirely intact, inspiring millions of alternative artists globally.` 
+            } : { 
+                ep1: `Зародження ${bandName} було легендарним моментом, що започаткував справжню музичну революцію.`, 
+                ep2: `Еволюція розширила їхні горизонти через сміливі експерименти зі студійним звуком.`, 
+                ep3: `Зеніт слави приніс перші місця у світових чартах та масштабні стадіонні турне.`, 
+                ep4: `Спадщина залишається непохитною, надихаючи мільйони нових виконавців по всьому світу.` 
+            };
+        }
+
+        function generateDetailedLineup(bandName, lang) {
+            if (realBandLineups[bandName]) return realBandLineups[bandName][lang];
+            return [
+                { name: "John Riff", role: lang === 'en' ? "Lead Vocals & Guitar" : "Головний Вокал та Гітара" },
+                { name: "Alex Beat", role: lang === 'en' ? "Drums & Percussion" : "Ударні інструменти" },
+                { name: "Dave Bass", role: lang === 'en' ? "Bass Guitar & Backing Vocals" : "Бас-гітара та бек-вокал" }
+            ];
+        }
+
+        function handleSearchKeyDown(event) { if (event.key === 'Enter') executeSearch(); }
+
+        function executeSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const dock = document.getElementById('searchResultsDock');
+            dock.innerHTML = '';
+            if (!query) return;
+            let matches = [];
+
+            let allBands = new Set();
+            Object.keys(rockDatabase).forEach(cat => {
+                rockDatabase[cat].forEach(genre => {
+                    getSmartBandList(genre).forEach(band => allBands.add(JSON.stringify({name: band, genre: genre})));
+                });
+            });
+
+            allBands.forEach(bandStr => {
+                const bandObj = JSON.parse(bandStr);
+                if (bandObj.name.toLowerCase().includes(query)) {
+                    matches.push({ type: 'band', title: bandObj.name, genre: bandObj.genre, displayText: bandObj.name });
+                }
+            });
+
+            // Динамічний пошук по треках усіх гуртів
+            allBands.forEach(bandStr => {
+                const bandObj = JSON.parse(bandStr);
+                const tracks = generateGiganticTracklist(bandObj.name);
+                tracks.forEach(track => {
+                    if (track.toLowerCase().includes(query)) {
+                        matches.push({ type: 'song', title: bandObj.name, genre: bandObj.genre, displayText: `${bandObj.name} — ${track}` });
+                    }
+                });
+            });
+
+            let uniqueMatches = matches.filter((v, i, a) => a.findIndex(t => (t.displayText === v.displayText)) === i);
+
+            if (uniqueMatches.length > 0) {
+                uniqueMatches.slice(0, 12).forEach(match => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-search-result';
+                    const labelType = match.type === 'band' ? localization[currentLang].bandLabel : localization[currentLang].songLabel;
+                    btn.innerHTML = `<span class="result-type">${labelType}</span><span class="result-title">${match.displayText}</span>`;
+                    
+                    btn.onclick = () => {
+                        dock.innerHTML = '';
+                        document.getElementById('searchInput').value = '';
+                        if (match.genre) openGenreModal(match.genre);
+                        else openGenreModal("Core Rock Genres"); 
+                        displayBandDetails(match.title);
+                    };
+                    dock.appendChild(btn);
+                });
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('languageOverlay').style.display = 'none';
+            document.getElementById('searchInput').placeholder = localization[currentLang].searchPlaceholder;
+            document.getElementById('searchButton').innerText = localization[currentLang].searchBtn;
+        }
+
+        function openGenreModal(genreName) {
+            document.getElementById('mTitle').innerText = genreName;
+            document.getElementById('mArticle').innerHTML = generateSmartArticle(genreName, currentLang);
+            document.getElementById('bandsTitleText').innerText = localization[currentLang].bandsTitle;
+            const bandsGrid = document.getElementById('mBandsGrid');
+            bandsGrid.innerHTML = '';
+            document.getElementById('mBandDetails').style.display = 'none';
+
+            const bands = getSmartBandList(genreName);
+            bands.forEach(band => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-band';
+                btn.innerText = band;
+                btn.onclick = () => displayBandDetails(band);
+                bandsGrid.appendChild(btn);
+            });
+            document.getElementById('masterModal').style.display = 'flex';
+        }
+
+        function displayBandDetails(bandName) {
+            const detailBox = document.getElementById('mBandDetails');
+            const metaContainer = document.getElementById('bMeta');
+            document.getElementById('bName').innerText = bandName;
+            metaContainer.innerHTML = '';
+
+            const historyData = generateDeepHistory(bandName, currentLang);
+            const tracks = generateGiganticTracklist(bandName);
+            const lineup = generateDetailedLineup(bandName, currentLang);
+            const labels = localization[currentLang];
+
+            metaContainer.innerHTML = `
+                <div class="band-meta-title">${labels.history}</div>
+                <div class="history-epoch-title">${labels.ep1}</div><p class="band-story-paragraph">${historyData.ep1}</p>
+                <div class="history-epoch-title">${labels.ep2}</div><p class="band-story-paragraph">${historyData.ep2}</p>
+                <div class="history-epoch-title">${labels.ep3}</div><p class="band-story-paragraph">${historyData.ep3}</p>
+                <div class="history-epoch-title">${labels.ep4}</div><p class="band-story-paragraph">${historyData.ep4}</p>
+                <div class="band-meta-title">${labels.members}</div>
+                <ul class="lineup-list">${lineup.map(m => `<li><strong>${m.name}</strong> — <span>${m.role}</span></li>`).join('')}</ul>
+                <div class="band-meta-title">${labels.tracks}</div>
+                <ul class="song-list">
+                    ${tracks.map(track => {
+                        const cleanTrack = track.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+                        const cleanBand = bandName.replace(/'/g, "\\'");
+                        return `<li><span>${track}</span><button class="btn-simple" onclick="openTrackWindow('${cleanBand}', '${cleanTrack}')">${labels.btnText}</button></li>`;
+                    }).join('')}
+                </ul>
+            `;
+            detailBox.style.display = 'block';
+        }
+
+        // ГЕНЕРАЦІЯ ТЕКСТУ ПІСНІ ДЛЯ БУДЬ-ЯКОГО ТРЕКУ НА САЙТІ
+        function openTrackWindow(band, track) {
+            document.getElementById('lyricsBand').innerText = band;
+            document.getElementById('lyricsTrack').innerText = track;
+            const lookupKey = track.toLowerCase().trim();
+            const contentBox = document.getElementById('lyricsContent');
+            
+            if (songLyricsDatabase[lookupKey]) {
+                contentBox.innerText = songLyricsDatabase[lookupKey];
+            } else {
+                // Якщо унікального тексту немає в базі, створюється повноцінний атмосферний рок-текст спеціально під назву цієї пісні!
+                contentBox.innerText = currentLang === 'en' ? 
+`[Verse 1]
+Walking through the shadows of the old highway
+Listening to the rhythm that the pioneers play
+We don't care about what they used to say
+
+[Chorus]
+'Cause this is our anthem, this is "${track}"!
+Yeah, we are screaming out and there's no turning back!
+Turn up the sound, break down the track!
+
+[Verse 2]
+The energy is rising, it's deep within the soul
+${band} is on the stage, taking full control
+Let the heavy distortions roll!` 
+: 
+`[Куплет 1]
+Проходячи крізь тіні старого автошляху,
+Слухаючи ритм, який грають першопрохідці.
+Нам байдуже, що вони говорили колись.
+
+[Приспів]
+Бо це наш гімн, це драйвова пісня "${track}"!
+Так, ми кричимо на повну і вороття назад немає!
+Увімкни цей звук, розірви цей трек!
+
+[Куплет 2]
+Енергія росте, вона глибоко в душі,
+Гурт ${band} на сцені бере повний контроль.
+Нехай звучать важкі дисторшни рок-н-ролу!`;
+            }
+            document.getElementById('trackWindow').style.display = 'flex';
+        }
+
+        function closeTrackWindow() { document.getElementById('trackWindow').style.display = 'none'; }
+        function closeModal() { closeTrackWindow(); document.getElementById('masterModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        window.onclick = (e) => { if(e.target.className === 'modal') closeModal(); if(e.target.className === 'inner-window') closeTrackWindow(); }
+    </script>
+</body>
+</html>
